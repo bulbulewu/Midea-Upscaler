@@ -1,0 +1,20 @@
+# Media Toolkit Pro V3 .gitignore
+.venv/
+venv/
+ENV/
+env/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/

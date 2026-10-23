@@ -1,0 +1,14 @@
+# Render Blueprint Specification V3
+# Deploy Media Toolkit Pro V3 for free on Render.com
+# Made By Munajat International
+
+services:
+  - type: web
+    name: media-toolkit-pro-v3
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000

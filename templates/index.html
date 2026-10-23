@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Toolkit Pro V3 — Multi-Marketplace Studio Engine | Munajat International</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2224%22>🚀</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="/" class="brand-logo">
+      <div class="logo-icon">✨</div>
+      <div class="brand-text">
+        <span class="brand-name">Media Toolkit Pro</span>
+        <span class="brand-tag">Made By Munajat International</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <span class="nav-badge-v3">v3.0 Multi-Marketplace</span>
+      <div class="nav-status" id="system-status-pill">
+        <span class="status-dot"></span> CONNECTING…
+      </div>
+    </div>
+  </nav>
+
+  <!-- Marketplace Presets Bar -->
+  <div class="marketplaces-bar">
+    <div class="marketplaces-title">
+      <span>Select Target Microstock Marketplace</span>
+      <span style="color:var(--accent-cyan)">Active: <b class="active-market-badge">⭐ Universal Stock Master</b></span>
+    </div>
+    <div class="marketplaces-list">
+      <button class="m-btn active" data-marketplace="universal">⭐ Universal Stock Master</button>
+      <button class="m-btn" data-marketplace="adobe_stock">🅰️ Adobe Stock</button>
+      <button class="m-btn" data-marketplace="shutterstock">🔴 Shutterstock</button>
+      <button class="m-btn" data-marketplace="getty_istock">🟡 Getty / iStock</button>
+      <button class="m-btn" data-marketplace="pond5">🟢 Pond5 Broadcast</button>
+      <button class="m-btn" data-marketplace="freepik">🎨 Freepik Studio</button>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-badge">✨ 100% MICROSTOCK COMPLIANT ENGINE</div>
+    <h1>Master Media for <span class="gradient-text">All Major Marketplaces</span></h1>
+    <p>Certified export pipelines for Adobe Stock, Shutterstock, Getty Images, Pond5 & Freepik. Automated pre-flight compliance inspection, broadcast bitrates, and zero quality loss.</p>
+  </header>
+
+  <!-- Segmented Tabs -->
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <button class="tab-btn active" data-tool="video">
+        <span class="tab-icon">🎬</span> 4K Video Upscaler
+      </button>
+      <button class="tab-btn" data-tool="image">
+        <span class="tab-icon">🖼️</span> Image Upscaler (4K & 8K)
+      </button>
+      <button class="tab-btn" data-tool="psd">
+        <span class="tab-icon">📄</span> PNG to Layered PSD
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Tools Container -->
+  <main class="main-container">
+
+    <!-- ================= 1. VIDEO UPSCALER ================= -->
+    <section class="tool-panel active" id="panel-video">
+      <div class="studio-card">
+        <div class="panel-header">
+          <h2>🎬 4K Stock Video Master Upscaler</h2>
+          <p>Conforms footage to exact microstock requirements: broadcast bitrates, CFR frame rate preservation, Rec.709 colorimetry, and faststart streaming atoms.</p>
+          <div class="feature-pills">
+            <span class="pill-tag">Target: <b class="active-market-badge">⭐ Universal</b></span>
+            <span class="pill-tag">Framerate: <b>CFR Preserved</b></span>
+            <span class="pill-tag">Bitrate: <b>~60 Mbps</b></span>
+            <span class="pill-tag">Color: <b>Rec.709</b></span>
+            <span class="pill-tag">Threading: <b>Max Performance</b></span>
+          </div>
+        </div>
+
+        <div class="drop-zone" id="drop-video">
+          <div class="upload-icon-wrapper">📤</div>
+          <div class="drop-title">Drop your video clip here or browse</div>
+          <div class="drop-subtitle">Supports MP4, MOV, MKV, WEBM, AVI (up to 4 GB)</div>
+          <button type="button" class="btn-browse">Select Video File</button>
+          <input type="file" id="file-video" accept="video/*,.mkv,.mov,.webm,.avi">
+        </div>
+
+        <div class="preview-card" id="preview-video">
+          <div class="preview-info">
+            <div class="preview-name" id="preview-name-video">filename.mp4</div>
+            <div class="preview-details" id="preview-details-video">Ready for processing</div>
+          </div>
+        </div>
+
+        <!-- Live Pre-Flight Compliance Inspector -->
+        <div class="preflight-card" id="preflight-video">
+          <div class="preflight-header">
+            <span class="preflight-title">🛡️ <span id="preflight-market-video">Pre-Flight Compliance Check</span></span>
+            <span class="badge-status-pass">AUTO-INSPECTED</span>
+          </div>
+          <div class="preflight-grid" id="preflight-grid-video"></div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="form-group">
+            <label>Target Resolution</label>
+            <select id="video-target">
+              {% for key, t in targets.items() %}
+                <option value="{{ key }}">{{ t.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Master Codec Format</label>
+            <select id="video-codec">
+              {% for key, c in codecs.items() %}
+                <option value="{{ key }}" {% if key == 'h264' %}selected{% endif %}>{{ c.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Bitrate Quality Preset</label>
+            <select id="video-quality">
+              {% for key, q in qualities.items() %}
+                <option value="{{ key }}" {% if key == 'stock' %}selected{% endif %}>{{ q.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <label class="checkbox-toggle">
+          <input type="checkbox" id="video-keep-audio">
+          <span>Keep audio track <small style="color:var(--text-dim)">(Disabled by default to avoid stock agency audio rejections)</small></span>
+        </label>
+
+        <button type="button" class="btn-primary" id="btn-video" disabled>
+          <span>🚀 Export Stock Master Video</span>
+        </button>
+
+        <div class="progress-card" id="progress-video">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill-video"></div></div>
+          <div class="progress-meta">
+            <span class="progress-status" id="progress-status-video">Preparing encode…</span>
+            <span id="progress-pct-video">0%</span>
+          </div>
+        </div>
+
+        <div class="error-banner" id="error-video"></div>
+
+        <div class="result-card" id="result-video">
+          <div class="result-header">✓ Stock Master Export Completed</div>
+          <table class="comparison-table">
+            <thead>
+              <tr><th>Parameter</th><th>Source Footage</th><th>Master Export</th><th>Stock Check</th></tr>
+            </thead>
+            <tbody id="table-video"></tbody>
+          </table>
+          <a href="#" class="btn-download" id="dl-btn-video" download>⬇ Download Stock Master Video</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. IMAGE UPSCALER ================= -->
+    <section class="tool-panel" id="panel-image">
+      <div class="studio-card">
+        <div class="panel-header">
+          <h2>🖼️ Image Upscaler & Detail Enhancer</h2>
+          <p>Enlarge photos, AI renders, and illustrations to 4K & 8K with commercial 300 DPI print tags, guaranteed ≥ 4.0 Megapixel stock threshold, and auto-denoising.</p>
+          <div class="feature-pills">
+            <span class="pill-tag">Scale: <b>2× / 4× / 8×</b></span>
+            <span class="pill-tag">Print: <b>300 DPI Embedded</b></span>
+            <span class="pill-tag">Agency Rule: <b>≥ 4.0 MP Enforced</b></span>
+            <span class="pill-tag">Engine: <b>Lanczos V3</b></span>
+          </div>
+        </div>
+
+        <div class="drop-zone" id="drop-image">
+          <div class="upload-icon-wrapper">🖼️</div>
+          <div class="drop-title">Drop your image here or browse</div>
+          <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
+          <button type="button" class="btn-browse">Select Image File</button>
+          <input type="file" id="file-image" accept="image/*,.tiff,.bmp,.webp">
+        </div>
+
+        <div class="preview-card" id="preview-image">
+          <img class="preview-thumb" id="preview-img-image" alt="Preview">
+          <div class="preview-info">
+            <div class="preview-name" id="preview-name-image">image.png</div>
+            <div class="preview-details" id="preview-details-image">Ready for upscaling</div>
+          </div>
+        </div>
+
+        <!-- Pre-Flight Compliance Inspector -->
+        <div class="preflight-card" id="preflight-image">
+          <div class="preflight-header">
+            <span class="preflight-title">🛡️ <span id="preflight-market-image">Pre-Flight Compliance Check</span></span>
+            <span class="badge-status-pass">AUTO-INSPECTED</span>
+          </div>
+          <div class="preflight-grid" id="preflight-grid-image"></div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="form-group">
+            <label>Scale Factor</label>
+            <div class="segmented-control" data-for="image-scale">
+              <div class="segmented-option" data-val="2x">2× (2K)</div>
+              <div class="segmented-option selected" data-val="4x">4× (4K UHD)</div>
+              <div class="segmented-option" data-val="8x">8× (8K Ultra)</div>
+            </div>
+            <input type="hidden" id="image-scale" value="4x">
+          </div>
+
+          <div class="form-group">
+            <label>Output Format</label>
+            <div class="segmented-control" data-for="image-format">
+              <div class="segmented-option selected" data-val="jpg">JPG (Stock Standard)</div>
+              <div class="segmented-option" data-val="png">PNG (Lossless)</div>
+              <div class="segmented-option" data-val="webp">WEBP (Web)</div>
+            </div>
+            <input type="hidden" id="image-format" value="jpg">
+          </div>
+
+          <div class="form-group">
+            <label>Print Resolution Density</label>
+            <div class="segmented-control" data-for="image-dpi">
+              <div class="segmented-option selected" data-val="300">300 DPI (Commercial Print)</div>
+              <div class="segmented-option" data-val="72">72 DPI (Screen)</div>
+            </div>
+            <input type="hidden" id="image-dpi" value="300">
+          </div>
+
+          <div class="form-group">
+            <label>Compression Quality (JPG / WEBP)</label>
+            <input type="number" id="image-quality" value="95" min="75" max="100">
+          </div>
+        </div>
+
+        <label class="checkbox-toggle">
+          <input type="checkbox" id="image-auto-denoise" checked>
+          <span>Auto Denoise & Artifact Reduction <small style="color:var(--text-dim)">(Removes JPEG artifacts before sharpening)</small></span>
+        </label>
+
+        <button type="button" class="btn-primary" id="btn-image" disabled>
+          <span>⚡ Upscale Image to Stock Master</span>
+        </button>
+
+        <div class="progress-card" id="progress-image">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill-image"></div></div>
+          <div class="progress-meta">
+            <span class="progress-status" id="progress-status-image">Processing…</span>
+            <span id="progress-pct-image">0%</span>
+          </div>
+        </div>
+
+        <div class="error-banner" id="error-image"></div>
+
+        <div class="result-card" id="result-image">
+          <div class="result-header">✓ Image Upscaled Successfully</div>
+          <table class="comparison-table">
+            <thead>
+              <tr><th>Parameter</th><th>Source Graphic</th><th>Stock Master</th><th>Verification</th></tr>
+            </thead>
+            <tbody id="table-image"></tbody>
+          </table>
+          <a href="#" class="btn-download" id="dl-btn-image" download>⬇ Download Stock Image</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. PNG TO PSD ================= -->
+    <section class="tool-panel" id="panel-psd">
+      <div class="studio-card">
+        <div class="panel-header">
+          <h2>📄 PNG to Photoshop PSD Generator</h2>
+          <p>Converts transparent PNGs or graphics into unlocked, layered Adobe Photoshop .psd documents ready for Freepik, Adobe Stock, and GraphicRiver template submissions.</p>
+          <div class="feature-pills">
+            <span class="pill-tag">Layer: <b>Unlocked & Editable</b></span>
+            <span class="pill-tag">Alpha: <b>100% Preserved</b></span>
+            <span class="pill-tag">Quality: <b>300 DPI Print</b></span>
+            <span class="pill-tag">Compression: <b>ZIP Lossless</b></span>
+          </div>
+        </div>
+
+        <div class="drop-zone" id="drop-psd">
+          <div class="upload-icon-wrapper">📄</div>
+          <div class="drop-title">Drop your image here or browse</div>
+          <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
+          <button type="button" class="btn-browse">Select Image for PSD</button>
+          <input type="file" id="file-psd" accept="image/*,.tiff,.bmp,.webp">
+        </div>
+
+        <div class="preview-card" id="preview-psd">
+          <img class="preview-thumb" id="preview-img-psd" alt="Preview">
+          <div class="preview-info">
+            <div class="preview-name" id="preview-name-psd">artwork.png</div>
+            <div class="preview-details" id="preview-details-psd">Ready for PSD conversion</div>
+          </div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="form-group">
+            <label>PSD Layer Name</label>
+            <input type="text" id="psd-layer-name" value="Artwork Layer" maxlength="60">
+          </div>
+
+          <div class="form-group">
+            <label>Background Canvas Mode</label>
+            <div class="segmented-control" data-for="psd-background">
+              <div class="segmented-option selected" data-val="transparent">Transparent Canvas</div>
+              <div class="segmented-option" data-val="white">Solid White BG</div>
+            </div>
+            <input type="hidden" id="psd-background" value="transparent">
+          </div>
+
+          <div class="form-group">
+            <label>Print Resolution Density</label>
+            <div class="segmented-control" data-for="psd-dpi">
+              <div class="segmented-option selected" data-val="300">300 DPI (Print Ready)</div>
+              <div class="segmented-option" data-val="72">72 DPI (Standard)</div>
+            </div>
+            <input type="hidden" id="psd-dpi" value="300">
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="btn-psd" disabled>
+          <span>🎨 Convert to Layered PSD</span>
+        </button>
+
+        <div class="progress-card" id="progress-psd">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill-psd"></div></div>
+          <div class="progress-meta">
+            <span class="progress-status" id="progress-status-psd">Generating PSD…</span>
+            <span id="progress-pct-psd">0%</span>
+          </div>
+        </div>
+
+        <div class="error-banner" id="error-psd"></div>
+
+        <div class="result-card" id="result-psd">
+          <div class="result-header">✓ PSD Master File Created</div>
+          <table class="comparison-table">
+            <thead>
+              <tr><th>Parameter</th><th>Source Graphic</th><th>Photoshop PSD File</th><th>Stock Check</th></tr>
+            </thead>
+            <tbody id="table-psd"></tbody>
+          </table>
+          <a href="#" class="btn-download" id="dl-btn-psd" download>⬇ Download PSD File</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marketplace Guidelines Section -->
+    <section class="info-section">
+      <div class="section-title">
+        <h3>Official Microstock Standards Supported</h3>
+        <p>Pre-configured rules strictly adhered to across all major commercial marketplaces</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">ADOBE STOCK</span>
+          <h4>Adobe Stock Standards</h4>
+          <p>4K UHD (3840×2160) at ~65 Mbps, Rec.709 colorimetry, 5s–60s duration, CFR frame rate preservation, and zero audio rejections.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">SHUTTERSTOCK</span>
+          <h4>Shutterstock Standards</h4>
+          <p>Strict progressive video scanning, standard broadcast frame rates (23.98–60 fps), sanitized ambient sound, and 4.0 MP minimum image density.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">GETTY & POND5</span>
+          <h4>Getty Images & Pond5</h4>
+          <p>High-tier Apple ProRes 422 HQ export option for maximum contributor royalties, combined with universal MP4 faststart delivery.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="info-section">
+      <div class="section-title">
+        <h3>Frequently Asked Questions</h3>
+        <p>Technical specifications and stock contributor advice</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h4>Why does the app strip audio by default?</h4>
+          <p>Adobe Stock and Shutterstock automatically reject b-roll clips if ambient background noise, microphone hum, or copyrighted music is detected. Stripping audio ensures 100% acceptance for video b-roll.</p>
+        </div>
+        <div class="faq-card">
+          <h4>What is the minimum Megapixel rule for photos?</h4>
+          <p>Both Adobe Stock and Shutterstock strictly enforce a 4.0 Megapixel minimum. Our 4x and 8x Lanczos engines easily elevate any image to 8.3 MP (4K) or 33 MP (8K) with 300 DPI tags.</p>
+        </div>
+        <div class="faq-card">
+          <h4>How does the app maintain maximum performance?</h4>
+          <p>The engine uses automatic multi-core threading (`-threads 0`), hardware-accelerated encoding (NVENC), and in-memory image buffers for zero latency.</p>
+        </div>
+        <div class="faq-card">
+          <h4>Can I host Version 3 on Render.com for free?</h4>
+          <p>Yes. The included Dockerfile and render.yaml blueprint deploy seamlessly on Render.com's free web service tier.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p><b>Media Toolkit Pro V3</b> · Made By Munajat International © 2026</p>
+    <p>Multi-Marketplace Studio Engine · Certified for Adobe Stock, Shutterstock, Getty Images, Pond5 & Freepik</p>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
