@@ -297,328 +297,138 @@
             </div>
 
             <!-- Video Upscale Controls Grid -->
-            <div class="controls-grid">
-              <div class="form-group">
-                <label>Target Master Resolution</label>
-                <select id="video-target">
-                  {% for key, t in targets.items() %}
-                    <option value="{{ key }}">{{ t.label }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Master Codec Format</label>
-                <select id="video-codec">
-                  {% for key, c in codecs.items() %}
-                    <option value="{{ key }}" {% if key == 'h264' %}selected{% endif %}>{{ c.label }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Bitrate Quality Preset</label>
-                <select id="video-quality">
-                  {% for key, q in qualities.items() %}
-                    <option value="{{ key }}" {% if key == 'stock' %}selected{% endif %}>{{ q.label }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-
-            <label class="checkbox-toggle">
-              <input type="checkbox" id="video-keep-audio">
-              <span>Keep audio track <small style="color:var(--text-dim)">(Disabled by default to avoid stock agency audio rejections)</small></span>
-            </label>
-
-            <!-- Export Master Button -->
-            <button type="button" class="btn-primary" id="btn-video" disabled>
-              <span>🚀 Export Stock Master Video</span>
-            </button>
-
-            <!-- Progress Card -->
-            <div class="progress-card" id="progress-video">
-              <div class="progress-track"><div class="progress-fill" id="progress-fill-video"></div></div>
-              <div class="progress-meta">
-                <span class="progress-status" id="progress-status-video">Preparing encode…</span>
-                <span id="progress-pct-video">0%</span>
-              </div>
-            </div>
-
-            <div class="error-banner" id="error-video"></div>
-
-            <!-- Result Card -->
-            <div class="result-card" id="result-video">
-              <div class="result-header">✓ Stock Master Export Completed</div>
-              <table class="comparison-table">
-                <thead>
-                  <tr><th>Parameter</th><th>Source Footage</th><th>Master Export</th><th>Stock Check</th></tr>
-                </thead>
-                <tbody id="table-video"></tbody>
-              </table>
-              <div class="result-actions-row">
-                <a href="#" class="btn-download" id="dl-btn-video" download>⬇ Download Stock Master Video</a>
-                <button type="button" class="btn-open-folder" id="btn-open-folder-video" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-
-        <!-- ========================================================
-             2. IMAGE UPSCALER (4K & 8K) PANEL
-        ======================================================== -->
-        <section class="tool-panel" id="panel-image">
-          <div class="studio-card">
-            
-            <div class="panel-header">
-              <div class="panel-header-left">
-                <h2>🖼️ Image Upscaler & Detail Enhancer</h2>
-                <p>Enlarge photos, AI renders, and illustrations to 4K & 8K with commercial 300 DPI print tags, guaranteed ≥ 4.0 Megapixel stock threshold, and auto-denoising.</p>
-              </div>
-              <div class="panel-view-switcher">
-                <span class="view-label">View:</span>
-                <div class="view-pill-group">
-                  <button class="view-pill-btn active" data-view="grid">⊞ Grid</button>
-                  <button class="view-pill-btn" data-view="list">☰ List</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-pills">
-              <span class="pill-tag">Scale: <b>2× / 4× / 8×</b></span>
-              <span class="pill-tag">Print: <b>300 DPI Embedded</b></span>
-              <span class="pill-tag">Agency Rule: <b>≥ 4.0 MP Enforced</b></span>
-              <span class="pill-tag">Engine: <b>Lanczos V3</b></span>
-            </div>
-
-            <div class="drop-zone" id="drop-image">
-              <div class="upload-icon-wrapper">🖼️</div>
-              <div class="drop-title">Drop your image here or browse</div>
-              <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
-              <button type="button" class="btn-browse">Select Image File</button>
-              <input type="file" id="file-image" accept="image/*,.tiff,.bmp,.webp">
-            </div>
-
-            <!-- Uploaded Image Preview (Grid / List Switchable) -->
-            <div class="media-container layout-grid" id="media-container-image">
-              <div class="preview-card-advanced" id="preview-image">
-                <div class="image-thumb-wrapper">
-                  <img class="preview-thumb" id="preview-img-image" alt="Preview Image">
-                  <span class="image-mp-pill" id="image-mp-pill">0.0 MP</span>
-                </div>
-                <div class="media-content">
-                  <div class="media-header-row">
-                    <div class="media-title-group">
-                      <h4 class="media-filename" id="preview-name-image">image.png</h4>
-                      <span class="media-format-badge" id="preview-format-image">PNG</span>
-                    </div>
-                    <div class="media-actions">
-                      <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-image">✕ Remove</button>
-                    </div>
+            <!-- Enhanced Microstock PSD Controls Grid -->
+            <div class="psd-controls-wrapper">
+              
+              <!-- Section 1: Canvas Dimensions & Auto-Trim -->
+              <div class="psd-control-group">
+                <div class="control-group-header">
+                  <span class="cg-icon">📐</span>
+                  <div>
+                    <span class="cg-title">Smart Canvas Sizing & Framing</span>
+                    <span class="cg-sub">Standardize dimensions for Freepik & Adobe Stock compliance</span>
                   </div>
-                  <div class="technical-badges-grid">
-                    <div class="tech-badge-item">
-                      <span class="tech-label">FILE SIZE</span>
-                      <span class="tech-value" id="tech-size-image">0.0 MB</span>
+                </div>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label>Target Canvas Preset</label>
+                  <select id="psd-canvas-size" class="psd-select-input">
+                    <option value="original" selected>Original Dimensions (Keep Image Size)</option>
+                    <option value="square_4000">Square 4000 × 4000 px (Freepik Recommended — 16 MP)</option>
+                    <option value="landscape_5000">Landscape 5000 × 3500 px (Commercial 3:2 Banner — 17.5 MP)</option>
+                    <option value="custom">Custom Dimensions (Manual Width × Height)</option>
+                  </select>
+                </div>
+
+                <!-- Custom Dimensions Row (Appears when Custom is selected) -->
+                <div class="custom-dim-row" id="psd-custom-dim-row" style="display:none;">
+                  <div class="dim-field">
+                    <label>Width (px)</label>
+                    <input type="number" id="psd-custom-w" value="4000" min="500" max="12000" step="100">
+                  </div>
+                  <div class="dim-field">
+                    <label>Height (px)</label>
+                    <input type="number" id="psd-custom-h" value="4000" min="500" max="12000" step="100">
+                  </div>
+                </div>
+
+                <div class="psd-checkbox-options">
+                  <label class="setting-checkbox">
+                    <input type="checkbox" id="psd-auto-trim" checked>
+                    <span>✂️ <b>Auto-Trim Dead Space:</b> Crop empty transparent borders & center artwork</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Section 2: Input Format & Background Isolation (JPG to Transparent PNG) -->
+              <div class="psd-control-group">
+                <div class="control-group-header">
+                  <span class="cg-icon">🪄</span>
+                  <div>
+                    <span class="cg-title">JPEG / Solid BG Isolation (JPG → PNG)</span>
+                    <span class="cg-sub">Extract subject from solid background to smooth transparent PNG</span>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                  <label>Background Extraction Mode</label>
+                  <select id="psd-isolate-bg" class="psd-select-input">
+                    <option value="none" selected>Keep Original (Already Transparent PNG)</option>
+                    <option value="white">Magic Extract Solid White / Studio BG (Smooth Feather)</option>
+                    <option value="black">Magic Extract Solid Black Background</option>
+                  </select>
+                </div>
+
+                <div class="psd-checkbox-options">
+                  <label class="setting-checkbox">
+                    <input type="checkbox" id="psd-defringe" checked>
+                    <span>🧹 <b>Smart Alpha Defringe:</b> Remove 1px dark/white halo artifacts around edges</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Section 3: Photoshop Layer Architecture & Editable Shadow -->
+              <div class="psd-control-group">
+                <div class="control-group-header">
+                  <span class="cg-icon">📑</span>
+                  <div>
+                    <span class="cg-title">Photoshop Layer Architecture & Shadows</span>
+                    <span class="cg-sub">Configure layer structure and separate editable shadow</span>
+                  </div>
+                </div>
+
+                <div class="psd-form-row">
+                  <div class="form-group flex-1">
+                    <label>Layer Structure Preset</label>
+                    <select id="psd-layer-structure" class="psd-select-input">
+                      <option value="dual_white" selected>Freepik Dual-Layer (Artwork + White BG)</option>
+                      <option value="single">Single Layer (Pure Isolated Transparency)</option>
+                      <option value="dual_dark">Studio Dark (Artwork + Dark Studio BG)</option>
+                    </select>
+                  </div>
+                  <div class="form-group flex-1">
+                    <label>Artwork Layer Name</label>
+                    <input type="text" id="psd-layer-name" value="Artwork Layer" maxlength="60">
+                  </div>
+                </div>
+
+                <div class="psd-checkbox-options" style="margin-top:12px;">
+                  <label class="setting-checkbox">
+                    <input type="checkbox" id="psd-add-shadow">
+                    <span>👥 <b>Generate Drop Shadow Layer:</b> Creates an editable shadow layer in Photoshop</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Section 4: Print Resolution Density -->
+              <div class="psd-control-group">
+                <div class="control-group-header">
+                  <span class="cg-icon">🖨️</span>
+                  <div>
+                    <span class="cg-title">Print Resolution & Color Profile</span>
+                    <span class="cg-sub">Commercial print headers and color tagging</span>
+                  </div>
+                </div>
+
+                <div class="psd-form-row">
+                  <div class="form-group flex-1">
+                    <label>Print Resolution Density</label>
+                    <div class="segmented-control" data-for="psd-dpi">
+                      <div class="segmented-option selected" data-val="300">300 DPI (Print Ready)</div>
+                      <div class="segmented-option" data-val="72">72 DPI (Web/Mobile)</div>
                     </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">DIMENSIONS</span>
-                      <span class="tech-value" id="tech-res-image">0 × 0 px</span>
-                    </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">MEGAPIXELS</span>
-                      <span class="tech-value" id="tech-mp-image">0.0 MP</span>
-                    </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">STOCK THRESHOLD</span>
-                      <span class="tech-value" id="tech-stock-image">≥ 4.0 MP</span>
-                    </div>
+                    <input type="hidden" id="psd-dpi" value="300">
+                  </div>
+                  <div class="form-group flex-1">
+                    <label>Color Space Profile</label>
+                    <select id="psd-color-profile" class="psd-select-input">
+                      <option value="srgb" selected>sRGB IEC61966-2.1 (Universal Stock)</option>
+                      <option value="adobergb">Adobe RGB (1998) (Fine Art Print)</option>
+                    </select>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Image Pre-Flight Compliance Inspector -->
-            <div class="preflight-card" id="preflight-image">
-              <div class="preflight-header">
-                <span class="preflight-title">🛡️ <span id="preflight-market-image">Pre-Flight Compliance Check</span></span>
-                <span class="badge-status-pass">AUTO-INSPECTED</span>
-              </div>
-              <div class="preflight-grid" id="preflight-grid-image"></div>
-            </div>
-
-            <div class="controls-grid">
-              <div class="form-group">
-                <label>Scale Factor</label>
-                <div class="segmented-control" data-for="image-scale">
-                  <div class="segmented-option" data-val="2x">2× (2K)</div>
-                  <div class="segmented-option selected" data-val="4x">4× (4K UHD)</div>
-                  <div class="segmented-option" data-val="8x">8× (8K Ultra)</div>
-                </div>
-                <input type="hidden" id="image-scale" value="4x">
-              </div>
-
-              <div class="form-group">
-                <label>Output Format</label>
-                <div class="segmented-control" data-for="image-format">
-                  <div class="segmented-option selected" data-val="jpg">JPG (Stock Standard)</div>
-                  <div class="segmented-option" data-val="png">PNG (Lossless)</div>
-                  <div class="segmented-option" data-val="webp">WEBP (Web)</div>
-                </div>
-                <input type="hidden" id="image-format" value="jpg">
-              </div>
-
-              <div class="form-group">
-                <label>Print Resolution Density</label>
-                <div class="segmented-control" data-for="image-dpi">
-                  <div class="segmented-option selected" data-val="300">300 DPI (Commercial Print)</div>
-                  <div class="segmented-option" data-val="72">72 DPI (Screen)</div>
-                </div>
-                <input type="hidden" id="image-dpi" value="300">
-              </div>
-
-              <div class="form-group">
-                <label>Compression Quality (JPG / WEBP)</label>
-                <input type="number" id="image-quality" value="95" min="75" max="100">
-              </div>
-            </div>
-
-            <label class="checkbox-toggle">
-              <input type="checkbox" id="image-auto-denoise" checked>
-              <span>Auto Denoise & Artifact Reduction <small style="color:var(--text-dim)">(Removes compression artifacts before sharpening)</small></span>
-            </label>
-
-            <button type="button" class="btn-primary" id="btn-image" disabled>
-              <span>⚡ Upscale Image to Stock Master</span>
-            </button>
-
-            <div class="progress-card" id="progress-image">
-              <div class="progress-track"><div class="progress-fill" id="progress-fill-image"></div></div>
-              <div class="progress-meta">
-                <span class="progress-status" id="progress-status-image">Processing…</span>
-                <span id="progress-pct-image">0%</span>
-              </div>
-            </div>
-
-            <div class="error-banner" id="error-image"></div>
-
-            <div class="result-card" id="result-image">
-              <div class="result-header">✓ Image Upscaled Successfully</div>
-              <table class="comparison-table">
-                <thead>
-                  <tr><th>Parameter</th><th>Source Graphic</th><th>Stock Master</th><th>Verification</th></tr>
-                </thead>
-                <tbody id="table-image"></tbody>
-              </table>
-              <div class="result-actions-row">
-                <a href="#" class="btn-download" id="dl-btn-image" download>⬇ Download Stock Image</a>
-                <button type="button" class="btn-open-folder" id="btn-open-folder-image" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-
-        <!-- ========================================================
-             3. PNG TO LAYERED PSD PANEL
-        ======================================================== -->
-        <section class="tool-panel" id="panel-psd">
-          <div class="studio-card">
-            
-            <div class="panel-header">
-              <div class="panel-header-left">
-                <h2>📄 PNG to Photoshop PSD Generator</h2>
-                <p>Converts transparent PNGs or graphics into unlocked, layered Adobe Photoshop .psd documents ready for Freepik, Adobe Stock, and GraphicRiver template submissions.</p>
-              </div>
-              <div class="panel-view-switcher">
-                <span class="view-label">View:</span>
-                <div class="view-pill-group">
-                  <button class="view-pill-btn active" data-view="grid">⊞ Grid</button>
-                  <button class="view-pill-btn" data-view="list">☰ List</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-pills">
-              <span class="pill-tag">Layer: <b>Unlocked & Editable</b></span>
-              <span class="pill-tag">Alpha: <b>100% Preserved</b></span>
-              <span class="pill-tag">Quality: <b>300 DPI Print</b></span>
-              <span class="pill-tag">Compression: <b>ZIP Lossless</b></span>
-            </div>
-
-            <div class="drop-zone" id="drop-psd">
-              <div class="upload-icon-wrapper">📄</div>
-              <div class="drop-title">Drop your image here or browse</div>
-              <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
-              <button type="button" class="btn-browse">Select Image for PSD</button>
-              <input type="file" id="file-psd" accept="image/*,.tiff,.bmp,.webp">
-            </div>
-
-            <!-- Uploaded PSD Source Preview (Grid / List Switchable) -->
-            <div class="media-container layout-grid" id="media-container-psd">
-              <div class="preview-card-advanced" id="preview-psd">
-                <div class="image-thumb-wrapper">
-                  <img class="preview-thumb" id="preview-img-psd" alt="Preview Artwork">
-                  <span class="image-mp-pill" id="psd-alpha-pill">RGBA Alpha</span>
-                </div>
-                <div class="media-content">
-                  <div class="media-header-row">
-                    <div class="media-title-group">
-                      <h4 class="media-filename" id="preview-name-psd">artwork.png</h4>
-                      <span class="media-format-badge" id="preview-format-psd">PNG</span>
-                    </div>
-                    <div class="media-actions">
-                      <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-psd">✕ Remove</button>
-                    </div>
-                  </div>
-                  <div class="technical-badges-grid">
-                    <div class="tech-badge-item">
-                      <span class="tech-label">FILE SIZE</span>
-                      <span class="tech-value" id="tech-size-psd">0.0 MB</span>
-                    </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">RESOLUTION</span>
-                      <span class="tech-value" id="tech-res-psd">0 × 0 px</span>
-                    </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">ALPHA CHANNEL</span>
-                      <span class="tech-value" id="tech-alpha-psd">Preserved</span>
-                    </div>
-                    <div class="tech-badge-item">
-                      <span class="tech-label">PSD TARGET</span>
-                      <span class="tech-value">Editable Layer</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="controls-grid">
-              <div class="form-group">
-                <label>PSD Layer Name</label>
-                <input type="text" id="psd-layer-name" value="Artwork Layer" maxlength="60">
-              </div>
-
-              <div class="form-group">
-                <label>Background Canvas Mode</label>
-                <div class="segmented-control" data-for="psd-background">
-                  <div class="segmented-option selected" data-val="transparent">Transparent Canvas</div>
-                  <div class="segmented-option" data-val="white">Solid White BG</div>
-                </div>
-                <input type="hidden" id="psd-background" value="transparent">
-              </div>
-
-              <div class="form-group">
-                <label>Print Resolution Density</label>
-                <div class="segmented-control" data-for="psd-dpi">
-                  <div class="segmented-option selected" data-val="300">300 DPI (Print Ready)</div>
-                  <div class="segmented-option" data-val="72">72 DPI (Standard)</div>
-                </div>
-                <input type="hidden" id="psd-dpi" value="300">
-              </div>
             </div>
 
             <button type="button" class="btn-primary" id="btn-psd" disabled>
@@ -644,7 +454,8 @@
                 <tbody id="table-psd"></tbody>
               </table>
               <div class="result-actions-row">
-                <a href="#" class="btn-download" id="dl-btn-psd" download>⬇ Download PSD File</a>
+                <a href="#" class="btn-download" id="dl-btn-psd" download>⬇ Download Layered PSD (.psd)</a>
+                <a href="#" class="btn-download btn-download-png" id="dl-btn-psd-png" style="display:none;" download>🖼️ Download Isolated Transparent PNG (.png)</a>
                 <button type="button" class="btn-open-folder" id="btn-open-folder-psd" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
               </div>
             </div>

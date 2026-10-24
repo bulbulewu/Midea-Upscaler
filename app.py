@@ -117,6 +117,15 @@ def _run_job(job_id):
                 layer_name=job["layer_name"],
                 background=job.get("background", "transparent"),
                 dpi=job.get("dpi", 300),
+                canvas_size=job.get("canvas_size", "original"),
+                custom_w=job.get("custom_w", 4000),
+                custom_h=job.get("custom_h", 4000),
+                auto_trim=job.get("auto_trim", False),
+                isolate_bg=job.get("isolate_bg", "none"),
+                layer_structure=job.get("layer_structure", "dual_white"),
+                add_shadow=job.get("add_shadow", False),
+                defringe=job.get("defringe", True),
+                extracted_png_path=job.get("companion_png_path"),
                 progress_cb=_cb,
             )
         else:
@@ -322,6 +331,19 @@ def create_psd_job():
 
     layer_name = (request.form.get("layer_name") or "Artwork Layer").strip()[:60]
     background = request.form.get("background", "transparent")
+    canvas_size = request.form.get("canvas_size", "original")
+    try:
+        custom_w = int(request.form.get("custom_w", 4000))
+        custom_h = int(request.form.get("custom_h", 4000))
+    except ValueError:
+        custom_w, custom_h = 4000, 4000
+
+    auto_trim = request.form.get("auto_trim") in ("true", "1", "on", True)
+    isolate_bg = request.form.get("isolate_bg", "none")
+    layer_structure = request.form.get("layer_structure", "dual_white")
+    add_shadow = request.form.get("add_shadow") in ("true", "1", "on", True)
+    defringe = request.form.get("defringe") in ("true", "1", "on", True)
+
     try:
         dpi = int(request.form.get("dpi", 300))
     except ValueError:
@@ -335,6 +357,7 @@ def create_psd_job():
 
     stem = os.path.splitext(secure_filename(f.filename))[0]
     dst = os.path.join(OUTPUT_DIR, f"{job_id}_{stem}.psd")
+    companion_png_path = os.path.join(OUTPUT_DIR, f"{job_id}_{stem}_isolated.png")
 
     return jsonify(_start_job({
         "id": job_id,
@@ -344,6 +367,15 @@ def create_psd_job():
         "filename": f.filename,
         "layer_name": layer_name or "Artwork Layer",
         "background": background,
+        "canvas_size": canvas_size,
+        "custom_w": custom_w,
+        "custom_h": custom_h,
+        "auto_trim": auto_trim,
+        "isolate_bg": isolate_bg,
+        "layer_structure": layer_structure,
+        "add_shadow": add_shadow,
+        "defringe": defringe,
+        "companion_png_path": companion_png_path,
         "dpi": dpi,
         "state": "queued",
         "progress": 0.0,
@@ -353,6 +385,24 @@ def create_psd_job():
         "download_name": f"{stem}_layered_master.psd",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }))
+
+
+@app.route("/api/download/png/<job_id>")
+def download_companion_png(job_id):
+    with jobs_lock:
+        job = jobs.get(job_id)
+        if job is None or job["state"] != "done":
+            return jsonify({"error": "Result file is not ready yet."}), 404
+        companion = job.get("companion_png_path")
+        if not companion or not os.path.exists(companion):
+            return jsonify({"error": "No companion PNG available."}), 404
+        stem = os.path.splitext(secure_filename(job["filename"]))[0]
+        return send_file(
+            companion,
+            as_attachment=True,
+            download_name=f"{stem}_isolated_transparent.png",
+            mimetype="image/png"
+        )
 
 
 @app.route("/api/jobs/<job_id>")

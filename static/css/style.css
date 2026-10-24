@@ -3062,3 +3062,105 @@ select:focus, input:focus, textarea:focus {
     align-items: flex-start;
   }
 }
+
+
+/* ========================================================
+   ENHANCED MICROSTOCK PSD GENERATOR CONTROLS
+======================================================== */
+.psd-controls-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.psd-control-group {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.control-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.cg-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.cg-title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.cg-sub {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--text-dim);
+}
+.psd-select-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.psd-select-input:focus {
+  border-color: var(--primary);
+}
+.psd-form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.flex-1 {
+  flex: 1;
+}
+.custom-dim-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.dim-field {
+  flex: 1;
+}
+.dim-field label {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.dim-field input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+.psd-checkbox-options {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+.btn-download-png {
+  background: linear-gradient(135deg, #059669, #10b981) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important;
+  border: none !important;
+}
+.btn-download-png:hover {
+  background: linear-gradient(135deg, #047857, #059669) !important;
+  transform: translateY(-1px);
+}

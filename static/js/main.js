@@ -524,10 +524,17 @@ document.addEventListener("DOMContentLoaded", () => {
       fd.append("dpi", document.getElementById("image-dpi").value);
       fd.append("auto_denoise", document.getElementById("image-auto-denoise").checked ? "true" : "false");
     } else if (tool === "psd") {
-      endpoint = "/api/jobs/psd";
-      fd.append("layer_name", document.getElementById("psd-layer-name").value || "Artwork");
-      fd.append("background", document.getElementById("psd-background").value);
-      fd.append("dpi", document.getElementById("psd-dpi").value);
+      endpoint = "/api/psd-jobs";
+      fd.append("layer_name", document.getElementById("psd-layer-name")?.value || "Artwork Layer");
+      fd.append("canvas_size", document.getElementById("psd-canvas-size")?.value || "original");
+      fd.append("custom_w", document.getElementById("psd-custom-w")?.value || "4000");
+      fd.append("custom_h", document.getElementById("psd-custom-h")?.value || "4000");
+      fd.append("auto_trim", document.getElementById("psd-auto-trim")?.checked ? "true" : "false");
+      fd.append("isolate_bg", document.getElementById("psd-isolate-bg")?.value || "none");
+      fd.append("layer_structure", document.getElementById("psd-layer-structure")?.value || "dual_white");
+      fd.append("add_shadow", document.getElementById("psd-add-shadow")?.checked ? "true" : "false");
+      fd.append("defringe", document.getElementById("psd-defringe")?.checked ? "true" : "false");
+      fd.append("dpi", document.getElementById("psd-dpi")?.value || "300");
     }
 
     try {
@@ -628,11 +635,21 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     } else if (tool === "psd") {
       rows += `
-        <tr><td>Dimensions</td><td>${src.width}×${src.height}</td><td><b>${meta.width}×${meta.height} px</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
-        <tr><td>Layers</td><td>Flattened Bitmap</td><td><b>${meta.layer_name} (Unlocked & Editable)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
-        <tr><td>Transparency / Alpha</td><td>Preserved</td><td><b>100% Alpha Channel Intact</b></td><td><span class="badge-status-pass">FREEPIK READY</span></td></tr>
-        <tr><td>Print Density</td><td>72 DPI</td><td><b>${meta.dpi} DPI Print Tags</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
+        <tr><td>Dimensions & Canvas</td><td>${src.width}×${src.height} (${src.size_mb} MB)</td><td><b>${meta.width}×${meta.height} px (${meta.megapixels} MP)</b></td><td><span class="badge-status-pass">CALIBRATED</span></td></tr>
+        <tr><td>Photoshop Layers</td><td>Single Layer</td><td><b>${meta.layers} Layers (${meta.layer_name})</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
+        <tr><td>Layer Structure & Alpha</td><td>Raw Bitmap</td><td><b>${meta.background} · 100% Alpha Intact</b></td><td><span class="badge-status-pass">FREEPIK READY</span></td></tr>
+        <tr><td>Print Resolution</td><td>Standard</td><td><b>${meta.dpi} Commercial Print Headers</b></td><td><span class="badge-status-pass">EMBEDDED</span></td></tr>
       `;
+
+      const pngBtn = document.getElementById("dl-btn-psd-png");
+      if (pngBtn) {
+        if (meta.companion_png) {
+          pngBtn.href = `/api/download/png/${jobId}`;
+          pngBtn.style.display = "inline-flex";
+        } else {
+          pngBtn.style.display = "none";
+        }
+      }
     }
 
     tableBody.innerHTML = rows;
@@ -1609,3 +1626,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (el) el.style.display = "none";
   }
 });
+
+  // PSD Canvas Size Custom Toggle
+  const psdCanvasSelect = document.getElementById("psd-canvas-size");
+  const psdCustomDimRow = document.getElementById("psd-custom-dim-row");
+  if (psdCanvasSelect && psdCustomDimRow) {
+    psdCanvasSelect.addEventListener("change", () => {
+      psdCustomDimRow.style.display = (psdCanvasSelect.value === "custom") ? "flex" : "none";
+    });
+  }
