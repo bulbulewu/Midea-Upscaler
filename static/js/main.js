@@ -612,8 +612,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dlBtn.href = `/api/download/${job.id}`;
 
-    const src = job.source || {};
-    const meta = job.meta || {};
+    const src = job.source || (job.meta && job.meta.source) || {};
+    const meta = (job.meta && job.meta.output) ? job.meta.output : (job.meta || {});
 
     let rows = "";
 
@@ -644,7 +644,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const pngBtn = document.getElementById("dl-btn-psd-png");
       if (pngBtn) {
         if (meta.companion_png) {
-          pngBtn.href = `/api/download/png/${jobId}`;
+          pngBtn.href = `/api/download/png/${job.id}`;
           pngBtn.style.display = "inline-flex";
         } else {
           pngBtn.style.display = "none";
