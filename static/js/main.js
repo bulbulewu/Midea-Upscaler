@@ -76,9 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------- Tool Pipeline Switching ----------------
   const toolTitles = {
-    video: "ðŸŽ¬ 4K Stock Video Master Upscaler",
-    image: "ðŸ–¼ï¸ Image Upscaler (4K & 8K)",
-    psd:   "ðŸ“„ PNG to Layered PSD Generator",
+    video: "🎬 4K Stock Video Master Upscaler",
+    image: "🖼️ Image Upscaler (4K & 8K)",
+    psd:   "📄 PNG to Layered PSD Generator",
+    toolkit: "🛠️ Stock Contributor Toolkit Pro",
   };
 
   const tabBtns = document.querySelectorAll(".tab-btn");
@@ -98,8 +99,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update topbar breadcrumb
       const topTitle = document.getElementById("topbar-tool-title");
-      if (topTitle && toolTitles[tool]) {
-        topTitle.textContent = toolTitles[tool];
+      const crumbPrefix = document.getElementById("topbar-crumb-prefix");
+      const marketPill = document.getElementById("topbar-market-pill");
+
+      if (tool === "toolkit") {
+        if (crumbPrefix) crumbPrefix.style.display = "none";
+        if (marketPill) marketPill.style.display = "none";
+        if (topTitle) topTitle.textContent = "🛠️ Stock Contributor Toolkit Pro";
+      } else {
+        if (crumbPrefix) crumbPrefix.style.display = "";
+        if (marketPill) marketPill.style.display = "";
+        if (topTitle && toolTitles[tool]) {
+          topTitle.textContent = toolTitles[tool];
+        }
       }
     });
   });

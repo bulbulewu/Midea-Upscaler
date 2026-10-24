@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media Toolkit Pro V3 — Multi-Marketplace Studio Engine | Munajat International</title>
-  <link rel="stylesheet" href="/static/css/style.css?v=8.0.0">
+  <link rel="stylesheet" href="/static/css/style.css?v=9.0.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 </head>
 <body>
@@ -163,7 +163,7 @@
         <div class="nav-left">
           <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">☰</button>
           <div class="active-pipeline-breadcrumb">
-            <span class="crumb-prefix">Studio Pipeline:</span>
+            <span class="crumb-prefix" id="topbar-crumb-prefix">Studio Pipeline:</span>
             <span class="crumb-title" id="topbar-tool-title">🎬 4K Stock Video Master Upscaler</span>
             <span class="active-market-pill" id="topbar-market-pill">⭐ Universal Stock Master</span>
           </div>
@@ -786,34 +786,15 @@
              4. STOCK CONTRIBUTOR TOOLKIT PANEL (iFrame Embedded)
         ======================================================== -->
         <section class="tool-panel" id="panel-toolkit">
-          <div class="studio-card">
-
-            <div class="toolkit-panel-header">
-              <div class="toolkit-panel-info">
-                <h2>🛠️ Stock Contributor Toolkit Pro</h2>
-                <p>A full suite of microstock contributor tools — AI Metadata Studio, Keyword Research, Trend Calendar, Portfolio Tracker, Motion Graphics Generator, Promo Maker, SVG-to-Video converter, and SEO Optimizer — embedded seamlessly.</p>
-              </div>
-            </div>
-
-            <div class="toolkit-pill-row">
-              <span class="toolkit-pill">📊 Adobe Tracker</span>
-              <span class="toolkit-pill">🔑 Keyword Research</span>
-              <span class="toolkit-pill">📅 Trend Calendar</span>
-              <span class="toolkit-pill">🧠 AI Creativity Hub</span>
-              <span class="toolkit-pill">🎞️ Motion Graphics</span>
-              <span class="toolkit-pill">🎬 Promo Maker</span>
-              <span class="toolkit-pill">🌀 SVG → Video</span>
-              <span class="toolkit-pill">📈 Portfolio</span>
-              <span class="toolkit-pill">🔍 SEO Studio</span>
-            </div>
+          <div class="studio-card" style="padding: 14px 18px 20px 18px;">
 
             <!-- Warning banner if toolkit service is not reachable -->
             <div class="toolkit-not-running-banner" id="toolkit-not-running-banner">
               ⚠️ <b>Toolkit service is not reachable.</b> If running locally, start the Stock Contributor Toolkit on port 5001: <code>python app.py --port 5001</code> inside the <code>stock-contributor-toolkit-pro-v14</code> folder. On Render, set the <b>TOOLKIT_URL</b> environment variable on this service to point to the deployed toolkit URL.
             </div>
 
-            <!-- iFrame wrapper with loading spinner -->
-            <div class="toolkit-iframe-wrapper">
+            <!-- iFrame wrapper with loading spinner (At TOP for Full Studio Height) -->
+            <div class="toolkit-iframe-wrapper" style="margin-bottom: 20px;">
               <div class="toolkit-iframe-loading" id="toolkit-iframe-loading">
                 <div class="toolkit-spinner"></div>
                 <span class="toolkit-load-text">Loading Stock Contributor Toolkit…</span>
@@ -827,6 +808,33 @@
                 allow="clipboard-write"
                 loading="lazy">
               </iframe>
+            </div>
+
+            <!-- Toolkit Title, Description & Feature Pills Area (Moved to BOTTOM above Footer) -->
+            <div class="toolkit-panel-bottom-card" style="padding: 18px 22px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <div class="toolkit-panel-header" style="margin-bottom: 10px;">
+                <div class="toolkit-panel-info">
+                  <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                    <span>🛠️</span>
+                    <span>Stock Contributor Toolkit Pro</span>
+                  </h3>
+                  <p style="font-size: 0.88rem; color: var(--text-dim); line-height: 1.5;">
+                    A full suite of microstock contributor tools — AI Metadata Studio, Keyword Research, Trend Calendar, Portfolio Tracker, Motion Graphics Generator, Promo Maker, SVG-to-Video converter, and SEO Optimizer — embedded seamlessly.
+                  </p>
+                </div>
+              </div>
+
+              <div class="toolkit-pill-row" style="margin-bottom: 0;">
+                <span class="toolkit-pill">📊 Adobe Tracker</span>
+                <span class="toolkit-pill">🔑 Keyword Research</span>
+                <span class="toolkit-pill">📅 Trend Calendar</span>
+                <span class="toolkit-pill">🧠 AI Creativity Hub</span>
+                <span class="toolkit-pill">🎞️ Motion Graphics</span>
+                <span class="toolkit-pill">🎬 Promo Maker</span>
+                <span class="toolkit-pill">🌀 SVG → Video</span>
+                <span class="toolkit-pill">📈 Portfolio</span>
+                <span class="toolkit-pill">🔍 SEO Studio</span>
+              </div>
             </div>
 
           </div>
@@ -2222,7 +2230,7 @@ pyinstaller --noconfirm --onedir --windowed --add-data "templates;templates" --a
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Main Application Script -->
-  <script src="/static/js/main.js?v=8.0.0"></script>
+  <script src="/static/js/main.js?v=9.0.0"></script>
   <!-- ========================================================
        MODAL: AI STOCK REJECTION INSPECTOR RESULTS
   ======================================================== -->
