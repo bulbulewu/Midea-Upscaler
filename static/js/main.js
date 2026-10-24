@@ -704,7 +704,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelActivateBtn = document.getElementById("cancel-activate-btn");
   if (cancelActivateBtn) cancelActivateBtn.addEventListener("click", () => closeModal("modal-activate"));
 
-  // ---------------- AUTH & SESSION ----------------
+  // ---------------- AUTH & SESSION (Strict Per-User Browser Isolation) ----------------
+  const openAdminBtn = document.getElementById("open-admin-btn");
+
   async function refreshSession() {
     try {
       const res = await fetch("/api/auth/session");
@@ -716,14 +718,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const userTierEl = document.getElementById("chip-user-tier");
       const logoutBtn = document.getElementById("auth-logout-btn");
 
+      // STRICT ADMIN VISIBILITY: Only show Admin Panel button if is_admin is true and role is Master Admin
+      if (openAdminBtn) {
+        if (sess.logged_in && sess.is_admin && sess.role === "Master Admin") {
+          openAdminBtn.style.display = "inline-flex";
+        } else {
+          openAdminBtn.style.display = "none";
+        }
+      }
+
       if (sess.logged_in) {
         if (userEmailEl) userEmailEl.textContent = sess.user_email;
         if (userTierEl) userTierEl.textContent = `⭐ ${sess.role} (${sess.license_tier || 'Pro'})`;
         if (logoutBtn) logoutBtn.textContent = "Logout";
       } else {
         if (userEmailEl) userEmailEl.textContent = "Guest Contributor";
-        if (userTierEl) userTierEl.textContent = "Unactivated Studio";
-        if (logoutBtn) logoutBtn.textContent = "Login";
+        if (userTierEl) userTierEl.textContent = "Unregistered · 7-Day Free Trial Available";
+        if (logoutBtn) logoutBtn.textContent = "Sign In / Register";
       }
     } catch (err) {
       console.warn("Session check error:", err);
@@ -737,11 +748,29 @@ document.addEventListener("DOMContentLoaded", () => {
     authBtn.addEventListener("click", async () => {
       if (state.session && state.session.logged_in) {
         await fetch("/api/auth/logout", { method: "POST" });
+        if (openAdminBtn) openAdminBtn.style.display = "none";
         showToast("Logged out successfully.", "info");
         refreshSession();
       } else {
         openModal("modal-login");
       }
+    });
+  }
+
+  // Footer navigation links
+  const footerReadmeLink = document.getElementById("footer-link-readme");
+  if (footerReadmeLink) {
+    footerReadmeLink.addEventListener("click", () => {
+      openModal("modal-settings");
+      const readmePill = document.querySelector('.s-pill-btn[data-panel="readme"]');
+      if (readmePill) readmePill.click();
+    });
+  }
+
+  const footerSettingsLink = document.getElementById("footer-link-settings");
+  if (footerSettingsLink) {
+    footerSettingsLink.addEventListener("click", () => {
+      openModal("modal-settings");
     });
   }
 

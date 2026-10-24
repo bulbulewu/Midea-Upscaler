@@ -13,7 +13,8 @@ import uuid
 import webbrowser
 from datetime import datetime, timedelta, timezone
 
-from flask import Flask, jsonify, render_template, request, send_file, Response
+from flask import Flask, jsonify, render_template, request, send_file, Response, session
+from functools import wraps
 from werkzeug.utils import secure_filename
 
 from backend.upscaler_video import (
@@ -44,6 +45,17 @@ app = Flask(
     static_folder=os.path.join(BASE, "static"),
 )
 app.config["MAX_CONTENT_LENGTH"] = 4 * 1024 * 1024 * 1024  # 4 GB max upload
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "munajat-media-toolkit-master-key-2026-safe-production")
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get("is_admin") or session.get("role") != "Master Admin":
+            return jsonify({"error": "Unauthorized access. Master Administrator credentials required."}), 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 jobs = {}
 jobs_lock = threading.Lock()
@@ -395,7 +407,10 @@ def health():
 
 @app.route("/api/auth/session")
 def auth_session():
-    return jsonify(license_mgr.get_active_session())
+    user_email = session.get("user_email")
+    sess_data = license_mgr.get_session_for_email(user_email)
+    sess_data["is_admin"] = bool(session.get("is_admin") and session.get("role") == "Master Admin")
+    return jsonify(sess_data)
 
 
 @app.route("/api/auth/login", methods=["POST"])
@@ -404,6 +419,10 @@ def auth_login():
     email = data.get("email", "")
     password = data.get("password", "")
     res = license_mgr.login(email, password)
+    if res.get("success"):
+        session["user_email"] = res["session"]["user_email"]
+        session["role"] = res["session"]["role"]
+        session["is_admin"] = (res["session"]["role"] == "Master Admin")
     return jsonify(res), (200 if res.get("success") else 401)
 
 
@@ -415,6 +434,9 @@ def auth_register():
     name = data.get("name", "")
     try:
         res = license_mgr.register_user(email, password, name)
+        session["user_email"] = res["user"]["email"]
+        session["role"] = "Trial Contributor"
+        session["is_admin"] = False
         return jsonify(res), 200
     except Exception as exc:
         return jsonify({"error": str(exc)}), 400
@@ -422,7 +444,7 @@ def auth_register():
 
 @app.route("/api/auth/logout", methods=["POST"])
 def auth_logout():
-    license_mgr.logout()
+    session.clear()
     return jsonify({"success": True})
 
 
@@ -437,6 +459,7 @@ def license_activate():
 
 
 @app.route("/api/admin/keys", methods=["GET"])
+@admin_required
 def admin_get_keys():
     status = request.args.get("status", "All")
     search = request.args.get("search", "")
@@ -445,6 +468,7 @@ def admin_get_keys():
 
 
 @app.route("/api/admin/keys/generate", methods=["POST"])
+@admin_required
 def admin_generate_key():
     data = request.get_json(silent=True) or request.form
     email = data.get("email", "")
@@ -459,6 +483,7 @@ def admin_generate_key():
 
 
 @app.route("/api/admin/keys/revoke", methods=["POST"])
+@admin_required
 def admin_revoke_key():
     data = request.get_json(silent=True) or request.form
     key = data.get("key", "")
@@ -467,6 +492,7 @@ def admin_revoke_key():
 
 
 @app.route("/api/admin/keys/delete", methods=["DELETE", "POST"])
+@admin_required
 def admin_delete_key():
     data = request.get_json(silent=True) or request.form
     key = data.get("key", "")
@@ -475,12 +501,14 @@ def admin_delete_key():
 
 
 @app.route("/api/admin/users", methods=["GET"])
+@admin_required
 def admin_get_users():
     users = license_mgr.get_users()
     return jsonify({"users": users, "total": len(users)})
 
 
 @app.route("/api/admin/users/add", methods=["POST"])
+@admin_required
 def admin_add_user():
     data = request.get_json(silent=True) or request.form
     email = data.get("email", "")
@@ -495,6 +523,7 @@ def admin_add_user():
 
 
 @app.route("/api/admin/users/status", methods=["POST"])
+@admin_required
 def admin_user_status():
     data = request.get_json(silent=True) or request.form
     user_id = data.get("user_id", "")
@@ -504,6 +533,7 @@ def admin_user_status():
 
 
 @app.route("/api/admin/users/reset-hwid", methods=["POST"])
+@admin_required
 def admin_user_reset_hwid():
     data = request.get_json(silent=True) or request.form
     user_id = data.get("user_id", "")
@@ -512,6 +542,7 @@ def admin_user_reset_hwid():
 
 
 @app.route("/api/admin/users/edit", methods=["POST"])
+@admin_required
 def admin_edit_user():
     data = request.get_json(silent=True) or request.form
     user_id = data.get("user_id", "")
@@ -523,6 +554,7 @@ def admin_edit_user():
 
 
 @app.route("/api/admin/users/delete", methods=["DELETE", "POST"])
+@admin_required
 def admin_delete_user():
     data = request.get_json(silent=True) or request.form
     user_id = data.get("user_id", "")
@@ -531,6 +563,7 @@ def admin_delete_user():
 
 
 @app.route("/api/admin/users/export-csv")
+@admin_required
 def admin_export_users_csv():
     csv_text = license_mgr.export_users_csv()
     return Response(
@@ -541,18 +574,21 @@ def admin_export_users_csv():
 
 
 @app.route("/api/admin/stats")
+@admin_required
 def admin_stats():
     stats = license_mgr.get_storage_stats(UPLOAD_DIR, OUTPUT_DIR)
     return jsonify(stats)
 
 
 @app.route("/api/admin/purge-cache", methods=["POST"])
+@admin_required
 def admin_purge_cache():
     cleaned = license_mgr.purge_cache(UPLOAD_DIR, OUTPUT_DIR)
     return jsonify({"success": True, "files_removed": cleaned})
 
 
 @app.route("/api/admin/factory-reset", methods=["POST"])
+@admin_required
 def admin_factory_reset():
     license_mgr.factory_reset()
     return jsonify({"success": True, "message": "System store reset to initial commercial defaults."})
@@ -579,6 +615,7 @@ def open_folder(job_id):
 
 
 @app.route("/api/admin/policies", methods=["GET", "POST"])
+@admin_required
 def admin_policies():
     if request.method == "POST":
         data = request.get_json(silent=True) or request.form
@@ -588,6 +625,7 @@ def admin_policies():
 
 
 @app.route("/api/admin/backup", methods=["GET"])
+@admin_required
 def admin_backup_export():
     data = license_mgr.export_backup_json()
     return Response(
@@ -598,6 +636,7 @@ def admin_backup_export():
 
 
 @app.route("/api/admin/restore", methods=["POST"])
+@admin_required
 def admin_backup_restore():
     f = request.files.get("backup_file")
     if not f:

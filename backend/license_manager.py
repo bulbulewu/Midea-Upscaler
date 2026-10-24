@@ -609,16 +609,68 @@ class LicenseManager:
         return current
 
     # ---------------- Session & Auth ----------------
-    def get_active_session(self):
+    def get_session_for_email(self, email=None):
+        if not email:
+            return {
+                "logged_in": False,
+                "user_email": "Guest Contributor",
+                "role": "Guest",
+                "is_admin": False,
+                "license_tier": "7-Day Free Trial Available",
+                "expires_at": "Not Registered",
+                "daily_limit": "0",
+            }
+
         db = self._read_db()
-        return db.get("active_session", {
+        email_clean = email.strip().lower()
+
+        if email_clean == "bulbulworka1@gmail.com":
+            return {
+                "logged_in": True,
+                "user_email": "bulbulworka1@gmail.com",
+                "role": "Master Admin",
+                "is_admin": True,
+                "license_tier": "Master Lifetime Commercial",
+                "expires_at": "2036-01-01",
+                "daily_limit": "Unlimited",
+            }
+
+        user = next((u for u in db.get("users", []) if u["email"].lower() == email_clean), None)
+        if not user:
+            return {
+                "logged_in": False,
+                "user_email": email_clean,
+                "role": "Guest",
+                "is_admin": False,
+                "license_tier": "Unregistered",
+                "expires_at": "N/A",
+                "daily_limit": "0",
+            }
+
+        is_trial = "Trial" in user.get("role", "")
+        expires_date_str = user.get("expires_at")
+        is_expired = False
+        if expires_date_str:
+            try:
+                exp_dt = datetime.strptime(expires_date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                if datetime.now(timezone.utc) > exp_dt:
+                    is_expired = True
+                    user["status"] = "Expired (License Required)"
+            except Exception:
+                pass
+
+        return {
             "logged_in": True,
-            "user_email": "bulbulworka1@gmail.com",
-            "role": "Master Admin",
-            "license_tier": "Master Lifetime Pro",
-            "expires_at": "2036-01-01",
-            "daily_limit": "Unlimited",
-        })
+            "user_email": user["email"],
+            "role": user.get("role", "Pro Contributor"),
+            "is_admin": False,
+            "license_tier": "Expired (License Required)" if is_expired else (f"7-Day Free Trial" if is_trial else f"Pro Contributor"),
+            "expires_at": user.get("expires_at", "Active"),
+            "daily_limit": "0" if is_expired else str(user.get("daily_limit", 15)),
+        }
+
+    def get_active_session(self, email=None):
+        return self.get_session_for_email(email)
 
     def register_user(self, email, password="", name=""):
         email = email.strip().lower()
@@ -666,35 +718,41 @@ class LicenseManager:
         }
         db.setdefault("keys", []).insert(0, new_key_obj)
         db.setdefault("users", []).append(new_user)
+        self._write_db(db)
 
         session = {
             "logged_in": True,
             "user_email": email,
             "role": "Trial Contributor",
+            "is_admin": False,
             "license_tier": f"7-Day Free Trial ({trial_days} Days)",
             "expires_at": expires.strftime("%Y-%m-%d"),
             "daily_limit": str(daily_lim),
         }
-        db["active_session"] = session
-        self._write_db(db)
         return {"success": True, "user": new_user, "session": session}
 
     def login(self, email, password_or_pin=""):
         email = email.strip().lower()
+        password_or_pin = password_or_pin.strip()
         db = self._read_db()
 
         # Check if master admin
         if email in ("bulbulworka1@gmail.com", "ahmeddesignhouse@gmail.com"):
+            admin_pass = db.get("policies", {}).get("admin_password", "bulbul2026")
+            if password_or_pin != admin_pass:
+                return {
+                    "success": False,
+                    "message": "Incorrect Master Admin password. Please check your credentials or use recovery email."
+                }
             session = {
                 "logged_in": True,
                 "user_email": "bulbulworka1@gmail.com",
                 "role": "Master Admin",
+                "is_admin": True,
                 "license_tier": "Master Lifetime Commercial",
                 "expires_at": "2036-01-01",
                 "daily_limit": "Unlimited",
             }
-            db["active_session"] = session
-            self._write_db(db)
             return {"success": True, "session": session}
 
         # Check user in registered users
@@ -723,25 +781,14 @@ class LicenseManager:
             "logged_in": True,
             "user_email": user["email"],
             "role": user.get("role", "Pro Contributor"),
+            "is_admin": False,
             "license_tier": "Expired (License Required)" if is_expired else (f"7-Day Free Trial" if is_trial else f"Pro Contributor"),
             "expires_at": user.get("expires_at", "Active"),
             "daily_limit": "0" if is_expired else str(user.get("daily_limit", 15)),
         }
-        db["active_session"] = session
-        self._write_db(db)
         return {"success": True, "session": session, "is_expired": is_expired}
 
     def logout(self):
-        db = self._read_db()
-        db["active_session"] = {
-            "logged_in": False,
-            "user_email": "Guest",
-            "role": "Unregistered / Guest",
-            "license_tier": "Trial Restricted",
-            "expires_at": "Expired",
-            "daily_limit": "0",
-        }
-        self._write_db(db)
         return True
 
     # ---------------- Backup & Restore ----------------
