@@ -1,0 +1,85 @@
+[
+ {
+  "assetId": "88112233",
+  "assetTitle": "Ramadan lantern on night market street",
+  "authorName": "Fixture Creator One",
+  "authorUrl": "https://stock.adobe.com/contributor/201",
+  "url": "https://stock.adobe.com/images/88112233",
+  "thumbnail": "https://example.com/t1.jpg",
+  "mediaType": "photo",
+  "generativeAI": false,
+  "nbDownloads": 1840,
+  "nbViews": 51200,
+  "creationDate": "2025-02-11",
+  "tags": [
+   "ramadan",
+   "lantern",
+   "night market",
+   "eid"
+  ]
+ },
+ {
+  "id": "88114455",
+  "title": "Eid family dinner table celebration",
+  "creator": "Fixture Creator Two",
+  "asset_url": "https://stock.adobe.com/images/88114455",
+  "type": "Photo",
+  "isAIContent": "no",
+  "downloadsCount": "920",
+  "viewsCount": "20400",
+  "published": "2025-03-02",
+  "keywords": "eid, family, dinner, celebration, ramadan"
+ },
+ {
+  "asset_id": 99120077,
+  "name": "Golden islamic geometric pattern background",
+  "contributor": {
+   "name": "Pattern House Demo",
+   "url": "https://stock.adobe.com/contributor/305"
+  },
+  "link": "https://stock.adobe.com/images/99120077",
+  "contentType": "vector",
+  "ai_generated": true,
+  "downloads": 3120,
+  "views": 98750,
+  "date": "2024-12-19",
+  "keywords": [
+   "islamic pattern",
+   "gold",
+   "background",
+   "ramadan"
+  ]
+ },
+ {
+  "assetId": "77331100",
+  "assetTitle": "Iftar dates and arabic coffee still life",
+  "authorName": "Fixture Creator One",
+  "mediaType": "video",
+  "generativeAI": false,
+  "nbDownloads": 410,
+  "nbViews": 9800,
+  "creationDate": "2025-01-25",
+  "tags": [
+   "iftar",
+   "dates",
+   "coffee",
+   "ramadan"
+  ]
+ },
+ {
+  "assetId": "77339988",
+  "assetTitle": "Crescent moon over mosque silhouette",
+  "authorName": "Skyline Demo Studio",
+  "mediaType": "illustration",
+  "generativeAI": true,
+  "nbDownloads": 2210,
+  "nbViews": 67300,
+  "creationDate": "2025-02-28",
+  "tags": [
+   "crescent",
+   "mosque",
+   "ramadan",
+   "night"
+  ]
+ }
+]

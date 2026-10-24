@@ -1,0 +1,10 @@
+# Stock Contributor Toolkit Pro
+Flask>=3.0
+Pillow>=10.0
+cairosvg>=2.7
+resvg-py>=0.5
+opencv-python-headless>=4.8
+piexif>=1.1.3
+# OPTIONAL (Promo Maker voiceover/jingles only): free Microsoft Edge TTS.
+# The app and every non-voice feature run fine without it.
+edge-tts>=7.0

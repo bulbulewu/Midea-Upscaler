@@ -1914,7 +1914,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // -----------------------------------------------------------------------
   let toolkitLoaded = false;
 
-  async function loadToolkitPanel() {
+  function loadToolkitPanel() {
     if (toolkitLoaded) return;
 
     const iframe = document.getElementById("toolkit-iframe");
@@ -1922,28 +1922,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const banner = document.getElementById("toolkit-not-running-banner");
     if (!iframe) return;
 
-    try {
-      const res = await fetch("/api/toolkit-url");
-      const data = await res.json();
-      const toolkitUrl = data.url || "http://localhost:5001";
-
-      // Check reachability via no-cors probe (will resolve even on CORS block if server is up)
-      fetch(toolkitUrl, { mode: "no-cors", cache: "no-store" })
-        .then(() => {
-          // Server responded — load iframe
-          if (banner) banner.style.display = "none";
-          iframe.src = toolkitUrl;
-        })
-        .catch(() => {
-          // Server unreachable
-          if (loader) loader.classList.add("hidden");
-          if (banner) banner.style.display = "block";
-        });
-
-    } catch (e) {
-      if (loader) loader.classList.add("hidden");
-      if (banner) banner.style.display = "block";
+    if (banner) banner.style.display = "none";
+    if (loader) {
+      loader.classList.remove("hidden");
+      loader.style.display = "flex";
     }
+
+    iframe.src = "/toolkit/";
   }
 
   // Hide loading spinner when iframe finishes loading
@@ -1951,8 +1936,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (toolkitIframe) {
     toolkitIframe.addEventListener("load", () => {
       const loader = document.getElementById("toolkit-iframe-loading");
-      if (loader && toolkitIframe.src !== "about:blank") {
+      if (loader && toolkitIframe.src && !toolkitIframe.src.endsWith("about:blank")) {
         loader.classList.add("hidden");
+        loader.style.display = "none";
         toolkitLoaded = true;
       }
     });

@@ -832,14 +832,128 @@ def studio_settings():
 
 
 # -----------------------------------------------------------------------
-# Stock Contributor Toolkit Integration - iFrame URL endpoint
-# Set TOOLKIT_URL env var on Render to point to the toolkit's Render URL.
-# Locally defaults to http://localhost:5001
+# Stock Contributor Toolkit Pro — Zero-Conflict Engine & Reverse Proxy
+# Auto-spawns stock-contributor-toolkit-pro-v14 on internal port 5001
+# Serves seamlessly on /toolkit/ on both Render.com and Localhost
 # -----------------------------------------------------------------------
+import sys
+import subprocess
+import atexit
+import urllib.request
+import urllib.error
+
+_toolkit_proc = None
+_toolkit_lock = threading.Lock()
+
+def _ensure_toolkit_running():
+    global _toolkit_proc
+    toolkit_dir = os.path.join(BASE, "stock-contributor-toolkit-pro-v14")
+    if not os.path.isdir(toolkit_dir):
+        return False
+
+    try:
+        req = urllib.request.Request("http://127.0.0.1:5001/api/tracker/seasons", method="GET")
+        with urllib.request.urlopen(req, timeout=1.5):
+            return True
+    except Exception:
+        pass
+
+    with _toolkit_lock:
+        if _toolkit_proc is not None and _toolkit_proc.poll() is None:
+            return True
+        try:
+            app_py = os.path.join(toolkit_dir, "app.py")
+            cmd = [sys.executable, app_py, "--port", "5001", "--no-browser"]
+            _toolkit_proc = subprocess.Popen(
+                cmd,
+                cwd=toolkit_dir,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            print(f"[Media Toolkit Pro] Launched Stock Contributor Toolkit (PID {_toolkit_proc.pid}) on 127.0.0.1:5001")
+            return True
+        except Exception as exc:
+            print(f"[Media Toolkit Pro] Error launching toolkit: {exc}")
+            return False
+
+@atexit.register
+def _cleanup_toolkit():
+    global _toolkit_proc
+    if _toolkit_proc is not None and _toolkit_proc.poll() is None:
+        try:
+            _toolkit_proc.terminate()
+            _toolkit_proc.wait(timeout=2)
+        except Exception:
+            pass
+
+def _proxy_to_toolkit(path=""):
+    _ensure_toolkit_running()
+    target_url = f"http://127.0.0.1:5001/{path.lstrip('/')}"
+    if request.query_string:
+        target_url += f"?{request.query_string.decode('utf-8', errors='ignore')}"
+
+    excluded_headers = {'host', 'content-length'}
+    headers = {k: v for k, v in request.headers if k.lower() not in excluded_headers}
+    data = request.get_data() if request.method in ('POST', 'PUT', 'PATCH') else None
+
+    req = urllib.request.Request(target_url, data=data, headers=headers, method=request.method)
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            resp_body = resp.read()
+            content_type = resp.headers.get("content-type", "text/html")
+
+            # For main index page, inject seamless fetch & XHR interceptors
+            if "text/html" in content_type and (not path or path == "/" or path.endswith("html")):
+                html_str = resp_body.decode("utf-8", errors="ignore")
+                interceptor = '''
+<script>
+(function() {
+  const origFetch = window.fetch;
+  window.fetch = function(url, init) {
+    if (typeof url === 'string') {
+      if (url.startsWith('/api/') || url.startsWith('/download/') || url.startsWith('/promo-')) {
+        url = '/toolkit' + url;
+      }
+    } else if (url && url.url) {
+      try {
+        const u = new URL(url.url, window.location.origin);
+        if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/download/') || u.pathname.startsWith('/promo-')) {
+          url = new Request('/toolkit' + u.pathname + u.search, url);
+        }
+      } catch(e) {}
+    }
+    return origFetch.call(this, url, init);
+  };
+  const origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+    if (typeof url === 'string' && (url.startsWith('/api/') || url.startsWith('/download/') || url.startsWith('/promo-'))) {
+      url = '/toolkit' + url;
+    }
+    return origOpen.call(this, method, url, ...rest);
+  };
+})();
+</script>
+</head>'''
+                if "</head>" in html_str:
+                    html_str = html_str.replace("</head>", interceptor, 1)
+                    resp_body = html_str.encode("utf-8")
+
+            resp_headers = [(k, v) for k, v in resp.headers.items() if k.lower() not in ('content-length', 'content-encoding', 'transfer-encoding')]
+            return Response(resp_body, status=resp.status, headers=resp_headers)
+    except urllib.error.HTTPError as he:
+        return Response(he.read(), status=he.code, headers=[(k, v) for k, v in he.headers.items() if k.lower() not in ('content-length', 'content-encoding', 'transfer-encoding')])
+    except Exception as exc:
+        return Response("<div style='font-family:sans-serif;padding:40px;text-align:center;color:#64748b;'><h3>Initializing Stock Contributor Toolkit Pro…</h3><p>Setting up neural models and metadata database. Reloading automatically…</p><script>setTimeout(()=>location.reload(), 2000);</script></div>", status=503, content_type="text/html")
+
+@app.route("/toolkit", defaults={"path": ""}, methods=["GET", "POST", "PUT", "DELETE"])
+@app.route("/toolkit/", defaults={"path": ""}, methods=["GET", "POST", "PUT", "DELETE"])
+@app.route("/toolkit/<path:path>", methods=["GET", "POST", "PUT", "DELETE"])
+def proxy_toolkit_endpoint(path=""):
+    return _proxy_to_toolkit(path)
+
 @app.route("/api/toolkit-url")
 def toolkit_url():
-    url = os.environ.get("TOOLKIT_URL", "http://localhost:5001")
-    return jsonify({"url": url})
+    return jsonify({"url": "/toolkit/"})
 
 def main():
     ap = argparse.ArgumentParser(description="Media Toolkit Pro V3 by Munajat International")
@@ -861,6 +975,7 @@ def main():
         print(f"[Media Toolkit Pro V3] WARNING: {exc}")
 
     threading.Thread(target=_cleanup_old_files, daemon=True).start()
+    threading.Thread(target=_ensure_toolkit_running, daemon=True).start()
 
     url = f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}"
     print(f"\n=======================================================")
