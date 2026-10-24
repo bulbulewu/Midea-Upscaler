@@ -11,6 +11,7 @@ Marketplace Master Compliance:
   - Performance: -threads 0 full multi-core CPU threading & auto NVENC acceleration
 """
 
+import base64
 import json
 import os
 import re
@@ -127,7 +128,50 @@ def _parse_rational(val):
         return None
 
 
-def probe(path):
+def extract_thumbnail_base64(path, time_offset=1.0):
+    """Extract a high quality JPEG frame from video as a data URI string."""
+    try:
+        ffmpeg, _ = find_ffmpeg()
+        cmd = [
+            ffmpeg, "-hide_banner", "-loglevel", "error",
+            "-ss", str(max(0.0, float(time_offset))),
+            "-i", path,
+            "-vframes", "1",
+            "-vf", "scale=640:-1:flags=bicubic",
+            "-q:v", "3",
+            "-f", "image2pipe",
+            "-vcodec", "mjpeg",
+            "-",
+        ]
+        res = subprocess.run(cmd, capture_output=True, timeout=6)
+        if res.returncode == 0 and res.stdout:
+            b64 = base64.b64encode(res.stdout).decode("ascii")
+            return f"data:image/jpeg;base64,{b64}"
+    except Exception:
+        pass
+    try:
+        ffmpeg, _ = find_ffmpeg()
+        cmd = [
+            ffmpeg, "-hide_banner", "-loglevel", "error",
+            "-ss", "0.0",
+            "-i", path,
+            "-vframes", "1",
+            "-vf", "scale=640:-1:flags=bicubic",
+            "-q:v", "3",
+            "-f", "image2pipe",
+            "-vcodec", "mjpeg",
+            "-",
+        ]
+        res = subprocess.run(cmd, capture_output=True, timeout=6)
+        if res.returncode == 0 and res.stdout:
+            b64 = base64.b64encode(res.stdout).decode("ascii")
+            return f"data:image/jpeg;base64,{b64}"
+    except Exception:
+        pass
+    return None
+
+
+def probe(path, extract_thumb=True):
     """Return dictionary of video technical metadata."""
     _, ffprobe = find_ffmpeg()
     cmd = [
@@ -161,6 +205,11 @@ def probe(path):
 
     bitrate = float(fmt.get("bit_rate") or v_stream.get("bit_rate") or 0.0)
 
+    thumb_b64 = None
+    if extract_thumb:
+        thumb_time = min(1.0, max(0.0, dur * 0.1))
+        thumb_b64 = extract_thumbnail_base64(path, thumb_time)
+
     return {
         "width": int(v_stream.get("width", 0)),
         "height": int(v_stream.get("height", 0)),
@@ -176,6 +225,7 @@ def probe(path):
         "audio_codec": a_stream.get("codec_name") if a_stream else None,
         "size_mb": round(os.path.getsize(path) / (1024 * 1024), 2),
         "filename": os.path.basename(path),
+        "thumbnail": thumb_b64,
     }
 
 

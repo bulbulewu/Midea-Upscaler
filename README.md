@@ -16,7 +16,7 @@ Engineered specifically for microstock contributors, photographers, 3D artists, 
 1. **Multi-Marketplace Preset Selector**: 1-click optimization for Adobe Stock, Shutterstock, Getty Images, Pond5, and Freepik.
 2. **Stock Pre-Flight Compliance Inspector**: Instant automatic evaluation of clip duration (5–60s check), image Megapixels (≥ 4.0 MP rule), frame rate conformance, and audio presence warnings.
 3. **Apple ProRes 422 HQ Export**: Added high-tier Apple ProRes 422 master export in MOV container for maximum royalties on Pond5 and Getty.
-4. **Performance Engine**: Automatic multi-core threading (`-threads 0`), NVENC hardware acceleration, and memory-safe processing for Render.com free cloud containers.
+4. **Performance Engine**: Automatic multi-core threading (`-threads 0`), NVENC hardware acceleration, and memory-safe processing for dedicated cloud containers and high-performance local workstations.
 
 ---
 
@@ -34,7 +34,7 @@ chmod +x start.sh
 
 ---
 
-## 🌐 Deploy to GitHub & Render.com (100% Free)
+## 🌐 Deploy to GitHub & Cloud Server
 
 1. Open PowerShell inside `Midea-upscaler by Munajat_v3`:
    ```powershell
@@ -49,7 +49,7 @@ chmod +x start.sh
    git remote add origin https://github.com/bulbulewu/Midea-Upscaler.git
    git push -u origin main --force
    ```
-3. On Render.com, select your repo and click **Deploy web service**!
+3. Connect your repository to your cloud server or container cluster and click **Deploy web service**!
 
 ---
 

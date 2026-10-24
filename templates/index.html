@@ -1,420 +1,1633 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark_studio">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media Toolkit Pro V3 — Multi-Marketplace Studio Engine | Munajat International</title>
   <link rel="stylesheet" href="/static/css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2224%22>🚀</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <a href="/" class="brand-logo">
-      <div class="logo-icon">✨</div>
-      <div class="brand-text">
-        <span class="brand-name">Media Toolkit Pro</span>
-        <span class="brand-tag">Made By Munajat International</span>
-      </div>
-    </a>
-    <div class="nav-actions">
-      <span class="nav-badge-v3">v3.0 Multi-Marketplace</span>
-      <div class="nav-status" id="system-status-pill">
-        <span class="status-dot"></span> CONNECTING…
-      </div>
-    </div>
-  </nav>
+  <!-- Full Application Shell Layout -->
+  <div class="app-shell">
 
-  <!-- Marketplace Presets Bar -->
-  <div class="marketplaces-bar">
-    <div class="marketplaces-title">
-      <span>Select Target Microstock Marketplace</span>
-      <span style="color:var(--accent-cyan)">Active: <b class="active-market-badge">⭐ Universal Stock Master</b></span>
-    </div>
-    <div class="marketplaces-list">
-      <button class="m-btn active" data-marketplace="universal">⭐ Universal Stock Master</button>
-      <button class="m-btn" data-marketplace="adobe_stock">🅰️ Adobe Stock</button>
-      <button class="m-btn" data-marketplace="shutterstock">🔴 Shutterstock</button>
-      <button class="m-btn" data-marketplace="getty_istock">🟡 Getty / iStock</button>
-      <button class="m-btn" data-marketplace="pond5">🟢 Pond5 Broadcast</button>
-      <button class="m-btn" data-marketplace="freepik">🎨 Freepik Studio</button>
+    <!-- ========================================================
+         LEFT SIDEBAR (Marketplaces, Pipelines & View Controls)
+    ======================================================== -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- Brand & Studio Identity -->
+      <div class="sidebar-brand">
+        <div class="brand-icon">✨</div>
+        <div class="brand-meta">
+          <h1 class="brand-title">Media Toolkit Pro</h1>
+          <span class="brand-subtitle">Munajat International</span>
+        </div>
+      </div>
+
+      <!-- Studio Mode / License Badge -->
+      <div class="sidebar-license-chip" id="sidebar-user-chip">
+        <div class="chip-status-dot"></div>
+        <div class="chip-info">
+          <span class="chip-email" id="chip-user-email">ahmeddesignhouse@gmail.com</span>
+          <span class="chip-tier" id="chip-user-tier">⭐ Pro Studio Master</span>
+        </div>
+      </div>
+
+      <!-- Navigation Section 1: Studio Pipelines -->
+      <div class="sidebar-nav-group">
+        <div class="nav-group-label">STUDIO PIPELINES</div>
+        <nav class="pipeline-nav">
+          <button class="nav-item tab-btn active" data-tool="video">
+            <span class="nav-icon">🎬</span>
+            <span class="nav-text">4K Video Upscaler</span>
+            <span class="nav-badge">4K CFR</span>
+          </button>
+          <button class="nav-item tab-btn" data-tool="image">
+            <span class="nav-icon">🖼️</span>
+            <span class="nav-text">Image Upscaler</span>
+            <span class="nav-badge">8K • 300DPI</span>
+          </button>
+          <button class="nav-item tab-btn" data-tool="psd">
+            <span class="nav-icon">📄</span>
+            <span class="nav-text">PNG to Layered PSD</span>
+            <span class="nav-badge">Photoshop</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Navigation Section 2: Target Microstock Marketplaces -->
+      <div class="sidebar-nav-group">
+        <div class="nav-group-label">
+          <span>TARGET MARKETPLACE</span>
+          <span class="market-active-indicator" id="sidebar-active-indicator">ACTIVE</span>
+        </div>
+        <div class="marketplaces-menu" id="marketplaces-menu">
+          <button class="market-item m-btn active" data-marketplace="universal">
+            <span class="market-icon">⭐</span>
+            <div class="market-info">
+              <span class="market-name">Universal Stock Master</span>
+              <span class="market-desc">Standard compliant across all agencies</span>
+            </div>
+          </button>
+          <button class="market-item m-btn" data-marketplace="adobe_stock">
+            <span class="market-icon">🅰️</span>
+            <div class="market-info">
+              <span class="market-name">Adobe Stock</span>
+              <span class="market-desc">~65 Mbps, Rec.709, No audio reject</span>
+            </div>
+          </button>
+          <button class="market-item m-btn" data-marketplace="shutterstock">
+            <span class="market-icon">🔴</span>
+            <div class="market-info">
+              <span class="market-name">Shutterstock</span>
+              <span class="market-desc">≥ 4.0 MP photos, strict progressive video</span>
+            </div>
+          </button>
+          <button class="market-item m-btn" data-marketplace="getty_istock">
+            <span class="market-icon">🟡</span>
+            <div class="market-info">
+              <span class="market-name">Getty / iStock</span>
+              <span class="market-desc">Apple ProRes 422 HQ broadcast master</span>
+            </div>
+          </button>
+          <button class="market-item m-btn" data-marketplace="pond5">
+            <span class="market-icon">🟢</span>
+            <div class="market-info">
+              <span class="market-name">Pond5 Broadcast</span>
+              <span class="market-desc">High bitrate footage & editorial master</span>
+            </div>
+          </button>
+          <button class="market-item m-btn" data-marketplace="freepik">
+            <span class="market-icon">🎨</span>
+            <div class="market-info">
+              <span class="market-name">Freepik Studio</span>
+              <span class="market-desc">Layered PSD & transparent alpha assets</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Section 3: Layout & View Switcher -->
+      <div class="sidebar-nav-group">
+        <div class="nav-group-label">UPLOAD VIEW LAYOUT</div>
+        <div class="layout-toggle-control">
+          <button class="view-toggle-btn active" data-layout="grid" id="btn-view-grid" title="Switch to Card Grid View">
+            <span>⊞</span> Grid View
+          </button>
+          <button class="view-toggle-btn" data-layout="list" id="btn-view-list" title="Switch to Detailed List Row View">
+            <span>☰</span> List View
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer Hardware & Engine Info -->
+      <div class="sidebar-footer">
+        <div class="engine-status-row">
+          <span class="engine-dot ok"></span>
+          <span class="engine-title">FFmpeg Studio Engine:</span>
+          <span class="engine-pill" id="engine-status-pill">Ready (8.1)</span>
+        </div>
+        <div class="engine-subtext">Commercial Microstock Pipeline v3.0</div>
+      </div>
+
+    </aside>
+
+    <!-- ========================================================
+         MAIN CONTENT AREA
+    ======================================================== -->
+    <div class="main-wrapper">
+
+      <!-- Top Header Navigation Bar (Matches Image 3) -->
+      <header class="top-navbar">
+        <div class="nav-left">
+          <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">☰</button>
+          <div class="active-pipeline-breadcrumb">
+            <span class="crumb-prefix">Studio Pipeline:</span>
+            <span class="crumb-title" id="topbar-tool-title">🎬 4K Stock Video Master Upscaler</span>
+            <span class="active-market-pill" id="topbar-market-pill">⭐ Universal Stock Master</span>
+          </div>
+        </div>
+
+        <div class="nav-right-actions">
+          <!-- Settings Button -->
+          <button class="nav-action-btn btn-settings" id="open-settings-btn" title="Microstock Platform Limits & Configuration">
+            <span class="btn-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
+
+          <div class="nav-divider"></div>
+
+          <!-- Admin Panel Button -->
+          <button class="nav-action-btn btn-admin-panel" id="open-admin-btn" title="Administrator Control Panel">
+            <span class="btn-icon">👑</span>
+            <span>Admin Panel</span>
+          </button>
+
+          <!-- Activate Key Button -->
+          <button class="nav-action-btn btn-activate-key" id="open-activate-btn" title="Activate Pro License Key">
+            <span class="btn-icon">🗝️</span>
+            <span>Activate Key</span>
+          </button>
+
+          <!-- Login / Logout Action -->
+          <div class="auth-action-wrapper" id="auth-action-wrapper">
+            <button class="btn-auth-logout" id="auth-logout-btn">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Studio Container -->
+      <main class="main-container">
+
+        <!-- ========================================================
+             1. 4K VIDEO UPSCALER PANEL
+        ======================================================== -->
+        <section class="tool-panel active" id="panel-video">
+          <div class="studio-card">
+            
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2>🎬 4K Stock Video Master Upscaler</h2>
+                <p>Conforms footage to exact microstock requirements: broadcast bitrates, CFR frame rate preservation, Rec.709 colorimetry, and faststart streaming atoms.</p>
+              </div>
+              <!-- In-Panel View Mode Switcher -->
+              <div class="panel-view-switcher">
+                <span class="view-label">View:</span>
+                <div class="view-pill-group">
+                  <button class="view-pill-btn active" data-view="grid" title="Grid View">⊞ Grid</button>
+                  <button class="view-pill-btn" data-view="list" title="List View">☰ List</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feature Pills -->
+            <div class="feature-pills">
+              <span class="pill-tag">Target: <b class="active-market-badge">⭐ Universal</b></span>
+              <span class="pill-tag">Framerate: <b>CFR Preserved</b></span>
+              <span class="pill-tag">Bitrate: <b>~60 Mbps</b></span>
+              <span class="pill-tag">Color: <b>Rec.709</b></span>
+              <span class="pill-tag">Threading: <b>Max Performance</b></span>
+            </div>
+
+            <!-- Upload Drop Zone -->
+            <div class="drop-zone" id="drop-video">
+              <div class="upload-icon-wrapper">🎬</div>
+              <div class="drop-title">Drop your video clip here or browse</div>
+              <div class="drop-subtitle">Supports MP4, MOV, MKV, WEBM, AVI (up to 4 GB)</div>
+              <button type="button" class="btn-browse">Select Video File</button>
+              <input type="file" id="file-video" accept="video/*,.mkv,.mov,.webm,.avi">
+            </div>
+
+            <!-- Uploaded Video File Preview Card (Dynamic Grid vs List Layout) -->
+            <div class="media-container layout-grid" id="media-container-video">
+              <div class="preview-card-advanced" id="preview-video">
+                
+                <!-- Video Thumbnail Container with Snapshot & Play Button -->
+                <div class="video-thumb-wrapper" id="video-thumb-wrapper">
+                  <img class="video-thumb-img" id="video-thumb-img" alt="Video Thumbnail" src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 360%22 fill=%22%23111827%22><rect width=%22640%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%236b7280%22 font-size=%2224%22>Video Thumbnail</text></svg>">
+                  <div class="video-play-overlay" id="btn-play-video-preview" title="Play / Inspect Video">
+                    <div class="play-triangle">▶</div>
+                  </div>
+                  <span class="video-duration-pill" id="video-duration-pill">00:00</span>
+                  <span class="video-resolution-pill" id="video-resolution-pill">1080p</span>
+                </div>
+
+                <!-- Video File Metadata and Information -->
+                <div class="media-content">
+                  <div class="media-header-row">
+                    <div class="media-title-group">
+                      <h4 class="media-filename" id="preview-name-video">filename.mp4</h4>
+                      <span class="media-format-badge" id="preview-format-video">MP4</span>
+                    </div>
+                    <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-preview-inspect" id="btn-inspect-video">🔍 Inspect</button>
+                      <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-video" title="Remove video">✕ Remove</button>
+                    </div>
+                  </div>
+
+                  <!-- Technical Badges Row -->
+                  <div class="technical-badges-grid">
+                    <div class="tech-badge-item">
+                      <span class="tech-label">FILE SIZE</span>
+                      <span class="tech-value" id="tech-size-video">0.0 MB</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">RESOLUTION</span>
+                      <span class="tech-value" id="tech-res-video">1920×1080</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">FRAME RATE</span>
+                      <span class="tech-value" id="tech-fps-video">24.00 fps</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">CODEC</span>
+                      <span class="tech-value" id="tech-codec-video">H.264</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">AUDIO STATUS</span>
+                      <span class="tech-value" id="tech-audio-video">Muted</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">EST. BITRATE</span>
+                      <span class="tech-value" id="tech-bitrate-video">~60 Mbps</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Live Pre-Flight Compliance Inspector (Matches Image 2) -->
+            <div class="preflight-card" id="preflight-video">
+              <div class="preflight-header">
+                <span class="preflight-title">🛡️ <span id="preflight-market-video">Universal Stock Master Pre-Flight Check</span></span>
+                <span class="badge-status-pass" id="preflight-badge-video">AUTO-INSPECTED</span>
+              </div>
+              <div class="preflight-grid" id="preflight-grid-video"></div>
+            </div>
+
+            <!-- Video Upscale Controls Grid -->
+            <div class="controls-grid">
+              <div class="form-group">
+                <label>Target Master Resolution</label>
+                <select id="video-target">
+                  {% for key, t in targets.items() %}
+                    <option value="{{ key }}">{{ t.label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Master Codec Format</label>
+                <select id="video-codec">
+                  {% for key, c in codecs.items() %}
+                    <option value="{{ key }}" {% if key == 'h264' %}selected{% endif %}>{{ c.label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Bitrate Quality Preset</label>
+                <select id="video-quality">
+                  {% for key, q in qualities.items() %}
+                    <option value="{{ key }}" {% if key == 'stock' %}selected{% endif %}>{{ q.label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <label class="checkbox-toggle">
+              <input type="checkbox" id="video-keep-audio">
+              <span>Keep audio track <small style="color:var(--text-dim)">(Disabled by default to avoid stock agency audio rejections)</small></span>
+            </label>
+
+            <!-- Export Master Button -->
+            <button type="button" class="btn-primary" id="btn-video" disabled>
+              <span>🚀 Export Stock Master Video</span>
+            </button>
+
+            <!-- Progress Card -->
+            <div class="progress-card" id="progress-video">
+              <div class="progress-track"><div class="progress-fill" id="progress-fill-video"></div></div>
+              <div class="progress-meta">
+                <span class="progress-status" id="progress-status-video">Preparing encode…</span>
+                <span id="progress-pct-video">0%</span>
+              </div>
+            </div>
+
+            <div class="error-banner" id="error-video"></div>
+
+            <!-- Result Card -->
+            <div class="result-card" id="result-video">
+              <div class="result-header">✓ Stock Master Export Completed</div>
+              <table class="comparison-table">
+                <thead>
+                  <tr><th>Parameter</th><th>Source Footage</th><th>Master Export</th><th>Stock Check</th></tr>
+                </thead>
+                <tbody id="table-video"></tbody>
+              </table>
+              <div class="result-actions-row">
+                <a href="#" class="btn-download" id="dl-btn-video" download>⬇ Download Stock Master Video</a>
+                <button type="button" class="btn-open-folder" id="btn-open-folder-video" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ========================================================
+             2. IMAGE UPSCALER (4K & 8K) PANEL
+        ======================================================== -->
+        <section class="tool-panel" id="panel-image">
+          <div class="studio-card">
+            
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2>🖼️ Image Upscaler & Detail Enhancer</h2>
+                <p>Enlarge photos, AI renders, and illustrations to 4K & 8K with commercial 300 DPI print tags, guaranteed ≥ 4.0 Megapixel stock threshold, and auto-denoising.</p>
+              </div>
+              <div class="panel-view-switcher">
+                <span class="view-label">View:</span>
+                <div class="view-pill-group">
+                  <button class="view-pill-btn active" data-view="grid">⊞ Grid</button>
+                  <button class="view-pill-btn" data-view="list">☰ List</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-pills">
+              <span class="pill-tag">Scale: <b>2× / 4× / 8×</b></span>
+              <span class="pill-tag">Print: <b>300 DPI Embedded</b></span>
+              <span class="pill-tag">Agency Rule: <b>≥ 4.0 MP Enforced</b></span>
+              <span class="pill-tag">Engine: <b>Lanczos V3</b></span>
+            </div>
+
+            <div class="drop-zone" id="drop-image">
+              <div class="upload-icon-wrapper">🖼️</div>
+              <div class="drop-title">Drop your image here or browse</div>
+              <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
+              <button type="button" class="btn-browse">Select Image File</button>
+              <input type="file" id="file-image" accept="image/*,.tiff,.bmp,.webp">
+            </div>
+
+            <!-- Uploaded Image Preview (Grid / List Switchable) -->
+            <div class="media-container layout-grid" id="media-container-image">
+              <div class="preview-card-advanced" id="preview-image">
+                <div class="image-thumb-wrapper">
+                  <img class="preview-thumb" id="preview-img-image" alt="Preview Image">
+                  <span class="image-mp-pill" id="image-mp-pill">0.0 MP</span>
+                </div>
+                <div class="media-content">
+                  <div class="media-header-row">
+                    <div class="media-title-group">
+                      <h4 class="media-filename" id="preview-name-image">image.png</h4>
+                      <span class="media-format-badge" id="preview-format-image">PNG</span>
+                    </div>
+                    <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-image">✕ Remove</button>
+                    </div>
+                  </div>
+                  <div class="technical-badges-grid">
+                    <div class="tech-badge-item">
+                      <span class="tech-label">FILE SIZE</span>
+                      <span class="tech-value" id="tech-size-image">0.0 MB</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">DIMENSIONS</span>
+                      <span class="tech-value" id="tech-res-image">0 × 0 px</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">MEGAPIXELS</span>
+                      <span class="tech-value" id="tech-mp-image">0.0 MP</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">STOCK THRESHOLD</span>
+                      <span class="tech-value" id="tech-stock-image">≥ 4.0 MP</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Pre-Flight Compliance Inspector -->
+            <div class="preflight-card" id="preflight-image">
+              <div class="preflight-header">
+                <span class="preflight-title">🛡️ <span id="preflight-market-image">Pre-Flight Compliance Check</span></span>
+                <span class="badge-status-pass">AUTO-INSPECTED</span>
+              </div>
+              <div class="preflight-grid" id="preflight-grid-image"></div>
+            </div>
+
+            <div class="controls-grid">
+              <div class="form-group">
+                <label>Scale Factor</label>
+                <div class="segmented-control" data-for="image-scale">
+                  <div class="segmented-option" data-val="2x">2× (2K)</div>
+                  <div class="segmented-option selected" data-val="4x">4× (4K UHD)</div>
+                  <div class="segmented-option" data-val="8x">8× (8K Ultra)</div>
+                </div>
+                <input type="hidden" id="image-scale" value="4x">
+              </div>
+
+              <div class="form-group">
+                <label>Output Format</label>
+                <div class="segmented-control" data-for="image-format">
+                  <div class="segmented-option selected" data-val="jpg">JPG (Stock Standard)</div>
+                  <div class="segmented-option" data-val="png">PNG (Lossless)</div>
+                  <div class="segmented-option" data-val="webp">WEBP (Web)</div>
+                </div>
+                <input type="hidden" id="image-format" value="jpg">
+              </div>
+
+              <div class="form-group">
+                <label>Print Resolution Density</label>
+                <div class="segmented-control" data-for="image-dpi">
+                  <div class="segmented-option selected" data-val="300">300 DPI (Commercial Print)</div>
+                  <div class="segmented-option" data-val="72">72 DPI (Screen)</div>
+                </div>
+                <input type="hidden" id="image-dpi" value="300">
+              </div>
+
+              <div class="form-group">
+                <label>Compression Quality (JPG / WEBP)</label>
+                <input type="number" id="image-quality" value="95" min="75" max="100">
+              </div>
+            </div>
+
+            <label class="checkbox-toggle">
+              <input type="checkbox" id="image-auto-denoise" checked>
+              <span>Auto Denoise & Artifact Reduction <small style="color:var(--text-dim)">(Removes compression artifacts before sharpening)</small></span>
+            </label>
+
+            <button type="button" class="btn-primary" id="btn-image" disabled>
+              <span>⚡ Upscale Image to Stock Master</span>
+            </button>
+
+            <div class="progress-card" id="progress-image">
+              <div class="progress-track"><div class="progress-fill" id="progress-fill-image"></div></div>
+              <div class="progress-meta">
+                <span class="progress-status" id="progress-status-image">Processing…</span>
+                <span id="progress-pct-image">0%</span>
+              </div>
+            </div>
+
+            <div class="error-banner" id="error-image"></div>
+
+            <div class="result-card" id="result-image">
+              <div class="result-header">✓ Image Upscaled Successfully</div>
+              <table class="comparison-table">
+                <thead>
+                  <tr><th>Parameter</th><th>Source Graphic</th><th>Stock Master</th><th>Verification</th></tr>
+                </thead>
+                <tbody id="table-image"></tbody>
+              </table>
+              <div class="result-actions-row">
+                <a href="#" class="btn-download" id="dl-btn-image" download>⬇ Download Stock Image</a>
+                <button type="button" class="btn-open-folder" id="btn-open-folder-image" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ========================================================
+             3. PNG TO LAYERED PSD PANEL
+        ======================================================== -->
+        <section class="tool-panel" id="panel-psd">
+          <div class="studio-card">
+            
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2>📄 PNG to Photoshop PSD Generator</h2>
+                <p>Converts transparent PNGs or graphics into unlocked, layered Adobe Photoshop .psd documents ready for Freepik, Adobe Stock, and GraphicRiver template submissions.</p>
+              </div>
+              <div class="panel-view-switcher">
+                <span class="view-label">View:</span>
+                <div class="view-pill-group">
+                  <button class="view-pill-btn active" data-view="grid">⊞ Grid</button>
+                  <button class="view-pill-btn" data-view="list">☰ List</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-pills">
+              <span class="pill-tag">Layer: <b>Unlocked & Editable</b></span>
+              <span class="pill-tag">Alpha: <b>100% Preserved</b></span>
+              <span class="pill-tag">Quality: <b>300 DPI Print</b></span>
+              <span class="pill-tag">Compression: <b>ZIP Lossless</b></span>
+            </div>
+
+            <div class="drop-zone" id="drop-psd">
+              <div class="upload-icon-wrapper">📄</div>
+              <div class="drop-title">Drop your image here or browse</div>
+              <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
+              <button type="button" class="btn-browse">Select Image for PSD</button>
+              <input type="file" id="file-psd" accept="image/*,.tiff,.bmp,.webp">
+            </div>
+
+            <!-- Uploaded PSD Source Preview (Grid / List Switchable) -->
+            <div class="media-container layout-grid" id="media-container-psd">
+              <div class="preview-card-advanced" id="preview-psd">
+                <div class="image-thumb-wrapper">
+                  <img class="preview-thumb" id="preview-img-psd" alt="Preview Artwork">
+                  <span class="image-mp-pill" id="psd-alpha-pill">RGBA Alpha</span>
+                </div>
+                <div class="media-content">
+                  <div class="media-header-row">
+                    <div class="media-title-group">
+                      <h4 class="media-filename" id="preview-name-psd">artwork.png</h4>
+                      <span class="media-format-badge" id="preview-format-psd">PNG</span>
+                    </div>
+                    <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-psd">✕ Remove</button>
+                    </div>
+                  </div>
+                  <div class="technical-badges-grid">
+                    <div class="tech-badge-item">
+                      <span class="tech-label">FILE SIZE</span>
+                      <span class="tech-value" id="tech-size-psd">0.0 MB</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">RESOLUTION</span>
+                      <span class="tech-value" id="tech-res-psd">0 × 0 px</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">ALPHA CHANNEL</span>
+                      <span class="tech-value" id="tech-alpha-psd">Preserved</span>
+                    </div>
+                    <div class="tech-badge-item">
+                      <span class="tech-label">PSD TARGET</span>
+                      <span class="tech-value">Editable Layer</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="controls-grid">
+              <div class="form-group">
+                <label>PSD Layer Name</label>
+                <input type="text" id="psd-layer-name" value="Artwork Layer" maxlength="60">
+              </div>
+
+              <div class="form-group">
+                <label>Background Canvas Mode</label>
+                <div class="segmented-control" data-for="psd-background">
+                  <div class="segmented-option selected" data-val="transparent">Transparent Canvas</div>
+                  <div class="segmented-option" data-val="white">Solid White BG</div>
+                </div>
+                <input type="hidden" id="psd-background" value="transparent">
+              </div>
+
+              <div class="form-group">
+                <label>Print Resolution Density</label>
+                <div class="segmented-control" data-for="psd-dpi">
+                  <div class="segmented-option selected" data-val="300">300 DPI (Print Ready)</div>
+                  <div class="segmented-option" data-val="72">72 DPI (Standard)</div>
+                </div>
+                <input type="hidden" id="psd-dpi" value="300">
+              </div>
+            </div>
+
+            <button type="button" class="btn-primary" id="btn-psd" disabled>
+              <span>🎨 Convert to Layered PSD</span>
+            </button>
+
+            <div class="progress-card" id="progress-psd">
+              <div class="progress-track"><div class="progress-fill" id="progress-fill-psd"></div></div>
+              <div class="progress-meta">
+                <span class="progress-status" id="progress-status-psd">Generating PSD…</span>
+                <span id="progress-pct-psd">0%</span>
+              </div>
+            </div>
+
+            <div class="error-banner" id="error-psd"></div>
+
+            <div class="result-card" id="result-psd">
+              <div class="result-header">✓ PSD Master File Created</div>
+              <table class="comparison-table">
+                <thead>
+                  <tr><th>Parameter</th><th>Source Graphic</th><th>Photoshop PSD File</th><th>Stock Check</th></tr>
+                </thead>
+                <tbody id="table-psd"></tbody>
+              </table>
+              <div class="result-actions-row">
+                <a href="#" class="btn-download" id="dl-btn-psd" download>⬇ Download PSD File</a>
+                <button type="button" class="btn-open-folder" id="btn-open-folder-psd" title="Show file in Windows Explorer">📁 Show in Windows Explorer</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- Commercial Standards Overview -->
+        <section class="info-section">
+          <div class="section-title">
+            <h3>Official Microstock Standards Supported</h3>
+            <p>Pre-configured rules strictly adhered to across all major commercial marketplaces</p>
+          </div>
+          <div class="steps-grid">
+            <div class="step-card">
+              <span class="step-number">ADOBE STOCK</span>
+              <h4>Adobe Stock Standards</h4>
+              <p>4K UHD (3840×2160) at ~65 Mbps, Rec.709 colorimetry, 5s–60s duration, CFR frame rate preservation, and zero audio rejections.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">SHUTTERSTOCK</span>
+              <h4>Shutterstock Standards</h4>
+              <p>Strict progressive video scanning, standard broadcast frame rates (23.98–60 fps), sanitized ambient sound, and 4.0 MP minimum image density.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">GETTY & POND5</span>
+              <h4>Getty Images & Pond5</h4>
+              <p>High-tier Apple ProRes 422 HQ export option for maximum contributor royalties, combined with universal MP4 faststart delivery.</p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <p><b>Media Toolkit Pro V3</b> · Munajat International © 2026</p>
+        <p>Certified Commercial Engine for Adobe Stock, Shutterstock, Getty Images, Pond5 & Freepik</p>
+      </footer>
+
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="hero-badge">✨ 100% MICROSTOCK COMPLIANT ENGINE</div>
-    <h1>Master Media for <span class="gradient-text">All Major Marketplaces</span></h1>
-    <p>Certified export pipelines for Adobe Stock, Shutterstock, Getty Images, Pond5 & Freepik. Automated pre-flight compliance inspection, broadcast bitrates, and zero quality loss.</p>
-  </header>
 
-  <!-- Segmented Tabs -->
-  <div class="tabs-wrapper">
-    <div class="tabs">
-      <button class="tab-btn active" data-tool="video">
-        <span class="tab-icon">🎬</span> 4K Video Upscaler
-      </button>
-      <button class="tab-btn" data-tool="image">
-        <span class="tab-icon">🖼️</span> Image Upscaler (4K & 8K)
-      </button>
-      <button class="tab-btn" data-tool="psd">
-        <span class="tab-icon">📄</span> PNG to Layered PSD
-      </button>
+  <!-- ========================================================
+       MODAL 1: SETTINGS (Matches Image 4)
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-settings">
+    <div class="modal-dialog modal-settings-dialog">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge">⚙️</div>
+          <div>
+            <div class="modal-title-row">
+              <h3 class="modal-title">Microstock Platform Limits & Configuration</h3>
+              <span class="modal-badge-file">platforms.config.json</span>
+            </div>
+            <p class="modal-subtitle">Tune exact character limits, keyword counts, delimiters, and AI-disclosure policies per agency without touching code.</p>
+          </div>
+        </div>
+
+        <!-- Top Header Quick Nav Pills (Matches Image 4) -->
+        <div class="settings-top-pills">
+          <button class="s-pill-btn" data-panel="bulk_tools">🗂️ Bulk Tools</button>
+          <button class="s-pill-btn" data-panel="ip_risk">🛡️ IP Risk</button>
+          <button class="s-pill-btn" data-panel="exif_verify">🔍 Verify</button>
+          <button class="s-pill-btn" data-panel="submissions">📊 Submissions</button>
+          <button class="s-pill-btn" data-panel="privacy">🔒 Privacy</button>
+          <button class="s-pill-btn" data-panel="readme">📖 Readme</button>
+          <button class="modal-close-btn" id="close-settings-btn" title="Close Settings">✕</button>
+        </div>
+      </div>
+
+      <!-- Modal Body Split Layout -->
+      <div class="modal-body-split">
+        
+        <!-- Left Sidebar inside Settings -->
+        <div class="settings-sidebar">
+          
+          <div class="settings-group-title">STUDIO TOOLS</div>
+          <div class="settings-menu-list">
+            <button class="s-nav-btn active" data-target="studio_general">⚙️ General & Studio Config</button>
+            <button class="s-nav-btn" data-target="bulk_tools">🗂️ Bulk Metadata Tools</button>
+            <button class="s-nav-btn" data-target="ip_risk">🛡️ IP Risk & Compliance</button>
+            <button class="s-nav-btn" data-target="exif_verify">🔍 ExifTool Verification</button>
+            <button class="s-nav-btn" data-target="submissions">📊 Submissions Tracker</button>
+            <button class="s-nav-btn" data-target="privacy">🔒 Privacy & Security</button>
+            <button class="s-nav-btn" data-target="readme">📖 Readme (EN/বাংলা)</button>
+          </div>
+
+          <div class="settings-group-title">AGENCY RULES (13)</div>
+          <div class="settings-menu-list" id="agency-rules-list">
+            <button class="s-nav-btn s-agency-btn" data-agency="adobe_stock">Adobe Stock <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="shutterstock">Shutterstock <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="freepik">Freepik <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="vecteezy">Vecteezy <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="getty_istock">Getty Images / iStock <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="pond5">Pond5 <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="alamy">Alamy <span class="agency-dot"></span></button>
+            <button class="s-nav-btn s-agency-btn" data-agency="depositphotos">Depositphotos <span class="agency-dot"></span></button>
+          </div>
+
+        </div>
+
+        <!-- Right Content Panel inside Settings -->
+        <div class="settings-content-pane">
+          
+          <!-- Dynamic Agency View (Matches Image 4) -->
+          <div class="settings-panel-view" id="panel-agency-view">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title" id="setting-agency-name">Adobe Stock</h3>
+              <div class="agency-meta-inputs">
+                <div class="agency-verified-box">
+                  <span class="cal-icon">📅</span>
+                  <label>Last Verified:</label>
+                  <input type="text" id="setting-agency-verified" value="03/15/2026">
+                </div>
+                <div class="agency-csv-box">
+                  <label>CSV Delimiter:</label>
+                  <select id="setting-agency-delimiter">
+                    <option value=",">Comma (,)</option>
+                    <option value=";">Semicolon (;)</option>
+                    <option value="\t">Tab (\t)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card: Title Length Constraints -->
+            <div class="setting-card">
+              <div class="setting-card-title">📄 Title Length Constraints (Characters)</div>
+              <div class="setting-grid-3">
+                <div class="setting-field">
+                  <label>Min Length</label>
+                  <input type="number" id="setting-title-min" value="15">
+                </div>
+                <div class="setting-field">
+                  <label>Hard Max Limit</label>
+                  <input type="number" id="setting-title-max" value="200">
+                </div>
+                <div class="setting-field">
+                  <label>Min Words</label>
+                  <input type="number" id="setting-title-words" value="5">
+                </div>
+              </div>
+            </div>
+
+            <!-- Card: Keyword Count Limits -->
+            <div class="setting-card">
+              <div class="setting-card-title">✨ Keyword Count Limits</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Minimum Keywords Required</label>
+                  <input type="number" id="setting-kw-min" value="35">
+                </div>
+                <div class="setting-field">
+                  <label>Maximum Allowed Keywords</label>
+                  <input type="number" id="setting-kw-max" value="49">
+                </div>
+              </div>
+            </div>
+
+            <!-- Card: AI Disclosure -->
+            <div class="setting-card">
+              <div class="setting-card-header">
+                <span class="setting-card-title">🛡️ AI-Generated Disclosure Requirement</span>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-ai-mandatory" checked>
+                  <span>Mandatory Disclosure</span>
+                </label>
+              </div>
+              <div class="setting-field">
+                <textarea id="setting-ai-text" rows="3">Mark 'Created using generative AI tools' toggle during upload. If realistic people/places, releases or editorial flags are required.</textarea>
+              </div>
+            </div>
+
+            <!-- Platform Special Notes -->
+            <div class="setting-card">
+              <div class="setting-card-title">Platform Special Notes & Rules</div>
+              <div class="setting-field">
+                <textarea id="setting-special-notes" rows="2">First 10 keywords are strictly weighted in Adobe Stock search algorithm. Max 49 keywords.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Studio General & Theme Settings Panel -->
+          <div class="settings-panel-view" id="panel-studio_general" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">⚙️ General & Studio Engine Settings</h3>
+            </div>
+
+            <!-- Theme Switcher -->
+            <div class="setting-card">
+              <div class="setting-card-title">🎨 Visual Studio Theme</div>
+              <div class="theme-picker-grid">
+                <button class="theme-card active" data-theme="dark_studio">
+                  <div class="theme-preview dark-studio-prev"></div>
+                  <span>Dark Studio (Default)</span>
+                </button>
+                <button class="theme-card" data-theme="obsidian_oled">
+                  <div class="theme-preview obsidian-prev"></div>
+                  <span>Obsidian OLED Black</span>
+                </button>
+                <button class="theme-card" data-theme="cyber_neon">
+                  <div class="theme-preview cyber-prev"></div>
+                  <span>Cyber Neon</span>
+                </button>
+                <button class="theme-card" data-theme="titanium_light">
+                  <div class="theme-preview titanium-prev"></div>
+                  <span>Titanium Light</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Studio Engine & Threading -->
+            <div class="setting-card">
+              <div class="setting-card-title">⚡ Hardware & Processing Engines</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Hardware Acceleration</label>
+                  <select id="setting-hw-accel">
+                    <option value="auto">Auto (Detect NVENC GPU / Fallback CPU)</option>
+                    <option value="nvenc">Force NVIDIA NVENC CUDA</option>
+                    <option value="cpu">Force Multi-core CPU (-threads 0)</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>Default Master Codec</label>
+                  <select id="setting-default-codec">
+                    <option value="h264">H.264 High@5.1 (Universal Stock MP4)</option>
+                    <option value="prores">Apple ProRes 422 HQ (Broadcast MOV)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-checkbox-list" style="margin-top:14px;">
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-force-300dpi" checked>
+                  <span>Always embed 300 DPI commercial print tags into upscaled images</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-auto-open-folder">
+                  <span>Auto-open file in system explorer upon export completion</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Readme & Contributor Guide (EN / বাংলা) Panel -->
+          <div class="settings-panel-view" id="panel-readme" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">📖 Contributor Manual & Microstock Master Guide</h3>
+              <div class="lang-switch-pills">
+                <button class="lang-btn active" data-lang="en">English Guide</button>
+                <button class="lang-btn" data-lang="bn">বাংলা নির্দেশিকা</button>
+              </div>
+            </div>
+
+            <!-- English Readme Content -->
+            <div class="readme-text-container" id="readme-en">
+              <h4>🚀 Media Toolkit Pro V3 — Contributor Production Manual</h4>
+              <p>Welcome to <b>Media Toolkit Pro V3</b>, engineered exclusively by Munajat International for stock media professionals and high-volume contributors.</p>
+              
+              <div class="readme-box">
+                <h5>1. Video Mastery Rules (Adobe Stock, Shutterstock, Getty, Pond5):</h5>
+                <ul>
+                  <li><b>Frame Rates:</b> Never submit variable frame rate (VFR) footage. Our engine automatically locks into standard broadcast Constant Frame Rates (23.976, 24, 25, 29.97, 30, 50, 60 fps).</li>
+                  <li><b>Duration:</b> Microstock footage must be strictly between 5 seconds and 60 seconds.</li>
+                  <li><b>Audio Policy:</b> Unless the sound is essential professional Foley, stock agencies reject 95% of clips containing background mic hum, fan noise, or copyrighted music. Audio is safely muted by default.</li>
+                  <li><b>Color Profile:</b> All exported footage is tagged with BT.709 colorimetry and faststart MP4 atoms.</li>
+                </ul>
+              </div>
+
+              <div class="readme-box">
+                <h5>2. Image Upscaling & Resolution Thresholds:</h5>
+                <ul>
+                  <li><b>Megapixel Rule:</b> Shutterstock and Adobe Stock reject images under 4.0 Megapixels. Our 4x and 8x engines easily reach 8.3 MP (4K) to 33 MP (8K).</li>
+                  <li><b>Print Density:</b> All upscaled outputs embed 300 DPI EXIF headers, allowing direct buyer printing.</li>
+                </ul>
+              </div>
+
+              <div class="readme-box">
+                <h5>3. Layered PSD Guidelines for Freepik:</h5>
+                <ul>
+                  <li>Transparent PNG artwork is converted into unlocked, editable Photoshop layers with full alpha channel integrity.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Bengali Readme Content -->
+            <div class="readme-text-container" id="readme-bn" style="display:none;">
+              <h4>🚀 মিডিয়া টুলকিট প্রো V3 — মাইক্রোস্টক কন্ট্রিবিউটর নির্দেশিকা</h4>
+              <p><b>মুনাজাত ইন্টারন্যাশনাল</b> কর্তৃক প্রফেশনাল স্টক কন্ট্রিবিউটরদের জন্য নির্মিত বিশ্বমানের মাল্টি-মার্কেটপ্লেস মিডিয়া প্রোডাকশন স্যুট।</p>
+              
+              <div class="readme-box">
+                <h5>১. ভিডিও আপস্কেলিং ও মার্কেটপ্লেস নিয়মাবলী:</h5>
+                <ul>
+                  <li><b>ফ্রেম রেট:</b> অ্যাডোব স্টক বা শাটারস্টকে কখনোই ভেরিয়েবল ফ্রেম রেট (VFR) গ্রহণ করে না। এই অ্যাপ স্বয়ংক্রিয়ভাবে ব্রডকাস্ট স্ট্যান্ডার্ড CFR (২৪, ২৫, ৩০, ৬০ fps) নিশ্চিত করে।</li>
+                  <li><b>ভিডিওর দৈর্ঘ্য:</b> ক্লিপের দৈর্ঘ্য সর্বনিম্ন ৫ সেকেন্ড এবং সর্বোচ্চ ৬০ সেকেন্ড হতে হবে।</li>
+                  <li><b>অডিও পলিসি:</b> অযাচিত ব্যাকগ্রাউন্ড নয়েজ বা মিউজিকের কারণে স্টক মার্কেটপ্লেস ভিডিও রিজেক্ট করে দেয়। তাই স্বয়ংক্রিয়ভাবে অডিও ট্র্যাক ফিল্টার করা থাকে।</li>
+                </ul>
+              </div>
+
+              <div class="readme-box">
+                <h5>২. ইমেজ আপস্কেলার ও কোয়ালিটি রুলস:</h5>
+                <ul>
+                  <li><b>মেগাপিক্সেল নিয়ম:</b> ৪ মেগাপিক্সেলের নিচে ছবি স্টক সাইটে আপলোড করা যায় না। আমাদের 4x ও 8x ল্যানকজস ইঞ্জিন ছবিকে সরাসরি ৮.৩ MP (4K) থেকে ৩৩ MP (8K)-তে উন্নীত করে।</li>
+                  <li><b>৩০০ ডিপিআই প্রিন্ট:</b> কমার্শিয়াল প্রিন্টের জন্য প্রতিটি ফাইলে ৩০০ DPI ট্যাগ স্বয়ংক্রিয়ভাবে এমবেড করা হয়।</li>
+                </ul>
+              </div>
+
+              <div class="readme-box">
+                <h5>৩. ফ্রিপিক লেয়ার্ড PSD গাইডলাইন:</h5>
+                <ul>
+                  <li>ট্রান্সপারেন্ট পিএনজি ছবিকে আনলকড ও এডিটেবল ফটোশপ লেয়ারে রূপান্তর করে সরাসরি ফ্রিপিক ও অ্যাডোব স্টকে সাবমিটের উপযোগী করা হয়।</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Tools Panels (Bulk, IP Risk, Exif, Privacy) -->
+          <div class="settings-panel-view" id="panel-other-tools" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title" id="other-tools-title">Studio Tools</h3>
+            </div>
+            <div class="setting-card">
+              <div class="setting-card-title">Commercial Studio Configuration</div>
+              <p id="other-tools-desc" style="color:var(--text-muted); font-size:0.92rem; line-height:1.6;"></p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn-text-action" id="reset-settings-btn">↺ Reset All to Defaults</button>
+        <div class="footer-btn-group">
+          <button class="btn-secondary" id="cancel-settings-btn">Close</button>
+          <button class="btn-primary-compact" id="save-settings-btn">💾 Save & Apply Settings</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- Main Tools Container -->
-  <main class="main-container">
 
-    <!-- ================= 1. VIDEO UPSCALER ================= -->
-    <section class="tool-panel active" id="panel-video">
-      <div class="studio-card">
-        <div class="panel-header">
-          <h2>🎬 4K Stock Video Master Upscaler</h2>
-          <p>Conforms footage to exact microstock requirements: broadcast bitrates, CFR frame rate preservation, Rec.709 colorimetry, and faststart streaming atoms.</p>
-          <div class="feature-pills">
-            <span class="pill-tag">Target: <b class="active-market-badge">⭐ Universal</b></span>
-            <span class="pill-tag">Framerate: <b>CFR Preserved</b></span>
-            <span class="pill-tag">Bitrate: <b>~60 Mbps</b></span>
-            <span class="pill-tag">Color: <b>Rec.709</b></span>
-            <span class="pill-tag">Threading: <b>Max Performance</b></span>
+  <!-- ========================================================
+       MODAL 2: ADMINISTRATOR CONTROL PANEL (Matches Image 5)
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-admin">
+    <div class="modal-dialog modal-admin-dialog">
+      
+      <!-- Admin Modal Header (Matches Image 5) -->
+      <div class="modal-header admin-modal-header">
+        <div class="admin-header-left">
+          <div class="admin-shield-badge">🛡️</div>
+          <div>
+            <div class="admin-title-row">
+              <h3 class="admin-title">Administrator Control Panel</h3>
+              <span class="admin-badge-pro">StockMeta Pro Master</span>
+            </div>
+            <p class="admin-subtitle">Generate user license keys, manage subscription periods & system access policies</p>
           </div>
         </div>
 
-        <div class="drop-zone" id="drop-video">
-          <div class="upload-icon-wrapper">📤</div>
-          <div class="drop-title">Drop your video clip here or browse</div>
-          <div class="drop-subtitle">Supports MP4, MOV, MKV, WEBM, AVI (up to 4 GB)</div>
-          <button type="button" class="btn-browse">Select Video File</button>
-          <input type="file" id="file-video" accept="video/*,.mkv,.mov,.webm,.avi">
+        <div class="admin-header-actions">
+          <button class="admin-icon-btn" id="admin-refresh-btn" title="Refresh Database">🔄</button>
+          <button class="modal-close-btn" id="close-admin-btn" title="Close Admin Panel">✕</button>
         </div>
+      </div>
 
-        <div class="preview-card" id="preview-video">
-          <div class="preview-info">
-            <div class="preview-name" id="preview-name-video">filename.mp4</div>
-            <div class="preview-details" id="preview-details-video">Ready for processing</div>
-          </div>
-        </div>
-
-        <!-- Live Pre-Flight Compliance Inspector -->
-        <div class="preflight-card" id="preflight-video">
-          <div class="preflight-header">
-            <span class="preflight-title">🛡️ <span id="preflight-market-video">Pre-Flight Compliance Check</span></span>
-            <span class="badge-status-pass">AUTO-INSPECTED</span>
-          </div>
-          <div class="preflight-grid" id="preflight-grid-video"></div>
-        </div>
-
-        <div class="controls-grid">
-          <div class="form-group">
-            <label>Target Resolution</label>
-            <select id="video-target">
-              {% for key, t in targets.items() %}
-                <option value="{{ key }}">{{ t.label }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Master Codec Format</label>
-            <select id="video-codec">
-              {% for key, c in codecs.items() %}
-                <option value="{{ key }}" {% if key == 'h264' %}selected{% endif %}>{{ c.label }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Bitrate Quality Preset</label>
-            <select id="video-quality">
-              {% for key, q in qualities.items() %}
-                <option value="{{ key }}" {% if key == 'stock' %}selected{% endif %}>{{ q.label }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-
-        <label class="checkbox-toggle">
-          <input type="checkbox" id="video-keep-audio">
-          <span>Keep audio track <small style="color:var(--text-dim)">(Disabled by default to avoid stock agency audio rejections)</small></span>
-        </label>
-
-        <button type="button" class="btn-primary" id="btn-video" disabled>
-          <span>🚀 Export Stock Master Video</span>
+      <!-- Admin Top Tabs Navigation (Matches Image 5) -->
+      <div class="admin-tabs-nav">
+        <button class="admin-tab-btn active" data-tab="keys">
+          <span>🗝️ License Keys Generator (<span id="admin-keys-count">0</span>)</span>
         </button>
-
-        <div class="progress-card" id="progress-video">
-          <div class="progress-track"><div class="progress-fill" id="progress-fill-video"></div></div>
-          <div class="progress-meta">
-            <span class="progress-status" id="progress-status-video">Preparing encode…</span>
-            <span id="progress-pct-video">0%</span>
-          </div>
-        </div>
-
-        <div class="error-banner" id="error-video"></div>
-
-        <div class="result-card" id="result-video">
-          <div class="result-header">✓ Stock Master Export Completed</div>
-          <table class="comparison-table">
-            <thead>
-              <tr><th>Parameter</th><th>Source Footage</th><th>Master Export</th><th>Stock Check</th></tr>
-            </thead>
-            <tbody id="table-video"></tbody>
-          </table>
-          <a href="#" class="btn-download" id="dl-btn-video" download>⬇ Download Stock Master Video</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 2. IMAGE UPSCALER ================= -->
-    <section class="tool-panel" id="panel-image">
-      <div class="studio-card">
-        <div class="panel-header">
-          <h2>🖼️ Image Upscaler & Detail Enhancer</h2>
-          <p>Enlarge photos, AI renders, and illustrations to 4K & 8K with commercial 300 DPI print tags, guaranteed ≥ 4.0 Megapixel stock threshold, and auto-denoising.</p>
-          <div class="feature-pills">
-            <span class="pill-tag">Scale: <b>2× / 4× / 8×</b></span>
-            <span class="pill-tag">Print: <b>300 DPI Embedded</b></span>
-            <span class="pill-tag">Agency Rule: <b>≥ 4.0 MP Enforced</b></span>
-            <span class="pill-tag">Engine: <b>Lanczos V3</b></span>
-          </div>
-        </div>
-
-        <div class="drop-zone" id="drop-image">
-          <div class="upload-icon-wrapper">🖼️</div>
-          <div class="drop-title">Drop your image here or browse</div>
-          <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
-          <button type="button" class="btn-browse">Select Image File</button>
-          <input type="file" id="file-image" accept="image/*,.tiff,.bmp,.webp">
-        </div>
-
-        <div class="preview-card" id="preview-image">
-          <img class="preview-thumb" id="preview-img-image" alt="Preview">
-          <div class="preview-info">
-            <div class="preview-name" id="preview-name-image">image.png</div>
-            <div class="preview-details" id="preview-details-image">Ready for upscaling</div>
-          </div>
-        </div>
-
-        <!-- Pre-Flight Compliance Inspector -->
-        <div class="preflight-card" id="preflight-image">
-          <div class="preflight-header">
-            <span class="preflight-title">🛡️ <span id="preflight-market-image">Pre-Flight Compliance Check</span></span>
-            <span class="badge-status-pass">AUTO-INSPECTED</span>
-          </div>
-          <div class="preflight-grid" id="preflight-grid-image"></div>
-        </div>
-
-        <div class="controls-grid">
-          <div class="form-group">
-            <label>Scale Factor</label>
-            <div class="segmented-control" data-for="image-scale">
-              <div class="segmented-option" data-val="2x">2× (2K)</div>
-              <div class="segmented-option selected" data-val="4x">4× (4K UHD)</div>
-              <div class="segmented-option" data-val="8x">8× (8K Ultra)</div>
-            </div>
-            <input type="hidden" id="image-scale" value="4x">
-          </div>
-
-          <div class="form-group">
-            <label>Output Format</label>
-            <div class="segmented-control" data-for="image-format">
-              <div class="segmented-option selected" data-val="jpg">JPG (Stock Standard)</div>
-              <div class="segmented-option" data-val="png">PNG (Lossless)</div>
-              <div class="segmented-option" data-val="webp">WEBP (Web)</div>
-            </div>
-            <input type="hidden" id="image-format" value="jpg">
-          </div>
-
-          <div class="form-group">
-            <label>Print Resolution Density</label>
-            <div class="segmented-control" data-for="image-dpi">
-              <div class="segmented-option selected" data-val="300">300 DPI (Commercial Print)</div>
-              <div class="segmented-option" data-val="72">72 DPI (Screen)</div>
-            </div>
-            <input type="hidden" id="image-dpi" value="300">
-          </div>
-
-          <div class="form-group">
-            <label>Compression Quality (JPG / WEBP)</label>
-            <input type="number" id="image-quality" value="95" min="75" max="100">
-          </div>
-        </div>
-
-        <label class="checkbox-toggle">
-          <input type="checkbox" id="image-auto-denoise" checked>
-          <span>Auto Denoise & Artifact Reduction <small style="color:var(--text-dim)">(Removes JPEG artifacts before sharpening)</small></span>
-        </label>
-
-        <button type="button" class="btn-primary" id="btn-image" disabled>
-          <span>⚡ Upscale Image to Stock Master</span>
+        <button class="admin-tab-btn" data-tab="users">
+          <span>👥 Registered Users (<span id="admin-users-count">1</span>)</span>
         </button>
-
-        <div class="progress-card" id="progress-image">
-          <div class="progress-track"><div class="progress-fill" id="progress-fill-image"></div></div>
-          <div class="progress-meta">
-            <span class="progress-status" id="progress-status-image">Processing…</span>
-            <span id="progress-pct-image">0%</span>
-          </div>
-        </div>
-
-        <div class="error-banner" id="error-image"></div>
-
-        <div class="result-card" id="result-image">
-          <div class="result-header">✓ Image Upscaled Successfully</div>
-          <table class="comparison-table">
-            <thead>
-              <tr><th>Parameter</th><th>Source Graphic</th><th>Stock Master</th><th>Verification</th></tr>
-            </thead>
-            <tbody id="table-image"></tbody>
-          </table>
-          <a href="#" class="btn-download" id="dl-btn-image" download>⬇ Download Stock Image</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 3. PNG TO PSD ================= -->
-    <section class="tool-panel" id="panel-psd">
-      <div class="studio-card">
-        <div class="panel-header">
-          <h2>📄 PNG to Photoshop PSD Generator</h2>
-          <p>Converts transparent PNGs or graphics into unlocked, layered Adobe Photoshop .psd documents ready for Freepik, Adobe Stock, and GraphicRiver template submissions.</p>
-          <div class="feature-pills">
-            <span class="pill-tag">Layer: <b>Unlocked & Editable</b></span>
-            <span class="pill-tag">Alpha: <b>100% Preserved</b></span>
-            <span class="pill-tag">Quality: <b>300 DPI Print</b></span>
-            <span class="pill-tag">Compression: <b>ZIP Lossless</b></span>
-          </div>
-        </div>
-
-        <div class="drop-zone" id="drop-psd">
-          <div class="upload-icon-wrapper">📄</div>
-          <div class="drop-title">Drop your image here or browse</div>
-          <div class="drop-subtitle">Supports PNG, JPG, WEBP, BMP, TIFF (up to 50 MB)</div>
-          <button type="button" class="btn-browse">Select Image for PSD</button>
-          <input type="file" id="file-psd" accept="image/*,.tiff,.bmp,.webp">
-        </div>
-
-        <div class="preview-card" id="preview-psd">
-          <img class="preview-thumb" id="preview-img-psd" alt="Preview">
-          <div class="preview-info">
-            <div class="preview-name" id="preview-name-psd">artwork.png</div>
-            <div class="preview-details" id="preview-details-psd">Ready for PSD conversion</div>
-          </div>
-        </div>
-
-        <div class="controls-grid">
-          <div class="form-group">
-            <label>PSD Layer Name</label>
-            <input type="text" id="psd-layer-name" value="Artwork Layer" maxlength="60">
-          </div>
-
-          <div class="form-group">
-            <label>Background Canvas Mode</label>
-            <div class="segmented-control" data-for="psd-background">
-              <div class="segmented-option selected" data-val="transparent">Transparent Canvas</div>
-              <div class="segmented-option" data-val="white">Solid White BG</div>
-            </div>
-            <input type="hidden" id="psd-background" value="transparent">
-          </div>
-
-          <div class="form-group">
-            <label>Print Resolution Density</label>
-            <div class="segmented-control" data-for="psd-dpi">
-              <div class="segmented-option selected" data-val="300">300 DPI (Print Ready)</div>
-              <div class="segmented-option" data-val="72">72 DPI (Standard)</div>
-            </div>
-            <input type="hidden" id="psd-dpi" value="300">
-          </div>
-        </div>
-
-        <button type="button" class="btn-primary" id="btn-psd" disabled>
-          <span>🎨 Convert to Layered PSD</span>
+        <button class="admin-tab-btn" data-tab="policies">
+          <span>⚙️ Default Policy Settings</span>
         </button>
+        <button class="admin-tab-btn" data-tab="backup">
+          <span>💾 Backup & Restore</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="guide">
+          <span>📘 Admin Guide</span>
+        </button>
+      </div>
 
-        <div class="progress-card" id="progress-psd">
-          <div class="progress-track"><div class="progress-fill" id="progress-fill-psd"></div></div>
-          <div class="progress-meta">
-            <span class="progress-status" id="progress-status-psd">Generating PSD…</span>
-            <span id="progress-pct-psd">0%</span>
+      <!-- Admin Tab 1: License Keys Generator (Matches Image 5 Form & Table) -->
+      <div class="admin-tab-pane active" id="pane-admin-keys">
+        
+        <!-- Generate Unique User License Key Card -->
+        <div class="admin-card-boxed">
+          <div class="admin-card-header">
+            <div class="admin-card-title-group">
+              <span class="admin-card-icon">✨</span>
+              <div>
+                <h4 class="admin-card-title">Generate Unique User License Key</h4>
+                <p class="admin-card-sub">Input the user's email ID and period in days. The key can only be activated by that specific user.</p>
+              </div>
+            </div>
+            <span class="unclaimed-keys-pill" id="unclaimed-keys-pill">0 Active Unclaimed Keys</span>
+          </div>
+
+          <div class="admin-gen-grid">
+            
+            <!-- User Email ID -->
+            <div class="admin-field">
+              <div class="field-label-row">
+                <label>User Email ID *</label>
+                <div class="pick-registered-wrapper">
+                  <span>Or pick registered</span>
+                  <button type="button" class="btn-pick-email" id="quick-pick-email">ahmeddesignhouse@gmail.com</button>
+                </div>
+              </div>
+              <div class="input-with-icon">
+                <input type="email" id="gen-email" placeholder="e.g. user@gmail.com" required>
+                <span class="input-right-icon">✉️</span>
+              </div>
+            </div>
+
+            <!-- Access Period (Days) -->
+            <div class="admin-field">
+              <label>Access Period (Number of Days) *</label>
+              <input type="number" id="gen-period" value="30" min="1" max="3650">
+              <div class="quick-pills-row" id="pills-period">
+                <button type="button" class="pill-btn" data-val="7">7d</button>
+                <button type="button" class="pill-btn active" data-val="30">30d</button>
+                <button type="button" class="pill-btn" data-val="60">60d</button>
+                <button type="button" class="pill-btn" data-val="90">90d</button>
+                <button type="button" class="pill-btn" data-val="180">180d</button>
+                <button type="button" class="pill-btn" data-val="365">1yr</button>
+              </div>
+            </div>
+
+            <!-- Daily AI Limit -->
+            <div class="admin-field">
+              <label>Daily AI Limit (Files / Day)</label>
+              <input type="text" id="gen-limit" value="50">
+              <div class="quick-pills-row" id="pills-limit">
+                <button type="button" class="pill-btn active" data-val="50">50/d</button>
+                <button type="button" class="pill-btn" data-val="100">100/d</button>
+                <button type="button" class="pill-btn" data-val="250">250/d</button>
+                <button type="button" class="pill-btn" data-val="Unlimited">Unlimited</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Note & Generate Button Row -->
+          <div class="admin-gen-bottom-row">
+            <input type="text" id="gen-note" class="admin-note-input" placeholder="Optional Note / Memo (e.g. Paid via bKash / Order #1042)">
+            <button type="button" class="btn-generate-key" id="btn-do-generate-key">
+              <span>🗝️ Generate License Key</span>
+            </button>
           </div>
         </div>
 
-        <div class="error-banner" id="error-psd"></div>
+        <!-- All Generated License Keys Table Section -->
+        <div class="admin-table-section">
+          
+          <div class="table-controls-row">
+            <h4 class="table-section-title">All Generated License Keys (<span id="table-keys-count">0</span>)</h4>
+            
+            <div class="table-filter-group">
+              <div class="table-search-box">
+                <span>🔍</span>
+                <input type="text" id="search-keys-input" placeholder="Search key or email...">
+              </div>
+              <div class="status-filters" id="keys-filter-pills">
+                <button class="status-filter-btn active" data-filter="All">All</button>
+                <button class="status-filter-btn" data-filter="Active">Active</button>
+                <button class="status-filter-btn" data-filter="Used">Used</button>
+                <button class="status-filter-btn" data-filter="Revoked">Revoked</button>
+              </div>
+            </div>
+          </div>
 
-        <div class="result-card" id="result-psd">
-          <div class="result-header">✓ PSD Master File Created</div>
-          <table class="comparison-table">
-            <thead>
-              <tr><th>Parameter</th><th>Source Graphic</th><th>Photoshop PSD File</th><th>Stock Check</th></tr>
-            </thead>
-            <tbody id="table-psd"></tbody>
-          </table>
-          <a href="#" class="btn-download" id="dl-btn-psd" download>⬇ Download PSD File</a>
+          <!-- Keys Data Table -->
+          <div class="table-responsive">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>LICENSE KEY</th>
+                  <th>ASSIGNED USER EMAIL</th>
+                  <th>PERIOD</th>
+                  <th>DAILY LIMIT</th>
+                  <th>STATUS</th>
+                  <th>CREATED DATE</th>
+                  <th>ACTIVATION DETAILS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="keys-table-body">
+                <!-- Empty state placeholder or dynamic rows -->
+                <tr class="empty-row" id="keys-empty-row">
+                  <td colspan="8">No license keys match your filter. Generate one above!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Admin Tab 2: Registered Users -->
+      <div class="admin-tab-pane" id="pane-admin-users" style="display:none;">
+        <div class="admin-card-boxed">
+          
+          <!-- Statistics Summary Row -->
+          <div class="admin-stats-summary-grid">
+            <div class="stat-card">
+              <span class="stat-icon">👥</span>
+              <div class="stat-meta">
+                <span class="stat-num" id="stat-total-users">1</span>
+                <span class="stat-lbl">Total Contributors</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">⭐</span>
+              <div class="stat-meta">
+                <span class="stat-num" id="stat-active-users">1</span>
+                <span class="stat-lbl">Active Pro VIPs</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">🗝️</span>
+              <div class="stat-meta">
+                <span class="stat-num" id="stat-unclaimed-keys">0</span>
+                <span class="stat-lbl">Available Keys</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">💾</span>
+              <div class="stat-meta">
+                <span class="stat-num" id="stat-disk-mb">0 MB</span>
+                <span class="stat-lbl">Cache Storage</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card-header">
+            <div>
+              <h4 class="admin-card-title">Registered Contributor Accounts</h4>
+              <p class="admin-card-sub">Active contributors, subscription status, machine locks, and daily quota utilization.</p>
+            </div>
+            <div class="header-action-btns" style="display:flex; gap:8px;">
+              <a href="/api/admin/users/export-csv" class="btn-secondary" id="btn-export-users" download="media_toolkit_registered_users.csv">📥 Export CSV</a>
+              <button class="btn-primary-compact" id="btn-open-add-user">+ Add Registered User</button>
+            </div>
+          </div>
+
+          <!-- User Search Bar -->
+          <div class="table-search-box" style="margin-bottom:14px; width:260px;">
+            <span>🔍</span>
+            <input type="text" id="search-users-input" placeholder="Filter user by email/name...">
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>CONTRIBUTOR EMAIL</th>
+                  <th>NAME / ROLE</th>
+                  <th>ACTIVE LICENSE</th>
+                  <th>DAILY QUOTA</th>
+                  <th>DEVICE HWID</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Marketplace Guidelines Section -->
-    <section class="info-section">
-      <div class="section-title">
-        <h3>Official Microstock Standards Supported</h3>
-        <p>Pre-configured rules strictly adhered to across all major commercial marketplaces</p>
+      <!-- Admin Tab 3: Default Policy Settings -->
+      <div class="admin-tab-pane" id="pane-admin-policies" style="display:none;">
+        <div class="admin-card-boxed">
+          <h4 class="admin-card-title">Commercial Access & Security Policies</h4>
+          <p class="admin-card-sub">System-wide operational policies, anti-tamper controls, and default user privileges.</p>
+
+          <div class="policy-form-grid">
+            <div class="admin-field">
+              <label>Default Access / License Period (Days)</label>
+              <input type="number" id="policy-default-days" value="30">
+            </div>
+            <div class="admin-field">
+              <label>Default Daily File Limit (Per Contributor)</label>
+              <input type="number" id="policy-default-limit" value="50">
+            </div>
+            <div class="admin-field">
+              <label>Max Video Duration Threshold (Seconds)</label>
+              <input type="number" id="policy-max-duration" value="120">
+            </div>
+            <div class="admin-field">
+              <label>Master Administrator Contact Email</label>
+              <input type="email" id="policy-admin-email" value="ahmeddesignhouse@gmail.com">
+            </div>
+          </div>
+
+          <!-- Watermarking Policy -->
+          <div class="setting-card" style="margin-top:14px;">
+            <div class="setting-card-title">🛡️ Unlicensed & Expired Contributor Watermarking</div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:10px;">
+              Enables semi-transparent diagnostic watermark on downloads if a user has not entered a valid license key.
+            </p>
+            <div class="policy-form-grid">
+              <div class="admin-field">
+                <label>Watermark Text Overlay</label>
+                <input type="text" id="policy-watermark-text" value="PRO PREVIEW • LICENSE REQUIRED">
+              </div>
+              <div class="admin-field">
+                <label>Watermark Opacity (0.1 - 1.0)</label>
+                <input type="number" id="policy-watermark-opacity" value="0.25" step="0.05" min="0.1" max="1.0">
+              </div>
+            </div>
+          </div>
+
+          <div class="policy-toggles-list" style="margin-top:16px;">
+            <label class="setting-checkbox">
+              <input type="checkbox" id="policy-enforce-hwid" checked>
+              <span>Enforce Single-Device Hardware Binding (Prevents account sharing across multiple computers)</span>
+            </label>
+            <label class="setting-checkbox">
+              <input type="checkbox" id="policy-allow-offline" checked>
+              <span>Allow Local Cryptographic Offline Validation (No external internet dependency required for encoding)</span>
+            </label>
+          </div>
+
+          <div style="margin-top:20px;">
+            <button class="btn-primary-compact" id="btn-save-policies">💾 Save System Policies</button>
+          </div>
+        </div>
       </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <span class="step-number">ADOBE STOCK</span>
-          <h4>Adobe Stock Standards</h4>
-          <p>4K UHD (3840×2160) at ~65 Mbps, Rec.709 colorimetry, 5s–60s duration, CFR frame rate preservation, and zero audio rejections.</p>
-        </div>
-        <div class="step-card">
-          <span class="step-number">SHUTTERSTOCK</span>
-          <h4>Shutterstock Standards</h4>
-          <p>Strict progressive video scanning, standard broadcast frame rates (23.98–60 fps), sanitized ambient sound, and 4.0 MP minimum image density.</p>
-        </div>
-        <div class="step-card">
-          <span class="step-number">GETTY & POND5</span>
-          <h4>Getty Images & Pond5</h4>
-          <p>High-tier Apple ProRes 422 HQ export option for maximum contributor royalties, combined with universal MP4 faststart delivery.</p>
+
+      <!-- Admin Tab 4: Backup & Restore -->
+      <div class="admin-tab-pane" id="pane-admin-backup" style="display:none;">
+        <div class="admin-card-boxed">
+          <h4 class="admin-card-title">Database Backup, Export & Disaster Recovery</h4>
+          <p class="admin-card-sub">Securely export user data, generated license keys, storage statistics, and platform rule overrides.</p>
+
+          <!-- Storage Meter -->
+          <div class="setting-card" style="margin-top:14px;">
+            <div class="setting-card-title">📊 Disk Usage & Storage Metrics</div>
+            <div class="technical-badges-grid">
+              <div class="tech-badge-item">
+                <span class="tech-label">UPLOADS CACHE</span>
+                <span class="tech-value" id="disk-uploads-mb">0.0 MB</span>
+              </div>
+              <div class="tech-badge-item">
+                <span class="tech-label">OUTPUTS EXPORT</span>
+                <span class="tech-value" id="disk-outputs-mb">0.0 MB</span>
+              </div>
+              <div class="tech-badge-item">
+                <span class="tech-label">TOTAL STORED KEYS</span>
+                <span class="tech-value" id="disk-total-keys">0</span>
+              </div>
+              <div class="tech-badge-item">
+                <span class="tech-label">DATABASE INTEGRITY</span>
+                <span class="tech-value" style="color:var(--success);">Synchronized</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="backup-actions-grid">
+            <div class="backup-box">
+              <div class="backup-box-icon">📥</div>
+              <h5>Export System Snapshot</h5>
+              <p>Download complete JSON snapshot of all license keys, registered accounts, and agency policies.</p>
+              <a href="/api/admin/backup" class="btn-primary-compact" download="media_toolkit_pro_backup.json">Download Database Backup</a>
+            </div>
+
+            <div class="backup-box">
+              <div class="backup-box-icon">📤</div>
+              <h5>Restore from Backup</h5>
+              <p>Upload a previously exported JSON backup file to instantly restore license records.</p>
+              <input type="file" id="backup-file-input" accept=".json" style="display:none;">
+              <button class="btn-secondary" id="btn-trigger-restore">Select Backup JSON File</button>
+            </div>
+          </div>
+
+          <div class="setting-card" style="margin-top:20px; border-color:var(--border-light);">
+            <div class="setting-card-title">🧹 Maintenance & Storage Hygiene</div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
+              Purge temporary source files and generated outputs to free up hard drive space without losing registered users or license keys.
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn-secondary" id="btn-purge-cache">🧹 Purge Temporary Uploads & Output Cache</button>
+              <button class="btn-secondary" id="btn-factory-reset" style="color:var(--danger); border-color:rgba(239, 68, 68, 0.4);">⚠️ Factory Reset Database</button>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- FAQ Section -->
-    <section class="info-section">
-      <div class="section-title">
-        <h3>Frequently Asked Questions</h3>
-        <p>Technical specifications and stock contributor advice</p>
+      <!-- Admin Tab 5: Admin Guide -->
+      <div class="admin-tab-pane" id="pane-admin-guide" style="display:none;">
+        <div class="admin-card-boxed">
+          <h4 class="admin-card-title">📘 Commercial Administrator Operations Guide</h4>
+          <p class="admin-card-sub">Monetization, anti-piracy, desktop compilation, and submission strategies by Munajat International.</p>
+
+          <!-- Guide Sub Navigation -->
+          <div class="guide-tab-nav">
+            <button class="guide-nav-btn active" data-guide="sales">💳 Monetization & bKash</button>
+            <button class="guide-nav-btn" data-guide="crypto">🔐 Cryptographic Tokens & HWID</button>
+            <button class="guide-nav-btn" data-guide="agency">🛡️ Stock Acceptance Secrets</button>
+            <button class="guide-nav-btn" data-guide="package">📦 Windows Desktop .exe</button>
+          </div>
+
+          <!-- Guide 1: Sales & Monetization -->
+          <div class="guide-card-section active" id="guide-sec-sales">
+            <div class="guide-section">
+              <h5>1. Commercial Pricing Architecture</h5>
+              <p>Recommended pricing structure for Bangladesh and international contributors:</p>
+              <ul>
+                <li><b>Monthly Pass (30 Days / 50 files/day):</b> ৳1,500 BDT or $15 USD. Perfect for individual contributors.</li>
+                <li><b>Quarterly Studio (90 Days / 100 files/day):</b> ৳3,800 BDT or $38 USD. Best value for active stock producers.</li>
+                <li><b>Annual Master Pro (365 Days / 250 files/day):</b> ৳12,000 BDT or $110 USD. High-margin subscription.</li>
+                <li><b>Lifetime Commercial VIP:</b> ৳25,000 BDT or $240 USD. Single payment with unlimited access.</li>
+              </ul>
+            </div>
+            <div class="guide-section">
+              <h5>2. bKash / Nagad / Bank Order Fulfillment Process</h5>
+              <ol>
+                <li>Customer sends payment to your Personal or Merchant bKash/Nagad number with their email ID in the reference.</li>
+                <li>Open the <b>Administrator Control Panel</b> &rarr; <b>License Keys Generator</b>.</li>
+                <li>Type their Email ID, choose the access duration (e.g. <code>30d</code> or <code>1yr</code>), and enter their TrxID in the memo.</li>
+                <li>Click <b>Generate License Key</b> and click <b>Copy</b>.</li>
+                <li>Send the generated key to the customer via WhatsApp/Email. Once entered, the key locks strictly to their PC.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Guide 2: Cryptographic Tokens & HWID -->
+          <div class="guide-card-section" id="guide-sec-crypto">
+            <div class="guide-section">
+              <h5>1. Offline Token Signing Architecture</h5>
+              <p>Every license key follows the format <code>MTK-PRO-XXXX-XXXX-XXXX</code>. It is cryptographically coupled with the contributor's email ID and system timestamp. When activated, the engine validates the signature locally without requiring external cloud servers, guaranteeing 100% offline functionality.</p>
+            </div>
+            <div class="guide-section">
+              <h5>2. Hardware ID (HWID) Device Lock</h5>
+              <p>Upon activation, the app captures the workstation's unique hardware identifier (Windows Machine GUID + CPU architecture). If a user attempts to give their key to another person, activation fails with an authorization error. If a customer legitimately upgrades their PC, simply click <b>Reset HWID</b> in the Registered Users table.</p>
+            </div>
+          </div>
+
+          <!-- Guide 3: Agency Acceptance Secrets -->
+          <div class="guide-card-section" id="guide-sec-agency">
+            <div class="guide-section">
+              <h5>1. Why Stock Agencies Reject Video Footages</h5>
+              <ul>
+                <li><b>VFR (Variable Frame Rates):</b> Phone cameras and screen recordings produce VFR which Adobe Stock rejects instantly. Our engine strictly enforces <b>Constant Frame Rates (CFR)</b>.</li>
+                <li><b>Audio Hum & Copyright:</b> Ambient mic noise causes 90% of rejections. Keep audio unchecked unless providing professional studio Foley.</li>
+                <li><b>Colorimetry:</b> High-definition stock requires BT.709 color tagging and <code>+faststart</code> atom streaming metadata.</li>
+              </ul>
+            </div>
+            <div class="guide-section">
+              <h5>2. Image & PSD Secret Requirements</h5>
+              <ul>
+                <li><b>≥ 4.0 Megapixel Threshold:</b> Shutterstock and Adobe Stock reject images under 4.0 MP. Our 4x and 8x upscale pipelines ensure ≥ 8.3 MP (4K) to 33 MP (8K).</li>
+                <li><b>300 DPI Print Tagging:</b> High-tier buyers filter for commercial print density. Our pipeline embeds 300 DPI into EXIF tags.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Guide 4: Desktop Installer Packaging -->
+          <div class="guide-card-section" id="guide-sec-package">
+            <div class="guide-section">
+              <h5>How to Compile into Standalone Windows .exe</h5>
+              <p>To distribute this software as a native Windows installer or single executable:</p>
+              <pre style="background:var(--bg-input); padding:12px; border-radius:6px; font-size:0.82rem; color:var(--accent-cyan); overflow-x:auto;">
+# 1. Install PyInstaller
+pip install pyinstaller
+
+# 2. Build single-file desktop application
+pyinstaller --noconfirm --onedir --windowed --add-data "templates;templates" --add-data "static;static" --add-data "backend;backend" --add-data "data;data" app.py
+              </pre>
+            </div>
+          </div>
+
+        </div>
       </div>
-      <div class="faq-grid">
-        <div class="faq-card">
-          <h4>Why does the app strip audio by default?</h4>
-          <p>Adobe Stock and Shutterstock automatically reject b-roll clips if ambient background noise, microphone hum, or copyrighted music is detected. Stripping audio ensures 100% acceptance for video b-roll.</p>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       MODAL 3: ACTIVATE LICENSE KEY
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-activate">
+    <div class="modal-dialog modal-small-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge green-badge">🗝️</div>
+          <div>
+            <h3 class="modal-title">Activate Pro License</h3>
+            <p class="modal-subtitle">Enter your assigned license key and email address</p>
+          </div>
         </div>
-        <div class="faq-card">
-          <h4>What is the minimum Megapixel rule for photos?</h4>
-          <p>Both Adobe Stock and Shutterstock strictly enforce a 4.0 Megapixel minimum. Our 4x and 8x Lanczos engines easily elevate any image to 8.3 MP (4K) or 33 MP (8K) with 300 DPI tags.</p>
+        <button class="modal-close-btn" id="close-activate-btn">✕</button>
+      </div>
+
+      <div class="modal-body-simple">
+        <div class="admin-field">
+          <label>Registered Email Address *</label>
+          <input type="email" id="activate-email" placeholder="user@gmail.com" value="ahmeddesignhouse@gmail.com">
         </div>
-        <div class="faq-card">
-          <h4>How does the app maintain maximum performance?</h4>
-          <p>The engine uses automatic multi-core threading (`-threads 0`), hardware-accelerated encoding (NVENC), and in-memory image buffers for zero latency.</p>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>License Key *</label>
+          <input type="text" id="activate-key" placeholder="MTK-PRO-XXXX-XXXX-XXXX" style="font-family:monospace; text-transform:uppercase;">
         </div>
-        <div class="faq-card">
-          <h4>Can I host Version 3 on Render.com for free?</h4>
-          <p>Yes. The included Dockerfile and render.yaml blueprint deploy seamlessly on Render.com's free web service tier.</p>
+        <div class="activate-status-msg" id="activate-status-msg"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-activate-btn">Cancel</button>
+        <button class="btn-primary-compact" id="do-activate-btn">Activate Key Now</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       MODAL 4: LOGIN / USER AUTH
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-login">
+    <div class="modal-dialog modal-small-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge">👤</div>
+          <div>
+            <h3 class="modal-title">Contributor Login</h3>
+            <p class="modal-subtitle">Sign in with your registered email</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-login-btn">✕</button>
+      </div>
+
+      <div class="modal-body-simple">
+        <div class="admin-field">
+          <label>Email Address</label>
+          <input type="email" id="login-email" placeholder="user@gmail.com" value="ahmeddesignhouse@gmail.com">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Security PIN or Password</label>
+          <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <div class="activate-status-msg" id="login-status-msg"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-login-btn">Cancel</button>
+        <button class="btn-primary-compact" id="do-login-btn">Sign In</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       MODAL: ADD REGISTERED CONTRIBUTOR
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-add-user">
+    <div class="modal-dialog modal-small-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge">👤</div>
+          <div>
+            <h3 class="modal-title">Register New Contributor</h3>
+            <p class="modal-subtitle">Create account profile & assign daily limits</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-add-user-btn">✕</button>
+      </div>
+
+      <div class="modal-body-simple">
+        <div class="admin-field">
+          <label>Contributor Email ID *</label>
+          <input type="email" id="new-user-email" placeholder="user@gmail.com" required>
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Full Name / Studio Name</label>
+          <input type="text" id="new-user-name" placeholder="Munajat Studio Contributor">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Account Role</label>
+          <select id="new-user-role">
+            <option value="Pro Contributor">Pro Contributor (Standard)</option>
+            <option value="Studio VIP">Studio VIP (High Quota)</option>
+            <option value="Agency Master">Agency Master (Commercial)</option>
+          </select>
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Daily File Processing Quota</label>
+          <input type="number" id="new-user-limit" value="50">
         </div>
       </div>
-    </section>
 
-  </main>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-add-user-btn">Cancel</button>
+        <button class="btn-primary-compact" id="do-add-user-btn">Register Account</button>
+      </div>
+    </div>
+  </div>
 
-  <!-- Footer -->
-  <footer>
-    <p><b>Media Toolkit Pro V3</b> · Made By Munajat International © 2026</p>
-    <p>Multi-Marketplace Studio Engine · Certified for Adobe Stock, Shutterstock, Getty Images, Pond5 & Freepik</p>
-  </footer>
 
+  <!-- ========================================================
+       MODAL: EDIT REGISTERED CONTRIBUTOR
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-edit-user">
+    <div class="modal-dialog modal-small-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge">✏️</div>
+          <div>
+            <h3 class="modal-title">Edit Contributor Account</h3>
+            <p class="modal-subtitle" id="edit-user-subtitle">Update subscription & quotas</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-edit-user-btn">✕</button>
+      </div>
+
+      <div class="modal-body-simple">
+        <input type="hidden" id="edit-user-id">
+        <div class="admin-field">
+          <label>Email Address</label>
+          <input type="email" id="edit-user-email" readonly style="opacity:0.7;">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Contributor Name</label>
+          <input type="text" id="edit-user-name">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Subscription Period (Days Remaining)</label>
+          <input type="number" id="edit-user-days" value="30">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Daily Quota Limit</label>
+          <input type="text" id="edit-user-limit" value="50">
+        </div>
+        <div class="admin-field" style="margin-top:14px;">
+          <label>Account Status</label>
+          <select id="edit-user-status">
+            <option value="Active">Active</option>
+            <option value="Suspended">Suspended</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancel-edit-user-btn">Cancel</button>
+        <button class="btn-primary-compact" id="do-save-edit-user-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       MODAL 5: VIDEO PLAYER PREVIEW INSPECTOR
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-video-player">
+    <div class="modal-dialog modal-video-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge">🎬</div>
+          <div>
+            <h3 class="modal-title" id="player-modal-title">Video Footage Preview</h3>
+            <p class="modal-subtitle" id="player-modal-subtitle">Inspect video streams, frame clarity & audio fidelity</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-player-btn">✕</button>
+      </div>
+
+      <div class="modal-player-body">
+        <video id="preview-video-element" controls playsinline></video>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Main Application Script -->
   <script src="/static/js/main.js"></script>
 </body>
 </html>

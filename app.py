@@ -5,6 +5,7 @@ Made By Munajat International
 """
 
 import argparse
+import json
 import os
 import threading
 import time
@@ -12,7 +13,7 @@ import uuid
 import webbrowser
 from datetime import datetime, timedelta, timezone
 
-from flask import Flask, jsonify, render_template, request, send_file
+from flask import Flask, jsonify, render_template, request, send_file, Response
 from werkzeug.utils import secure_filename
 
 from backend.upscaler_video import (
@@ -27,6 +28,7 @@ from backend.png_to_psd import png_to_psd, ALLOWED_EXTS as PSD_EXTS
 from backend.stock_validator import (
     STOCK_MARKETPLACES, preflight_video_check, preflight_image_check,
 )
+from backend.license_manager import license_mgr
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE, "uploads")
@@ -385,6 +387,235 @@ def health():
         "version": "3.0.0",
         "marketplaces_supported": list(STOCK_MARKETPLACES.keys()),
     })
+
+
+# ---------------------------------------------------------------------------
+# Auth, Licensing, Admin Panel & Settings API
+# ---------------------------------------------------------------------------
+
+@app.route("/api/auth/session")
+def auth_session():
+    return jsonify(license_mgr.get_active_session())
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def auth_login():
+    data = request.get_json(silent=True) or request.form
+    email = data.get("email", "")
+    password = data.get("password", "")
+    res = license_mgr.login(email, password)
+    return jsonify(res), (200 if res.get("success") else 401)
+
+
+@app.route("/api/auth/logout", methods=["POST"])
+def auth_logout():
+    license_mgr.logout()
+    return jsonify({"success": True})
+
+
+@app.route("/api/license/activate", methods=["POST"])
+def license_activate():
+    data = request.get_json(silent=True) or request.form
+    key = data.get("key", "")
+    email = data.get("email", "")
+    hwid = data.get("hwid", "PC-LOCAL-ID")
+    res = license_mgr.activate_key(key, email, hwid)
+    return jsonify(res), (200 if res.get("success") else 400)
+
+
+@app.route("/api/admin/keys", methods=["GET"])
+def admin_get_keys():
+    status = request.args.get("status", "All")
+    search = request.args.get("search", "")
+    keys = license_mgr.get_license_keys(status, search)
+    return jsonify({"keys": keys, "total": len(keys)})
+
+
+@app.route("/api/admin/keys/generate", methods=["POST"])
+def admin_generate_key():
+    data = request.get_json(silent=True) or request.form
+    email = data.get("email", "")
+    period = data.get("period", 30)
+    limit = data.get("daily_limit", 50)
+    note = data.get("note", "")
+    try:
+        new_key = license_mgr.generate_license_key(email, period, limit, note)
+        return jsonify({"success": True, "key": new_key})
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
+@app.route("/api/admin/keys/revoke", methods=["POST"])
+def admin_revoke_key():
+    data = request.get_json(silent=True) or request.form
+    key = data.get("key", "")
+    ok = license_mgr.revoke_license_key(key)
+    return jsonify({"success": ok})
+
+
+@app.route("/api/admin/keys/delete", methods=["DELETE", "POST"])
+def admin_delete_key():
+    data = request.get_json(silent=True) or request.form
+    key = data.get("key", "")
+    ok = license_mgr.delete_license_key(key)
+    return jsonify({"success": ok})
+
+
+@app.route("/api/admin/users", methods=["GET"])
+def admin_get_users():
+    users = license_mgr.get_users()
+    return jsonify({"users": users, "total": len(users)})
+
+
+@app.route("/api/admin/users/add", methods=["POST"])
+def admin_add_user():
+    data = request.get_json(silent=True) or request.form
+    email = data.get("email", "")
+    name = data.get("name", "")
+    role = data.get("role", "Pro Contributor")
+    limit = data.get("daily_limit", 50)
+    try:
+        user = license_mgr.add_user(email, name, role, limit)
+        return jsonify({"success": True, "user": user})
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
+@app.route("/api/admin/users/status", methods=["POST"])
+def admin_user_status():
+    data = request.get_json(silent=True) or request.form
+    user_id = data.get("user_id", "")
+    status = data.get("status", "Active")
+    ok = license_mgr.update_user_status(user_id, status)
+    return jsonify({"success": ok})
+
+
+@app.route("/api/admin/users/reset-hwid", methods=["POST"])
+def admin_user_reset_hwid():
+    data = request.get_json(silent=True) or request.form
+    user_id = data.get("user_id", "")
+    ok = license_mgr.reset_user_hwid(user_id)
+    return jsonify({"success": ok})
+
+
+@app.route("/api/admin/users/edit", methods=["POST"])
+def admin_edit_user():
+    data = request.get_json(silent=True) or request.form
+    user_id = data.get("user_id", "")
+    try:
+        user = license_mgr.edit_user(user_id, data)
+        return jsonify({"success": True, "user": user})
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
+@app.route("/api/admin/users/delete", methods=["DELETE", "POST"])
+def admin_delete_user():
+    data = request.get_json(silent=True) or request.form
+    user_id = data.get("user_id", "")
+    ok = license_mgr.delete_user(user_id)
+    return jsonify({"success": ok})
+
+
+@app.route("/api/admin/users/export-csv")
+def admin_export_users_csv():
+    csv_text = license_mgr.export_users_csv()
+    return Response(
+        csv_text,
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment;filename=media_toolkit_registered_users.csv"}
+    )
+
+
+@app.route("/api/admin/stats")
+def admin_stats():
+    stats = license_mgr.get_storage_stats(UPLOAD_DIR, OUTPUT_DIR)
+    return jsonify(stats)
+
+
+@app.route("/api/admin/purge-cache", methods=["POST"])
+def admin_purge_cache():
+    cleaned = license_mgr.purge_cache(UPLOAD_DIR, OUTPUT_DIR)
+    return jsonify({"success": True, "files_removed": cleaned})
+
+
+@app.route("/api/admin/factory-reset", methods=["POST"])
+def admin_factory_reset():
+    license_mgr.factory_reset()
+    return jsonify({"success": True, "message": "System store reset to initial commercial defaults."})
+
+
+@app.route("/api/open-folder/<job_id>", methods=["POST"])
+def open_folder(job_id):
+    import subprocess, sys
+    with jobs_lock:
+        job = jobs.get(job_id)
+        if not job or "dst" not in job:
+            return jsonify({"error": "Job output not found"}), 404
+        dst = job["dst"]
+
+    try:
+        if sys.platform.startswith("win"):
+            subprocess.Popen(f'explorer.exe /select,"{os.path.abspath(dst)}"')
+        else:
+            folder = os.path.dirname(os.path.abspath(dst))
+            webbrowser.open(f"file://{folder}")
+        return jsonify({"success": True})
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+
+
+@app.route("/api/admin/policies", methods=["GET", "POST"])
+def admin_policies():
+    if request.method == "POST":
+        data = request.get_json(silent=True) or request.form
+        saved = license_mgr.save_policies(data)
+        return jsonify({"success": True, "policies": saved})
+    return jsonify(license_mgr.get_policies())
+
+
+@app.route("/api/admin/backup", methods=["GET"])
+def admin_backup_export():
+    data = license_mgr.export_backup_json()
+    return Response(
+        json.dumps(data, indent=2),
+        mimetype="application/json",
+        headers={"Content-Disposition": "attachment;filename=media_toolkit_pro_backup.json"}
+    )
+
+
+@app.route("/api/admin/restore", methods=["POST"])
+def admin_backup_restore():
+    f = request.files.get("backup_file")
+    if not f:
+        return jsonify({"error": "No backup file provided."}), 400
+    try:
+        data = json.load(f)
+        license_mgr.import_backup_json(data)
+        return jsonify({"success": True, "message": "Database restored successfully."})
+    except Exception as exc:
+        return jsonify({"error": f"Failed to restore: {str(exc)}"}), 400
+
+
+@app.route("/api/settings/agencies", methods=["GET"])
+def get_agency_settings():
+    return jsonify(license_mgr.get_agency_settings())
+
+
+@app.route("/api/settings/agencies/<agency_key>", methods=["POST"])
+def save_agency_settings(agency_key):
+    data = request.get_json(silent=True) or request.form
+    saved = license_mgr.save_agency_settings(agency_key, data)
+    return jsonify({"success": True, "settings": saved})
+
+
+@app.route("/api/settings/studio", methods=["GET", "POST"])
+def studio_settings():
+    if request.method == "POST":
+        data = request.get_json(silent=True) or request.form
+        saved = license_mgr.save_studio_settings(data)
+        return jsonify({"success": True, "settings": saved})
+    return jsonify(license_mgr.get_studio_settings())
 
 
 def main():
