@@ -705,7 +705,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cancelActivateBtn) cancelActivateBtn.addEventListener("click", () => closeModal("modal-activate"));
 
   // ---------------- AUTH & SESSION (Strict Per-User Browser Isolation) ----------------
-  const openAdminBtn = document.getElementById("open-admin-btn");
 
   async function refreshSession() {
     try {
@@ -1545,7 +1544,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("policy-default-days").value = pol.default_access_period_days || 30;
       document.getElementById("policy-default-limit").value = pol.default_daily_limit || 50;
       document.getElementById("policy-max-duration").value = pol.max_video_duration_sec || 120;
-      document.getElementById("policy-admin-email").value = pol.master_admin_email || "ahmeddesignhouse@gmail.com";
+      document.getElementById("policy-admin-email").value = pol.master_admin_email || "bulbulworka1@gmail.com";
       document.getElementById("policy-enforce-hwid").checked = pol.enforce_single_device !== false;
       document.getElementById("policy-allow-offline").checked = pol.allow_offline_validation !== false;
     } catch (err) {
