@@ -407,6 +407,19 @@ def auth_login():
     return jsonify(res), (200 if res.get("success") else 401)
 
 
+@app.route("/api/auth/register", methods=["POST"])
+def auth_register():
+    data = request.get_json(silent=True) or request.form
+    email = data.get("email", "")
+    password = data.get("password", "")
+    name = data.get("name", "")
+    try:
+        res = license_mgr.register_user(email, password, name)
+        return jsonify(res), 200
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 400
+
+
 @app.route("/api/auth/logout", methods=["POST"])
 def auth_logout():
     license_mgr.logout()

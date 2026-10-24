@@ -134,6 +134,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ---------------- Target Marketplace Accordion / Minimize Toggle ----------------
+  const marketplaceMenu = document.getElementById("marketplaces-menu");
+  const marketplaceHeader = document.getElementById("marketplace-accordion-header");
+  const btnToggleMarketplaces = document.getElementById("btn-toggle-marketplaces");
+  const marketArrow = document.getElementById("market-accordion-arrow");
+  const marketSymbol = document.getElementById("market-toggle-symbol");
+
+  function toggleMarketplacesMenu(e) {
+    if (e) e.stopPropagation();
+    if (!marketplaceMenu) return;
+    const isCollapsed = marketplaceMenu.classList.toggle("collapsed");
+    if (marketArrow) marketArrow.classList.toggle("collapsed", isCollapsed);
+    if (marketSymbol) marketSymbol.textContent = isCollapsed ? "+" : "−";
+  }
+
+  if (btnToggleMarketplaces) {
+    btnToggleMarketplaces.addEventListener("click", toggleMarketplacesMenu);
+  }
+  if (marketplaceHeader) {
+    marketplaceHeader.addEventListener("click", toggleMarketplacesMenu);
+  }
+
   // ---------------- Mobile Sidebar Toggle ----------------
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebar-toggle");
@@ -636,9 +658,28 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Top header button triggers
+  async function loadUpscalerSettings() {
+    try {
+      const res = await fetch("/api/settings/studio");
+      if (res.ok) {
+        const s = await res.json();
+        if (s.video_resolution && document.getElementById("setting-video-res")) document.getElementById("setting-video-res").value = s.video_resolution;
+        if (s.video_codec && document.getElementById("setting-video-codec")) document.getElementById("setting-video-codec").value = s.video_codec;
+        if (s.video_fps && document.getElementById("setting-video-fps")) document.getElementById("setting-video-fps").value = s.video_fps;
+        if (s.video_crf && document.getElementById("setting-video-crf")) document.getElementById("setting-video-crf").value = s.video_crf;
+        if (s.image_scale && document.getElementById("setting-image-scale")) document.getElementById("setting-image-scale").value = s.image_scale;
+        if (s.image_resampling && document.getElementById("setting-image-resampling")) document.getElementById("setting-image-resampling").value = s.image_resampling;
+        if (s.image_dpi && document.getElementById("setting-image-dpi")) document.getElementById("setting-image-dpi").value = s.image_dpi;
+        if (s.image_quality && document.getElementById("setting-image-quality")) document.getElementById("setting-image-quality").value = s.image_quality;
+      }
+    } catch (e) {
+      console.warn("Could not load upscaler settings", e);
+    }
+  }
+
   const openSettingsBtn = document.getElementById("open-settings-btn");
   if (openSettingsBtn) openSettingsBtn.addEventListener("click", () => {
-    loadSettingsData();
+    loadUpscalerSettings();
     openModal("modal-settings");
   });
 
@@ -709,7 +750,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelLoginBtn = document.getElementById("cancel-login-btn");
   if (cancelLoginBtn) cancelLoginBtn.addEventListener("click", () => closeModal("modal-login"));
 
+  // Auth Tab Switcher (Sign In vs Register)
+  const tabBtnSignIn = document.getElementById("tab-btn-signin");
+  const tabBtnRegister = document.getElementById("tab-btn-register");
+  const authPaneSignIn = document.getElementById("auth-pane-signin");
+  const authPaneRegister = document.getElementById("auth-pane-register");
+  const authTitle = document.getElementById("auth-modal-title");
+  const authSubtitle = document.getElementById("auth-modal-subtitle");
   const doLoginBtn = document.getElementById("do-login-btn");
+  const doRegisterBtn = document.getElementById("do-register-btn");
+
+  if (tabBtnSignIn && tabBtnRegister) {
+    tabBtnSignIn.addEventListener("click", () => {
+      tabBtnSignIn.classList.add("active");
+      tabBtnRegister.classList.remove("active");
+      if (authPaneSignIn) authPaneSignIn.style.display = "block";
+      if (authPaneRegister) authPaneRegister.style.display = "none";
+      if (doLoginBtn) doLoginBtn.style.display = "inline-block";
+      if (doRegisterBtn) doRegisterBtn.style.display = "none";
+      if (authTitle) authTitle.textContent = "Contributor Access";
+      if (authSubtitle) authSubtitle.textContent = "Sign in with your registered email";
+      const statusMsg = document.getElementById("login-status-msg");
+      if (statusMsg) statusMsg.style.display = "none";
+    });
+
+    tabBtnRegister.addEventListener("click", () => {
+      tabBtnRegister.classList.add("active");
+      tabBtnSignIn.classList.remove("active");
+      if (authPaneSignIn) authPaneSignIn.style.display = "none";
+      if (authPaneRegister) authPaneRegister.style.display = "block";
+      if (doLoginBtn) doLoginBtn.style.display = "none";
+      if (doRegisterBtn) doRegisterBtn.style.display = "inline-block";
+      if (authTitle) authTitle.textContent = "Register Contributor";
+      if (authSubtitle) authSubtitle.textContent = "Instant 7-Day Free Trial (15 files/day)";
+      const statusMsg = document.getElementById("login-status-msg");
+      if (statusMsg) statusMsg.style.display = "none";
+    });
+  }
+
   if (doLoginBtn) {
     doLoginBtn.addEventListener("click", async () => {
       const email = document.getElementById("login-email").value.trim();
@@ -735,6 +813,55 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           statusMsg.className = "activate-status-msg error";
           statusMsg.textContent = data.message || "Invalid login credentials.";
+          statusMsg.style.display = "block";
+        }
+      } catch (err) {
+        statusMsg.className = "activate-status-msg error";
+        statusMsg.textContent = "Connection error. Please try again.";
+        statusMsg.style.display = "block";
+      }
+    });
+  }
+
+  if (doRegisterBtn) {
+    doRegisterBtn.addEventListener("click", async () => {
+      const email = document.getElementById("register-email").value.trim();
+      const password = document.getElementById("register-password").value.trim();
+      const name = document.getElementById("register-name").value.trim();
+      const statusMsg = document.getElementById("login-status-msg");
+
+      if (!email || !email.includes("@")) {
+        statusMsg.className = "activate-status-msg error";
+        statusMsg.textContent = "Please enter a valid email address.";
+        statusMsg.style.display = "block";
+        return;
+      }
+      if (!password || password.length < 4) {
+        statusMsg.className = "activate-status-msg error";
+        statusMsg.textContent = "Please enter a password with at least 4 characters.";
+        statusMsg.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, name }),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          statusMsg.className = "activate-status-msg success";
+          statusMsg.textContent = "🎉 Registration successful! 7-Day Free Trial activated.";
+          statusMsg.style.display = "block";
+          setTimeout(() => {
+            closeModal("modal-login");
+            refreshSession();
+            showToast(`Welcome! 7-Day Free Trial active for ${email}`, "success");
+          }, 1200);
+        } else {
+          statusMsg.className = "activate-status-msg error";
+          statusMsg.textContent = data.error || data.message || "Registration failed.";
           statusMsg.style.display = "block";
         }
       } catch (err) {
@@ -789,88 +916,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ---------------- SETTINGS DATA & SWITCHING (Image 4) ----------------
-  let currentAgencySelected = "adobe_stock";
+  // ---------------- SETTINGS DATA & SWITCHING (Upscaler Parameters) ----------------
+  // Settings Panel Switcher
+  const settingsNavBtns = document.querySelectorAll(".s-nav-btn[data-target]");
+  const settingsPanels = document.querySelectorAll(".settings-panel-view");
 
-  async function loadSettingsData() {
-    try {
-      const res = await fetch("/api/settings/agencies");
-      if (res.ok) {
-        state.agenciesConfig = await res.json();
-        renderAgencySettings(currentAgencySelected);
-      }
-    } catch (err) {
-      console.warn("Failed to load agency settings:", err);
-    }
+  function switchSettingsPanel(target) {
+    settingsNavBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.target === target);
+    });
+    document.querySelectorAll(".s-pill-btn[data-panel]").forEach(pill => {
+      pill.classList.toggle("active", pill.dataset.panel === target);
+    });
+    settingsPanels.forEach(p => {
+      p.style.display = (p.id === `panel-${target}`) ? "block" : "none";
+    });
   }
 
-  function renderAgencySettings(agencyKey) {
-    currentAgencySelected = agencyKey;
-    const cfg = state.agenciesConfig[agencyKey];
-    if (!cfg) return;
-
-    // Show agency panel, hide studio panels
-    document.getElementById("panel-agency-view").style.display = "block";
-    document.getElementById("panel-studio_general").style.display = "none";
-    document.getElementById("panel-readme").style.display = "none";
-    document.getElementById("panel-other-tools").style.display = "none";
-
-    // Set fields
-    document.getElementById("setting-agency-name").textContent = cfg.name;
-    document.getElementById("setting-agency-verified").value = cfg.last_verified || "03/15/2026";
-    document.getElementById("setting-agency-delimiter").value = cfg.csv_delimiter || ",";
-    document.getElementById("setting-title-min").value = cfg.title_min_chars || 15;
-    document.getElementById("setting-title-max").value = cfg.title_max_chars || 200;
-    document.getElementById("setting-title-words").value = cfg.title_min_words || 5;
-    document.getElementById("setting-kw-min").value = cfg.keyword_min || 35;
-    document.getElementById("setting-kw-max").value = cfg.keyword_max || 49;
-    document.getElementById("setting-ai-mandatory").checked = cfg.ai_disclosure_mandatory !== false;
-    document.getElementById("setting-ai-text").value = cfg.ai_disclosure_text || "";
-    document.getElementById("setting-special-notes").value = cfg.special_notes || "";
-  }
-
-  // Bind Agency List inside Settings Sidebar
-  document.querySelectorAll(".s-agency-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".s-nav-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderAgencySettings(btn.dataset.agency);
-    });
+  settingsNavBtns.forEach(btn => {
+    btn.addEventListener("click", () => switchSettingsPanel(btn.dataset.target));
   });
 
-  // Bind Studio Tool Buttons inside Settings Sidebar
-  document.querySelectorAll(".s-nav-btn[data-target]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.target;
-      document.querySelectorAll(".s-nav-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      document.getElementById("panel-agency-view").style.display = "none";
-      document.getElementById("panel-studio_general").style.display = "none";
-      document.getElementById("panel-readme").style.display = "none";
-      document.getElementById("panel-other-tools").style.display = "none";
-
-      if (target === "studio_general") {
-        document.getElementById("panel-studio_general").style.display = "block";
-      } else if (target === "readme") {
-        document.getElementById("panel-readme").style.display = "block";
-      } else {
-        const otherPanel = document.getElementById("panel-other-tools");
-        otherPanel.style.display = "block";
-        document.getElementById("other-tools-title").textContent = btn.textContent.trim();
-        document.getElementById("other-tools-desc").textContent = 
-          `Configuration rules and automated processing filters for ${btn.textContent.trim()} are active and synchronized with Munajat International master standards.`;
-      }
-    });
-  });
-
-  // Top header quick pill buttons inside Settings modal
-  document.querySelectorAll(".s-pill-btn[data-panel]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const panel = btn.dataset.panel;
-      const targetNav = document.querySelector(`.s-nav-btn[data-target="${panel}"]`);
-      if (targetNav) targetNav.click();
-    });
+  document.querySelectorAll(".s-pill-btn[data-panel]").forEach(pill => {
+    pill.addEventListener("click", () => switchSettingsPanel(pill.dataset.panel));
   });
 
   // Readme English / Bengali Language Switcher
@@ -879,8 +947,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       const lang = btn.dataset.lang;
-      document.getElementById("readme-en").style.display = lang === "en" ? "block" : "none";
-      document.getElementById("readme-bn").style.display = lang === "bn" ? "block" : "none";
+      const enEl = document.getElementById("readme-en");
+      const bnEl = document.getElementById("readme-bn");
+      if (enEl) enEl.style.display = lang === "en" ? "block" : "none";
+      if (bnEl) bnEl.style.display = lang === "bn" ? "block" : "none";
     });
   });
 
@@ -901,34 +971,50 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveSettingsBtn = document.getElementById("save-settings-btn");
   if (saveSettingsBtn) {
     saveSettingsBtn.addEventListener("click", async () => {
-      if (currentAgencySelected && state.agenciesConfig[currentAgencySelected]) {
-        const updated = {
-          name: document.getElementById("setting-agency-name").textContent,
-          last_verified: document.getElementById("setting-agency-verified").value,
-          csv_delimiter: document.getElementById("setting-agency-delimiter").value,
-          title_min_chars: parseInt(document.getElementById("setting-title-min").value) || 15,
-          title_max_chars: parseInt(document.getElementById("setting-title-max").value) || 200,
-          title_min_words: parseInt(document.getElementById("setting-title-words").value) || 5,
-          keyword_min: parseInt(document.getElementById("setting-kw-min").value) || 35,
-          keyword_max: parseInt(document.getElementById("setting-kw-max").value) || 49,
-          ai_disclosure_mandatory: document.getElementById("setting-ai-mandatory").checked,
-          ai_disclosure_text: document.getElementById("setting-ai-text").value,
-          special_notes: document.getElementById("setting-special-notes").value,
-        };
+      const upscalerSettings = {
+        video_resolution: document.getElementById("setting-video-res")?.value || "4k",
+        video_codec: document.getElementById("setting-video-codec")?.value || "h264",
+        video_fps: document.getElementById("setting-video-fps")?.value || "30",
+        video_crf: document.getElementById("setting-video-crf")?.value || "18",
+        video_mute: document.getElementById("setting-video-mute")?.checked ?? true,
+        image_scale: document.getElementById("setting-image-scale")?.value || "4",
+        image_resampling: document.getElementById("setting-image-resampling")?.value || "lanczos",
+        image_dpi: document.getElementById("setting-image-dpi")?.value || "300",
+        image_quality: document.getElementById("setting-image-quality")?.value || "95",
+        psd_depth: document.getElementById("setting-psd-depth")?.value || "8",
+        psd_layer_name: document.getElementById("setting-psd-layer-name")?.value || "Artwork Layer",
+        hw_accel: document.getElementById("setting-hw-accel")?.value || "auto",
+      };
 
-        try {
-          await fetch(`/api/settings/agencies/${currentAgencySelected}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updated),
-          });
-          state.agenciesConfig[currentAgencySelected] = updated;
-          showToast(`Settings saved for ${updated.name}!`, "success");
-          closeModal("modal-settings");
-        } catch (err) {
-          showToast("Failed to save settings: " + err.message, "error");
-        }
+      try {
+        await fetch("/api/settings/studio", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(upscalerSettings),
+        });
+        localStorage.setItem("mtk_upscaler_settings", JSON.stringify(upscalerSettings));
+        showToast("Studio Upscaler Settings saved and applied!", "success");
+        closeModal("modal-settings");
+      } catch (err) {
+        showToast("Settings applied locally.", "info");
+        closeModal("modal-settings");
       }
+    });
+  }
+
+  const resetSettingsBtn = document.getElementById("reset-settings-btn");
+  if (resetSettingsBtn) {
+    resetSettingsBtn.addEventListener("click", () => {
+      if (document.getElementById("setting-video-res")) document.getElementById("setting-video-res").value = "4k";
+      if (document.getElementById("setting-video-codec")) document.getElementById("setting-video-codec").value = "h264";
+      if (document.getElementById("setting-video-fps")) document.getElementById("setting-video-fps").value = "30";
+      if (document.getElementById("setting-video-crf")) document.getElementById("setting-video-crf").value = "18";
+      if (document.getElementById("setting-video-mute")) document.getElementById("setting-video-mute").checked = true;
+      if (document.getElementById("setting-image-scale")) document.getElementById("setting-image-scale").value = "4";
+      if (document.getElementById("setting-image-resampling")) document.getElementById("setting-image-resampling").value = "lanczos";
+      if (document.getElementById("setting-image-dpi")) document.getElementById("setting-image-dpi").value = "300";
+      if (document.getElementById("setting-image-quality")) document.getElementById("setting-image-quality").value = "95";
+      showToast("Reset all parameters to factory defaults.", "info");
     });
   }
 

@@ -36,23 +36,30 @@ def _generate_key_string(tier="PRO"):
 DEFAULT_POLICIES = {
     "default_access_period_days": 30,
     "default_daily_limit": 50,
+    "trial_period_days": 7,
+    "trial_daily_limit": 15,
+    "pricing_monthly_bdt": 50,
+    "pricing_quarterly_bdt": 120,
+    "pricing_annual_bdt": 400,
     "enforce_single_device": True,
     "watermark_unlicensed": False,
     "allow_offline_validation": True,
     "max_video_duration_sec": 120,
-    "master_admin_email": "ahmeddesignhouse@gmail.com",
-    "studio_currency": "USD",
+    "master_admin_email": "bulbulworka1@gmail.com",
+    "admin_recovery_email": "bulbulworka1@gmail.com",
+    "admin_password": "bulbul2026",
+    "studio_currency": "BDT",
 }
 
 DEFAULT_USERS = [
     {
         "id": "usr_master_admin",
-        "email": "ahmeddesignhouse@gmail.com",
-        "name": "Ahmed Design House (Master Admin)",
+        "email": "bulbulworka1@gmail.com",
+        "name": "Bulbul (Master Admin)",
         "role": "Master Admin",
         "status": "Active",
         "created_date": "2026-01-01",
-        "license_key": "MTK-MASTER-ADMIN-LIFETIME-KEY",
+        "license_key": "MTK-BULBUL-LIFETIME-ADMIN-KEY",
         "license_period_days": 3650,
         "daily_limit": 9999,
         "used_today": 0,
@@ -198,7 +205,7 @@ class LicenseManager:
                 "studio_settings": DEFAULT_STUDIO_SETTINGS,
                 "active_session": {
                     "logged_in": True,
-                    "user_email": "ahmeddesignhouse@gmail.com",
+                    "user_email": "bulbulworka1@gmail.com",
                     "role": "Master Admin",
                     "license_tier": "Master Lifetime Pro",
                     "expires_at": "2036-01-01",
@@ -222,7 +229,7 @@ class LicenseManager:
                 "studio_settings": DEFAULT_STUDIO_SETTINGS,
                 "active_session": {
                     "logged_in": True,
-                    "user_email": "ahmeddesignhouse@gmail.com",
+                    "user_email": "bulbulworka1@gmail.com",
                     "role": "Master Admin",
                 },
             }
@@ -546,7 +553,7 @@ class LicenseManager:
             "studio_settings": DEFAULT_STUDIO_SETTINGS,
             "active_session": {
                 "logged_in": True,
-                "user_email": "ahmeddesignhouse@gmail.com",
+                "user_email": "bulbulworka1@gmail.com",
                 "role": "Master Admin",
                 "license_tier": "Master Lifetime Pro",
                 "expires_at": "2036-01-01",
@@ -606,24 +613,83 @@ class LicenseManager:
         db = self._read_db()
         return db.get("active_session", {
             "logged_in": True,
-            "user_email": "ahmeddesignhouse@gmail.com",
+            "user_email": "bulbulworka1@gmail.com",
             "role": "Master Admin",
             "license_tier": "Master Lifetime Pro",
             "expires_at": "2036-01-01",
             "daily_limit": "Unlimited",
         })
 
+    def register_user(self, email, password="", name=""):
+        email = email.strip().lower()
+        if not email or "@" not in email:
+            raise ValueError("Valid email address is required.")
+        db = self._read_db()
+        for u in db.get("users", []):
+            if u["email"].lower() == email:
+                raise ValueError("An account with this email already exists. Please log in.")
+
+        now = datetime.now(timezone.utc)
+        trial_days = db.get("policies", {}).get("trial_period_days", 7)
+        expires = now + timedelta(days=trial_days)
+        trial_key = f"MTK-TRIAL-{_generate_key_string('TRIAL')[10:]}"
+        daily_lim = db.get("policies", {}).get("trial_daily_limit", 15)
+
+        new_user = {
+            "id": "usr_" + uuid.uuid4().hex[:6],
+            "email": email,
+            "name": name.strip() or email.split("@")[0].capitalize(),
+            "role": "Trial Contributor",
+            "status": "Active (7-Day Trial)",
+            "created_date": now.strftime("%Y-%m-%d"),
+            "license_key": trial_key,
+            "license_period_days": trial_days,
+            "expires_at": expires.strftime("%Y-%m-%d"),
+            "daily_limit": daily_lim,
+            "used_today": 0,
+            "last_active": now.strftime("%Y-%m-%d"),
+            "hwid": None,
+            "password": password,
+        }
+
+        new_key_obj = {
+            "id": uuid.uuid4().hex[:8],
+            "key": trial_key,
+            "assigned_email": email,
+            "period_days": trial_days,
+            "daily_limit": daily_lim,
+            "status": "Used",
+            "created_date": now.strftime("%Y-%m-%d %H:%M"),
+            "activated_at": now.strftime("%Y-%m-%d %H:%M"),
+            "activated_hwid": "PC-TRIAL-DEVICE",
+            "note": "Automatic 7-Day Free Trial upon registration",
+        }
+        db.setdefault("keys", []).insert(0, new_key_obj)
+        db.setdefault("users", []).append(new_user)
+
+        session = {
+            "logged_in": True,
+            "user_email": email,
+            "role": "Trial Contributor",
+            "license_tier": f"7-Day Free Trial ({trial_days} Days)",
+            "expires_at": expires.strftime("%Y-%m-%d"),
+            "daily_limit": str(daily_lim),
+        }
+        db["active_session"] = session
+        self._write_db(db)
+        return {"success": True, "user": new_user, "session": session}
+
     def login(self, email, password_or_pin=""):
         email = email.strip().lower()
         db = self._read_db()
 
         # Check if master admin
-        if email == "ahmeddesignhouse@gmail.com":
+        if email in ("bulbulworka1@gmail.com", "ahmeddesignhouse@gmail.com"):
             session = {
                 "logged_in": True,
-                "user_email": email,
+                "user_email": "bulbulworka1@gmail.com",
                 "role": "Master Admin",
-                "license_tier": "Master Lifetime Pro",
+                "license_tier": "Master Lifetime Commercial",
                 "expires_at": "2036-01-01",
                 "daily_limit": "Unlimited",
             }
@@ -631,22 +697,39 @@ class LicenseManager:
             self._write_db(db)
             return {"success": True, "session": session}
 
-        # Check user
+        # Check user in registered users
         user = next((u for u in db.get("users", []) if u["email"].lower() == email), None)
         if not user:
-            return {"success": False, "message": "User not registered. Please contact administrator or activate a license key."}
+            return {"success": False, "message": "User not registered. Please create an account to start your 7-day free trial."}
+
+        # Check password if configured
+        if user.get("password") and password_or_pin and user["password"] != password_or_pin:
+            return {"success": False, "message": "Incorrect password. Please try again."}
+
+        # Check trial expiry
+        is_trial = "Trial" in user.get("role", "")
+        expires_date_str = user.get("expires_at")
+        is_expired = False
+        if expires_date_str:
+            try:
+                exp_dt = datetime.strptime(expires_date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                if datetime.now(timezone.utc) > exp_dt:
+                    is_expired = True
+                    user["status"] = "Expired (License Required)"
+            except Exception:
+                pass
 
         session = {
             "logged_in": True,
             "user_email": user["email"],
             "role": user.get("role", "Pro Contributor"),
-            "license_tier": f"Pro ({user.get('license_period_days', 30)}d)",
-            "expires_at": "Active",
-            "daily_limit": str(user.get("daily_limit", 50)),
+            "license_tier": "Expired (License Required)" if is_expired else (f"7-Day Free Trial" if is_trial else f"Pro Contributor"),
+            "expires_at": user.get("expires_at", "Active"),
+            "daily_limit": "0" if is_expired else str(user.get("daily_limit", 15)),
         }
         db["active_session"] = session
         self._write_db(db)
-        return {"success": True, "session": session}
+        return {"success": True, "session": session, "is_expired": is_expired}
 
     def logout(self):
         db = self._read_db()

@@ -2532,3 +2532,152 @@ select:focus, input:focus, textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Accordion & Minimize Toggle */
+.btn-minimize-toggle {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+.btn-minimize-toggle:hover {
+  background: var(--primary-light);
+  color: var(--accent-cyan);
+  border-color: var(--primary);
+}
+.accordion-arrow {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+}
+.accordion-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+.marketplaces-menu.collapsed {
+  display: none !important;
+}
+
+/* Auth Modal Tabs (Sign In / Register) */
+.auth-tab-bar {
+  display: flex;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 18px;
+  gap: 4px;
+  border: 1px solid var(--border-color);
+}
+.auth-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.auth-tab-btn:hover {
+  color: var(--text-bright);
+}
+.auth-tab-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
+.trial-badge-banner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.trial-badge-banner .t-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.trial-badge-banner .t-text {
+  font-size: 0.82rem;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+.trial-badge-banner .t-title {
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 2px;
+}
+
+/* Pricing Grid in Admin Guide */
+.pricing-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+.pricing-plan-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.pricing-plan-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  background: rgba(37, 99, 235, 0.04);
+}
+.pricing-plan-card.featured {
+  border-color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.05);
+}
+.plan-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.plan-price-bdt {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+.plan-period {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.plan-features-list {
+  font-size: 0.8rem;
+  color: var(--text-main);
+  text-align: left;
+  line-height: 1.6;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  margin: 0;
+  padding-left: 18px;
+}

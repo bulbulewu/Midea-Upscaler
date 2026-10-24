@@ -59,9 +59,17 @@
 
       <!-- Navigation Section 2: Target Microstock Marketplaces -->
       <div class="sidebar-nav-group">
-        <div class="nav-group-label">
-          <span>TARGET MARKETPLACE</span>
-          <span class="market-active-indicator" id="sidebar-active-indicator">ACTIVE</span>
+        <div class="nav-group-label" id="marketplace-accordion-header" style="cursor:pointer;" title="Click to minimize or expand">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="accordion-arrow" id="market-accordion-arrow">▼</span>
+            <span>TARGET MARKETPLACE</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="market-active-indicator" id="sidebar-active-indicator">ACTIVE</span>
+            <button type="button" class="btn-minimize-toggle" id="btn-toggle-marketplaces" title="Minimize / Expand">
+              <span id="market-toggle-symbol">−</span>
+            </button>
+          </div>
         </div>
         <div class="marketplaces-menu" id="marketplaces-menu">
           <button class="market-item m-btn active" data-marketplace="universal">
@@ -694,21 +702,21 @@
           <div class="modal-icon-badge">⚙️</div>
           <div>
             <div class="modal-title-row">
-              <h3 class="modal-title">Microstock Platform Limits & Configuration</h3>
-              <span class="modal-badge-file">platforms.config.json</span>
+              <h3 class="modal-title">Studio Upscaler Parameters & Configuration</h3>
+              <span class="modal-badge-file">upscaler.config.json</span>
             </div>
-            <p class="modal-subtitle">Tune exact character limits, keyword counts, delimiters, and AI-disclosure policies per agency without touching code.</p>
+            <p class="modal-subtitle">Configure video rendering presets, image super-resolution, PSD layer parameters, hardware acceleration, and contributor guide.</p>
           </div>
         </div>
 
-        <!-- Top Header Quick Nav Pills (Matches Image 4) -->
+        <!-- Top Header Quick Nav Pills -->
         <div class="settings-top-pills">
-          <button class="s-pill-btn" data-panel="bulk_tools">🗂️ Bulk Tools</button>
-          <button class="s-pill-btn" data-panel="ip_risk">🛡️ IP Risk</button>
-          <button class="s-pill-btn" data-panel="exif_verify">🔍 Verify</button>
-          <button class="s-pill-btn" data-panel="submissions">📊 Submissions</button>
-          <button class="s-pill-btn" data-panel="privacy">🔒 Privacy</button>
-          <button class="s-pill-btn" data-panel="readme">📖 Readme</button>
+          <button class="s-pill-btn active" data-panel="video_settings">🎬 Video</button>
+          <button class="s-pill-btn" data-panel="image_settings">🖼️ Image</button>
+          <button class="s-pill-btn" data-panel="psd_settings">📄 PSD</button>
+          <button class="s-pill-btn" data-panel="engine_settings">⚡ Engine</button>
+          <button class="s-pill-btn" data-panel="theme_settings">🎨 Themes</button>
+          <button class="s-pill-btn" data-panel="readme">📖 Readme (EN/বাংলা)</button>
           <button class="modal-close-btn" id="close-settings-btn" title="Close Settings">✕</button>
         </div>
       </div>
@@ -718,122 +726,264 @@
         
         <!-- Left Sidebar inside Settings -->
         <div class="settings-sidebar">
-          
-          <div class="settings-group-title">STUDIO TOOLS</div>
+          <div class="settings-group-title">UPSCALING PARAMETERS</div>
           <div class="settings-menu-list">
-            <button class="s-nav-btn active" data-target="studio_general">⚙️ General & Studio Config</button>
-            <button class="s-nav-btn" data-target="bulk_tools">🗂️ Bulk Metadata Tools</button>
-            <button class="s-nav-btn" data-target="ip_risk">🛡️ IP Risk & Compliance</button>
-            <button class="s-nav-btn" data-target="exif_verify">🔍 ExifTool Verification</button>
-            <button class="s-nav-btn" data-target="submissions">📊 Submissions Tracker</button>
-            <button class="s-nav-btn" data-target="privacy">🔒 Privacy & Security</button>
-            <button class="s-nav-btn" data-target="readme">📖 Readme (EN/বাংলা)</button>
+            <button class="s-nav-btn active" data-target="video_settings">🎬 Video Upscaler Parameters</button>
+            <button class="s-nav-btn" data-target="image_settings">🖼️ Image Upscaler Parameters</button>
+            <button class="s-nav-btn" data-target="psd_settings">📄 PNG to PSD Engine</button>
           </div>
 
-          <div class="settings-group-title">AGENCY RULES (13)</div>
-          <div class="settings-menu-list" id="agency-rules-list">
-            <button class="s-nav-btn s-agency-btn" data-agency="adobe_stock">Adobe Stock <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="shutterstock">Shutterstock <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="freepik">Freepik <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="vecteezy">Vecteezy <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="getty_istock">Getty Images / iStock <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="pond5">Pond5 <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="alamy">Alamy <span class="agency-dot"></span></button>
-            <button class="s-nav-btn s-agency-btn" data-agency="depositphotos">Depositphotos <span class="agency-dot"></span></button>
+          <div class="settings-group-title">SYSTEM & DOCUMENTATION</div>
+          <div class="settings-menu-list">
+            <button class="s-nav-btn" data-target="engine_settings">⚡ Hardware & Performance</button>
+            <button class="s-nav-btn" data-target="theme_settings">🎨 Visual Studio Themes</button>
+            <button class="s-nav-btn" data-target="readme">📖 Readme & User Guide (EN/বাংলা)</button>
           </div>
-
         </div>
 
         <!-- Right Content Panel inside Settings -->
         <div class="settings-content-pane">
           
-          <!-- Dynamic Agency View (Matches Image 4) -->
-          <div class="settings-panel-view" id="panel-agency-view">
+          <!-- Panel 1: Video Upscaler Settings -->
+          <div class="settings-panel-view" id="panel-video_settings">
             <div class="agency-header-row">
-              <h3 class="agency-view-title" id="setting-agency-name">Adobe Stock</h3>
-              <div class="agency-meta-inputs">
-                <div class="agency-verified-box">
-                  <span class="cal-icon">📅</span>
-                  <label>Last Verified:</label>
-                  <input type="text" id="setting-agency-verified" value="03/15/2026">
+              <h3 class="agency-view-title">🎬 Video Upscaler Parameters</h3>
+              <span class="badge-pro-pill">Broadcast & Stock Compliant</span>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Target Resolution & Video Codec</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Default Output Resolution</label>
+                  <select id="setting-video-res">
+                    <option value="4k" selected>4K UHD (3840 × 2160) — Standard Microstock</option>
+                    <option value="fhd">Full HD (1920 × 1080) — Broadcast 1080p</option>
+                    <option value="2k">2K QHD (2560 × 1440) — High Density</option>
+                    <option value="8k">8K FUHD (7680 × 4320) — Master Archive</option>
+                  </select>
                 </div>
-                <div class="agency-csv-box">
-                  <label>CSV Delimiter:</label>
-                  <select id="setting-agency-delimiter">
-                    <option value=",">Comma (,)</option>
-                    <option value=";">Semicolon (;)</option>
-                    <option value="\t">Tab (\t)</option>
+                <div class="setting-field">
+                  <label>Master Video Codec</label>
+                  <select id="setting-video-codec">
+                    <option value="h264" selected>H.264 High@5.1 (Universal MP4 for all Agencies)</option>
+                    <option value="prores">Apple ProRes 422 HQ (Broadcast MOV)</option>
+                    <option value="hevc">H.265 / HEVC (High Compression 4K)</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            <!-- Card: Title Length Constraints -->
             <div class="setting-card">
-              <div class="setting-card-title">📄 Title Length Constraints (Characters)</div>
-              <div class="setting-grid-3">
-                <div class="setting-field">
-                  <label>Min Length</label>
-                  <input type="number" id="setting-title-min" value="15">
-                </div>
-                <div class="setting-field">
-                  <label>Hard Max Limit</label>
-                  <input type="number" id="setting-title-max" value="200">
-                </div>
-                <div class="setting-field">
-                  <label>Min Words</label>
-                  <input type="number" id="setting-title-words" value="5">
-                </div>
-              </div>
-            </div>
-
-            <!-- Card: Keyword Count Limits -->
-            <div class="setting-card">
-              <div class="setting-card-title">✨ Keyword Count Limits</div>
+              <div class="setting-card-title">Frame Rate & Compression Quality</div>
               <div class="setting-grid-2">
                 <div class="setting-field">
-                  <label>Minimum Keywords Required</label>
-                  <input type="number" id="setting-kw-min" value="35">
+                  <label>Constant Frame Rate (CFR)</label>
+                  <select id="setting-video-fps">
+                    <option value="30" selected>30 fps (Broadcast NTSC Standard)</option>
+                    <option value="60">60 fps (Smooth Ultra Action)</option>
+                    <option value="25">25 fps (European Broadcast PAL)</option>
+                    <option value="24">24 fps (Cinema True Motion)</option>
+                    <option value="23.976">23.976 fps (Film Standard)</option>
+                  </select>
                 </div>
                 <div class="setting-field">
-                  <label>Maximum Allowed Keywords</label>
-                  <input type="number" id="setting-kw-max" value="49">
+                  <label>CRF Quality Rate Control</label>
+                  <select id="setting-video-crf">
+                    <option value="18" selected>CRF 18 — Visually Lossless (Microstock Recommended)</option>
+                    <option value="15">CRF 15 — Ultra Master Studio</option>
+                    <option value="21">CRF 21 — Web Balanced</option>
+                  </select>
                 </div>
               </div>
-            </div>
-
-            <!-- Card: AI Disclosure -->
-            <div class="setting-card">
-              <div class="setting-card-header">
-                <span class="setting-card-title">🛡️ AI-Generated Disclosure Requirement</span>
+              <div class="setting-checkbox-list" style="margin-top:14px;">
                 <label class="setting-checkbox">
-                  <input type="checkbox" id="setting-ai-mandatory" checked>
-                  <span>Mandatory Disclosure</span>
+                  <input type="checkbox" id="setting-video-mute" checked>
+                  <span>Mute Audio Track by Default (Prevents 95% of agency rejections caused by ambient noise/copyright)</span>
                 </label>
-              </div>
-              <div class="setting-field">
-                <textarea id="setting-ai-text" rows="3">Mark 'Created using generative AI tools' toggle during upload. If realistic people/places, releases or editorial flags are required.</textarea>
-              </div>
-            </div>
-
-            <!-- Platform Special Notes -->
-            <div class="setting-card">
-              <div class="setting-card-title">Platform Special Notes & Rules</div>
-              <div class="setting-field">
-                <textarea id="setting-special-notes" rows="2">First 10 keywords are strictly weighted in Adobe Stock search algorithm. Max 49 keywords.</textarea>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-video-faststart" checked>
+                  <span>Inject +faststart MP4 moov atom (Enables instant preview stream on Adobe Stock & Shutterstock)</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-video-colorimetry" checked>
+                  <span>Embed BT.709 Color Space & Primaries</span>
+                </label>
               </div>
             </div>
           </div>
 
-          <!-- Studio General & Theme Settings Panel -->
-          <div class="settings-panel-view" id="panel-studio_general" style="display:none;">
+          <!-- Panel 2: Image Upscaler Settings -->
+          <div class="settings-panel-view" id="panel-image_settings" style="display:none;">
             <div class="agency-header-row">
-              <h3 class="agency-view-title">⚙️ General & Studio Engine Settings</h3>
+              <h3 class="agency-view-title">🖼️ Image Upscaler Parameters</h3>
+              <span class="badge-pro-pill">300 DPI Commercial Print</span>
             </div>
 
-            <!-- Theme Switcher -->
             <div class="setting-card">
-              <div class="setting-card-title">🎨 Visual Studio Theme</div>
+              <div class="setting-card-title">Super-Resolution Scale & Algorithm</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Default Upscale Scale Factor</label>
+                  <select id="setting-image-scale">
+                    <option value="4" selected>4x Ultra Resolution (Optimal for Stock & Print)</option>
+                    <option value="2">2x Standard Upscale</option>
+                    <option value="8">8x Master Super-Resolution (Huge Wall Canvas)</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>Resampling Interpolation Engine</label>
+                  <select id="setting-image-resampling">
+                    <option value="lanczos" selected>Lanczos-4 Sinc (Sharpest Detail & Micro-contrast)</option>
+                    <option value="bicubic">Bicubic Sharpen (Smooth Gradients)</option>
+                    <option value="bilinear">Bilinear (Fast Preview)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Commercial Print Density & Output Format</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Print Density (DPI / PPI)</label>
+                  <select id="setting-image-dpi">
+                    <option value="300" selected>300 DPI — Commercial Stock Print Standard</option>
+                    <option value="600">600 DPI — Fine Art Gallery Printing</option>
+                    <option value="150">150 DPI — Medium Resolution</option>
+                    <option value="72">72 DPI — Standard Web Display</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>Output Format & JPEG Quality</label>
+                  <select id="setting-image-quality">
+                    <option value="95" selected>JPEG 95% — High Commercial (Optimal Size/Quality)</option>
+                    <option value="100">JPEG 100% — Maximum Quality Lossless</option>
+                    <option value="png">PNG Lossless (Full Alpha & Vector Crisp)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-checkbox-list" style="margin-top:14px;">
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-image-min-mp" checked>
+                  <span>Enforce ≥ 4.0 Megapixel Stock Acceptance Gate (Prevents upload rejection)</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-image-preserve-icc" checked>
+                  <span>Preserve Embedded ICC Color Profile (sRGB / Adobe RGB 1998)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3: PNG to PSD Settings -->
+          <div class="settings-panel-view" id="panel-psd_settings" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">📄 PNG to PSD Parameters</h3>
+              <span class="badge-pro-pill">Freepik & Adobe Stock Ready</span>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Photoshop Layer Architecture</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>PSD Color Depth</label>
+                  <select id="setting-psd-depth">
+                    <option value="8" selected>8-Bit Per Channel (Universal Freepik/Adobe Stock)</option>
+                    <option value="16">16-Bit Per Channel (High Dynamic Master)</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>Primary Layer Naming</label>
+                  <input type="text" id="setting-psd-layer-name" value="Artwork Layer" placeholder="Layer Name">
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Canvas & Alpha Transparency Rules</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Canvas Dimensions</label>
+                  <select id="setting-psd-canvas">
+                    <option value="original" selected>Original Source Artwork Dimensions</option>
+                    <option value="4000">Square Studio Canvas (4000 × 4000 px)</option>
+                    <option value="5000">High-Res Square Canvas (5000 × 5000 px)</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>Edge Smoothing Mode</label>
+                  <select id="setting-psd-edge">
+                    <option value="smooth" selected>Preserve Soft Alpha Anti-Aliased Edges</option>
+                    <option value="crisp">Crisp Binary Mask (Pixel Art / Hard Cut)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-checkbox-list" style="margin-top:14px;">
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-psd-unlocked" checked>
+                  <span>Keep Artwork Layer Unlocked & Non-Flattened (Strict Freepik requirement)</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-psd-embed-dpi" checked>
+                  <span>Tag 300 DPI Print Resolution in PSD Headers</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4: Hardware & Performance Settings -->
+          <div class="settings-panel-view" id="panel-engine_settings" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">⚡ Hardware & Performance Engine</h3>
+              <span class="badge-pro-pill">Multi-Core Accelerated</span>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Hardware Acceleration & GPU Offload</div>
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Acceleration Mode</label>
+                  <select id="setting-hw-accel">
+                    <option value="auto" selected>Auto (Detect NVIDIA NVENC CUDA / Intel QSV / CPU)</option>
+                    <option value="nvenc">Force NVIDIA NVENC CUDA</option>
+                    <option value="cpu">Force Multi-Core CPU (-threads 0)</option>
+                  </select>
+                </div>
+                <div class="setting-field">
+                  <label>CPU Threading Allocation</label>
+                  <select id="setting-cpu-threads">
+                    <option value="0" selected>Max Available Threads (-threads 0)</option>
+                    <option value="8">8 Threads (Studio Balanced)</option>
+                    <option value="4">4 Threads (Low Background Load)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Workflow & File Management</div>
+              <div class="setting-checkbox-list">
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-auto-open-folder">
+                  <span>Auto-open file in system explorer / folder upon export completion</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-clean-cache-close">
+                  <span>Automatically purge temporary upload cache on window close</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 5: Visual Themes Settings -->
+          <div class="settings-panel-view" id="panel-theme_settings" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">🎨 Visual Studio Themes</h3>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Select Interface Palette</div>
               <div class="theme-picker-grid">
                 <button class="theme-card active" data-theme="dark_studio">
                   <div class="theme-preview dark-studio-prev"></div>
@@ -853,46 +1003,14 @@
                 </button>
               </div>
             </div>
-
-            <!-- Studio Engine & Threading -->
-            <div class="setting-card">
-              <div class="setting-card-title">⚡ Hardware & Processing Engines</div>
-              <div class="setting-grid-2">
-                <div class="setting-field">
-                  <label>Hardware Acceleration</label>
-                  <select id="setting-hw-accel">
-                    <option value="auto">Auto (Detect NVENC GPU / Fallback CPU)</option>
-                    <option value="nvenc">Force NVIDIA NVENC CUDA</option>
-                    <option value="cpu">Force Multi-core CPU (-threads 0)</option>
-                  </select>
-                </div>
-                <div class="setting-field">
-                  <label>Default Master Codec</label>
-                  <select id="setting-default-codec">
-                    <option value="h264">H.264 High@5.1 (Universal Stock MP4)</option>
-                    <option value="prores">Apple ProRes 422 HQ (Broadcast MOV)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="setting-checkbox-list" style="margin-top:14px;">
-                <label class="setting-checkbox">
-                  <input type="checkbox" id="setting-force-300dpi" checked>
-                  <span>Always embed 300 DPI commercial print tags into upscaled images</span>
-                </label>
-                <label class="setting-checkbox">
-                  <input type="checkbox" id="setting-auto-open-folder">
-                  <span>Auto-open file in system explorer upon export completion</span>
-                </label>
-              </div>
-            </div>
           </div>
 
-          <!-- Readme & Contributor Guide (EN / বাংলা) Panel -->
+          <!-- Panel 6: Readme & User Guide (Bilingual English & বাংলা) -->
           <div class="settings-panel-view" id="panel-readme" style="display:none;">
             <div class="agency-header-row">
-              <h3 class="agency-view-title">📖 Contributor Manual & Microstock Master Guide</h3>
+              <h3 class="agency-view-title">📖 Contributor Manual & Step-by-Step Guide</h3>
               <div class="lang-switch-pills">
-                <button class="lang-btn active" data-lang="en">English Guide</button>
+                <button class="lang-btn active" data-lang="en">English Manual</button>
                 <button class="lang-btn" data-lang="bn">বাংলা নির্দেশিকা</button>
               </div>
             </div>
@@ -900,73 +1018,104 @@
             <!-- English Readme Content -->
             <div class="readme-text-container" id="readme-en">
               <h4>🚀 Media Toolkit Pro V3 — Contributor Production Manual</h4>
-              <p>Welcome to <b>Media Toolkit Pro V3</b>, engineered exclusively by Munajat International for stock media professionals and high-volume contributors.</p>
+              <p>Welcome to <b>Media Toolkit Pro V3</b>, engineered exclusively by Munajat International for stock media professionals and high-volume contributors submitting to Adobe Stock, Shutterstock, Freepik, Pond5, and Getty Images.</p>
               
               <div class="readme-box">
-                <h5>1. Video Mastery Rules (Adobe Stock, Shutterstock, Getty, Pond5):</h5>
-                <ul>
-                  <li><b>Frame Rates:</b> Never submit variable frame rate (VFR) footage. Our engine automatically locks into standard broadcast Constant Frame Rates (23.976, 24, 25, 29.97, 30, 50, 60 fps).</li>
-                  <li><b>Duration:</b> Microstock footage must be strictly between 5 seconds and 60 seconds.</li>
-                  <li><b>Audio Policy:</b> Unless the sound is essential professional Foley, stock agencies reject 95% of clips containing background mic hum, fan noise, or copyrighted music. Audio is safely muted by default.</li>
-                  <li><b>Color Profile:</b> All exported footage is tagged with BT.709 colorimetry and faststart MP4 atoms.</li>
-                </ul>
+                <h5>🌟 What Is This App For?</h5>
+                <p>Media Toolkit Pro V3 solves the biggest reasons stock agencies reject digital submissions: low resolution, variable frame rates (VFR), ambient mic noise, lack of 300 DPI print tags, and non-layered PSD formats. It delivers 100% compliant commercial assets ready for instant submission.</p>
               </div>
 
               <div class="readme-box">
-                <h5>2. Image Upscaling & Resolution Thresholds:</h5>
-                <ul>
-                  <li><b>Megapixel Rule:</b> Shutterstock and Adobe Stock reject images under 4.0 Megapixels. Our 4x and 8x engines easily reach 8.3 MP (4K) to 33 MP (8K).</li>
-                  <li><b>Print Density:</b> All upscaled outputs embed 300 DPI EXIF headers, allowing direct buyer printing.</li>
-                </ul>
+                <h5>🎬 1. Step-by-Step: Video Upscaling (4K / 8K Master)</h5>
+                <ol>
+                  <li>Click <b>Video Upscaler</b> in the left sidebar.</li>
+                  <li>Click or drag your MP4/MOV footage into the upload zone. Once uploaded, a live thumbnail appears with file size, dimensions, and duration.</li>
+                  <li>In the Configuration panel, choose your target resolution: <b>4K UHD (3840×2160)</b> is the sweet spot for maximum stock royalties.</li>
+                  <li>Select your frame rate (30 fps or 60 fps). Our engine enforces <b>Constant Frame Rate (CFR)</b> and auto-mutes unwanted audio.</li>
+                  <li>Click <b>Start Video Upscaling</b>. Monitor real-time progress and download the finished broadcast-ready master.</li>
+                </ol>
               </div>
 
               <div class="readme-box">
-                <h5>3. Layered PSD Guidelines for Freepik:</h5>
+                <h5>🖼️ 2. Step-by-Step: Image Super-Resolution (300 DPI Print)</h5>
+                <ol>
+                  <li>Select <b>Image Upscaler</b> from the sidebar.</li>
+                  <li>Upload your JPEG/PNG images (single or batch).</li>
+                  <li>Choose your upscale factor: <b>4x Ultra</b> or <b>8x Master</b> using Lanczos-4 high-fidelity sinc interpolation.</li>
+                  <li>The app automatically embeds <b>300 DPI print density</b> and guarantees images exceed the strict 4.0 Megapixel threshold.</li>
+                  <li>Click <b>Start Image Upscaling</b> and download high-resolution commercial print files.</li>
+                </ol>
+              </div>
+
+              <div class="readme-box">
+                <h5>📄 3. Step-by-Step: Transparent PNG to Layered PSD (Freepik & Adobe Stock)</h5>
+                <ol>
+                  <li>Select <b>PNG to PSD</b> from the sidebar.</li>
+                  <li>Upload isolated artwork or illustrations with transparent backgrounds.</li>
+                  <li>Our engine packages the artwork into an <b>unlocked, non-flattened Photoshop layer</b> with intact alpha channels.</li>
+                  <li>Click <b>Generate Layered PSD</b> to produce PSD files that pass Freepik, Adobe Stock, and Vecteezy contributor inspections on the first attempt.</li>
+                </ol>
+              </div>
+
+              <div class="readme-box">
+                <h5>💡 4. Top Marketplace Acceptance Secrets</h5>
                 <ul>
-                  <li>Transparent PNG artwork is converted into unlocked, editable Photoshop layers with full alpha channel integrity.</li>
+                  <li><b>Adobe Stock Video:</b> Clips must be between 5s and 60s. Always keep audio muted unless recording professional foley sound.</li>
+                  <li><b>Shutterstock Images:</b> Any image below 4.0 Megapixels is automatically rejected. 4x upscale safely produces 8.3 MP to 33 MP.</li>
+                  <li><b>Freepik PSD:</b> Never submit flattened background PSDs. Our engine generates unlocked floating layers as demanded by Freepik reviewers.</li>
                 </ul>
               </div>
             </div>
 
             <!-- Bengali Readme Content -->
             <div class="readme-text-container" id="readme-bn" style="display:none;">
-              <h4>🚀 মিডিয়া টুলকিট প্রো V3 — মাইক্রোস্টক কন্ট্রিবিউটর নির্দেশিকা</h4>
-              <p><b>মুনাজাত ইন্টারন্যাশনাল</b> কর্তৃক প্রফেশনাল স্টক কন্ট্রিবিউটরদের জন্য নির্মিত বিশ্বমানের মাল্টি-মার্কেটপ্লেস মিডিয়া প্রোডাকশন স্যুট।</p>
+              <h4>🚀 মিডিয়া টুলকিট প্রো V3 — মাইক্রোস্টক কন্ট্রিবিউটর পূর্ণাঙ্গ নির্দেশিকা</h4>
+              <p><b>মুনাজাত ইন্টারন্যাশনাল</b> কর্তৃক প্রফেশনাল স্টক কন্ট্রিবিউটরদের জন্য নির্মিত বিশ্বমানের মাল্টি-মার্কেটপ্লেস মিডিয়া প্রোডাকশন স্যুট। Adobe Stock, Shutterstock, Freepik, Pond5 এবং Getty Images-এ সফলভাবে কাজ করার জন্য এটি একটি স্বয়ংসম্পূর্ণ প্ল্যাটফর্ম।</p>
               
               <div class="readme-box">
-                <h5>১. ভিডিও আপস্কেলিং ও মার্কেটপ্লেস নিয়মাবলী:</h5>
-                <ul>
-                  <li><b>ফ্রেম রেট:</b> অ্যাডোব স্টক বা শাটারস্টকে কখনোই ভেরিয়েবল ফ্রেম রেট (VFR) গ্রহণ করে না। এই অ্যাপ স্বয়ংক্রিয়ভাবে ব্রডকাস্ট স্ট্যান্ডার্ড CFR (২৪, ২৫, ৩০, ৬০ fps) নিশ্চিত করে।</li>
-                  <li><b>ভিডিওর দৈর্ঘ্য:</b> ক্লিপের দৈর্ঘ্য সর্বনিম্ন ৫ সেকেন্ড এবং সর্বোচ্চ ৬০ সেকেন্ড হতে হবে।</li>
-                  <li><b>অডিও পলিসি:</b> অযাচিত ব্যাকগ্রাউন্ড নয়েজ বা মিউজিকের কারণে স্টক মার্কেটপ্লেস ভিডিও রিজেক্ট করে দেয়। তাই স্বয়ংক্রিয়ভাবে অডিও ট্র্যাক ফিল্টার করা থাকে।</li>
-                </ul>
+                <h5>🌟 এই সফটওয়্যারটি কীসের জন্য?</h5>
+                <p>স্টক সাইটগুলোতে ফাইল রিজেক্ট হওয়ার প্রধান কারণগুলো হলো: কম রেজোলিউশন, ভেরিয়েবল ফ্রেম রেট (VFR), মাইক্রোফোনের নয়েজ, ৩০০ ডিপিআই প্রিন্ট ট্যাগের অভাব এবং ফ্ল্যাটেনড পিএসডি। এই টুলকিট স্বয়ংক্রিয়ভাবে আন্তর্জাতিক মান অনুযায়ী ফাইল তৈরি করে দেয় যাতে আপনার ফাইল শতভাগ একসেপ্ট হয়।</p>
               </div>
 
               <div class="readme-box">
-                <h5>২. ইমেজ আপস্কেলার ও কোয়ালিটি রুলস:</h5>
-                <ul>
-                  <li><b>মেগাপিক্সেল নিয়ম:</b> ৪ মেগাপিক্সেলের নিচে ছবি স্টক সাইটে আপলোড করা যায় না। আমাদের 4x ও 8x ল্যানকজস ইঞ্জিন ছবিকে সরাসরি ৮.৩ MP (4K) থেকে ৩৩ MP (8K)-তে উন্নীত করে।</li>
-                  <li><b>৩০০ ডিপিআই প্রিন্ট:</b> কমার্শিয়াল প্রিন্টের জন্য প্রতিটি ফাইলে ৩০০ DPI ট্যাগ স্বয়ংক্রিয়ভাবে এমবেড করা হয়।</li>
-                </ul>
+                <h5>🎬 ১. ধাপে ধাপে ভিডিও আপস্কেলিং গাইড (4K / 8K মাস্টার):</h5>
+                <ol>
+                  <li>বাম পাশের সাইডবার থেকে <b>Video Upscaler</b> অপশন নির্বাচন করুন।</li>
+                  <li>আপনার MP4 বা MOV ভিডিও ড্র্যাগ করে আপলোড করুন। আপলোড হওয়ার সাথে সাথে থাম্বনেইল, ভিডিও ফাইলের সাইজ ও ডিউরেশন প্রদর্শিত হবে।</li>
+                  <li>কনফিগারেশন সেকশন থেকে <b>4K UHD (3840×2160)</b> রেজোলিউশন এবং ৩০/৬০ fps ফ্রেম রেট সিলেক্ট করুন। ইঞ্জিন স্বয়ংক্রিয়ভাবে কনস্ট্যান্ট ফ্রেম রেট (CFR) নিশ্চিত করবে এবং ব্যাকগ্রাউন্ড নয়েজ দূর করতে অডিও মিউট করে দেবে।</li>
+                  <li><b>Start Video Upscaling</b> বাটনে ক্লিক করুন এবং রিয়েল-টাইম প্রোগ্রেস দেখে ব্রডকাস্ট মাস্টার ফাইল ডাউনলোড করুন।</li>
+                </ol>
               </div>
 
               <div class="readme-box">
-                <h5>৩. ফ্রিপিক লেয়ার্ড PSD গাইডলাইন:</h5>
+                <h5>🖼️ ২. ধাপে ধাপে ইমেজ আপস্কেলিং গাইড (৩০০ ডিপিআই প্রিন্ট কোয়ালিটি):</h5>
+                <ol>
+                  <li>সাইডবার থেকে <b>Image Upscaler</b> নির্বাচন করুন।</li>
+                  <li>আপনার সাধারণ রেজোলিউশনের ছবি আপলোড করুন। গ্রিড বা লিস্ট ভিউতে থাম্বনেইল দেখে নিন।</li>
+                  <li><b>4x Ultra</b> অথবা <b>8x Master</b> স্কেল বেছে নিন। ল্যানকজস-৪ অ্যালগরিদম ছবির শার্পনেস অক্ষুণ্ণ রেখে রেজোলিউশন বৃদ্ধি করে।</li>
+                  <li>সফটওয়্যার স্বয়ংক্রিয়ভাবে <b>300 DPI প্রিন্ট ট্যাগ</b> যুক্ত করবে এবং সাইজ ৪.০ মেগাপিক্সেলের উপরে উন্নীত করবে।</li>
+                  <li><b>Start Image Upscaling</b> এ ক্লিক করে ডাউনলোড করে সরাসরি স্টক সাইটে সাবমিট করুন।</li>
+                </ol>
+              </div>
+
+              <div class="readme-box">
+                <h5>📄 ৩. ধাপে ধাপে ট্রান্সপারেন্ট PNG থেকে লেয়ার্ড PSD গাইড (Freepik এর জন্য):</h5>
+                <ol>
+                  <li>সাইডবার থেকে <b>PNG to PSD</b> অপশন বেছে নিন।</li>
+                  <li>ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড যুক্ত আইসোলেটেড ভেক্টর আর্ট বা পিএনজি ফাইল আপলোড করুন।</li>
+                  <li>ইঞ্জিন প্রতিটি ট্রান্সপারেন্ট উপাদানকে আনলকড ও এডিটেবল ফটোশপ লেয়ারে কনভার্ট করবে।</li>
+                  <li><b>Generate Layered PSD</b> এ ক্লিক করে প্রস্তুতকৃত পিএসডি ডাউনলোড করুন, যা ফ্রিপিক এবং অ্যাডোব স্টক রিভিউয়াররা প্রথম দেখাতেই একসেপ্ট করবে।</li>
+                </ol>
+              </div>
+
+              <div class="readme-box">
+                <h5>💡 ৪. স্টক সাইটে ফাইল রিজেকশন ঠেকানোর বিশেষ কৌশল:</h5>
                 <ul>
-                  <li>ট্রান্সপারেন্ট পিএনজি ছবিকে আনলকড ও এডিটেবল ফটোশপ লেয়ারে রূপান্তর করে সরাসরি ফ্রিপিক ও অ্যাডোব স্টকে সাবমিটের উপযোগী করা হয়।</li>
+                  <li><b>ভিডিওর দৈর্ঘ্য:</b> স্টক সাইটের ভিডিও অবশ্যই ৫ থেকে ৬০ সেকেন্ডের মধ্যে হতে হবে। অপ্রয়োজনীয় ব্যাকগ্রাউন্ড শব্দ যাতে না থাকে তা নিশ্চিত করতে ভিডিও মিউট রাখা সবচেয়ে নিরাপদ।</li>
+                  <li><b>ছবির মেগাপিক্সেল:</b> শাটারস্টক ৪ মেগাপিক্সেলের নিচের কোনো ছবি গ্রহণ করে না। 4x আপস্কেল করলে ছবি সহজেই ৮.৩ থেকে ৩৩ মেগাপিক্সেলে পৌঁছে যায়।</li>
+                  <li><b>ফ্রিপিক পিএসডি নিয়ম:</b> ফ্ল্যাট ব্যাকগ্রাউন্ডের পিএসডি ফ্রিপিক সরাসরি রিজেক্ট করে। আমাদের টুলকিটের আনলকড লেয়ার্ড আর্কিটেকচার শতভাগ ফ্রিপিক কমপ্লায়েন্ট।</li>
                 </ul>
               </div>
-            </div>
-          </div>
-
-          <!-- Other Tools Panels (Bulk, IP Risk, Exif, Privacy) -->
-          <div class="settings-panel-view" id="panel-other-tools" style="display:none;">
-            <div class="agency-header-row">
-              <h3 class="agency-view-title" id="other-tools-title">Studio Tools</h3>
-            </div>
-            <div class="setting-card">
-              <div class="setting-card-title">Commercial Studio Configuration</div>
-              <p id="other-tools-desc" style="color:var(--text-muted); font-size:0.92rem; line-height:1.6;"></p>
             </div>
           </div>
 
@@ -1242,7 +1391,20 @@
             </div>
             <div class="admin-field">
               <label>Master Administrator Contact Email</label>
-              <input type="email" id="policy-admin-email" value="ahmeddesignhouse@gmail.com">
+              <input type="email" id="policy-admin-email" value="bulbulworka1@gmail.com">
+            </div>
+            <div class="admin-field">
+              <label>Master Admin Recovery Email Address</label>
+              <input type="email" id="policy-recovery-email" value="bulbulworka1@gmail.com" readonly style="background:rgba(255,255,255,0.04);">
+            </div>
+            <div class="admin-field">
+              <label>Default Free Trial Access Period (Days)</label>
+              <input type="number" id="policy-trial-days" value="7" readonly>
+            </div>
+            <div class="admin-field">
+              <label>Free Trial Daily Limit (Files / Day)</label>
+              <input type="number" id="policy-trial-limit" value="15" readonly>
+            </div>
             </div>
           </div>
 
@@ -1358,22 +1520,51 @@
           <div class="guide-card-section active" id="guide-sec-sales">
             <div class="guide-section">
               <h5>1. Commercial Pricing Architecture</h5>
-              <p>Recommended pricing structure for Bangladesh and international contributors:</p>
-              <ul>
-                <li><b>Monthly Pass (30 Days / 50 files/day):</b> ৳1,500 BDT or $15 USD. Perfect for individual contributors.</li>
-                <li><b>Quarterly Studio (90 Days / 100 files/day):</b> ৳3,800 BDT or $38 USD. Best value for active stock producers.</li>
-                <li><b>Annual Master Pro (365 Days / 250 files/day):</b> ৳12,000 BDT or $110 USD. High-margin subscription.</li>
-                <li><b>Lifetime Commercial VIP:</b> ৳25,000 BDT or $240 USD. Single payment with unlimited access.</li>
-              </ul>
+              <p>Official commercial subscription structure for Bangladesh & global stock contributors:</p>
+              <div class="pricing-guide-grid">
+                <div class="pricing-plan-card">
+                  <span class="plan-badge">ENTRY TIER</span>
+                  <div class="plan-price-bdt">৳50</div>
+                  <div class="plan-period">Monthly Pass (30 Days)</div>
+                  <ul class="plan-features-list">
+                    <li>50 files / day quota</li>
+                    <li>4K Video Upscaling</li>
+                    <li>8x Image Super-Resolution</li>
+                    <li>Layered PSD Generator</li>
+                  </ul>
+                </div>
+                <div class="pricing-plan-card featured">
+                  <span class="plan-badge">POPULAR CHOICE</span>
+                  <div class="plan-price-bdt">৳120</div>
+                  <div class="plan-period">Quarterly Studio (90 Days)</div>
+                  <ul class="plan-features-list">
+                    <li>100 files / day quota</li>
+                    <li>4K & 8K Video Processing</li>
+                    <li>Batch Queue Concurrency</li>
+                    <li>Priority License Support</li>
+                  </ul>
+                </div>
+                <div class="pricing-plan-card">
+                  <span class="plan-badge">BEST VALUE</span>
+                  <div class="plan-price-bdt">৳400</div>
+                  <div class="plan-period">Annual Master Pro (365 Days)</div>
+                  <ul class="plan-features-list">
+                    <li>250 files / day quota</li>
+                    <li>Uncapped 8K Video Engine</li>
+                    <li>Commercial Resale Rights</li>
+                    <li>VIP Priority Feature Requests</li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div class="guide-section">
-              <h5>2. bKash / Nagad / Bank Order Fulfillment Process</h5>
-              <ol>
-                <li>Customer sends payment to your Personal or Merchant bKash/Nagad number with their email ID in the reference.</li>
-                <li>Open the <b>Administrator Control Panel</b> &rarr; <b>License Keys Generator</b>.</li>
-                <li>Type their Email ID, choose the access duration (e.g. <code>30d</code> or <code>1yr</code>), and enter their TrxID in the memo.</li>
-                <li>Click <b>Generate License Key</b> and click <b>Copy</b>.</li>
-                <li>Send the generated key to the customer via WhatsApp/Email. Once entered, the key locks strictly to their PC.</li>
+              <h5>2. 5-Step Order Fulfillment Guide (bKash / Nagad / Bank / Card)</h5>
+              <ol style="line-height:1.8;">
+                <li><b>Step 1 — Payment Receipt:</b> Customer sends subscription fee (৳50 Monthly / ৳120 Quarterly / ৳400 Annual) to your bKash/Nagad Personal or Merchant number, providing their registered Email ID as payment reference.</li>
+                <li><b>Step 2 — Open Generator:</b> Open the <b>Administrator Control Panel</b> &rarr; navigate to <b>🔑 License Keys Generator</b>.</li>
+                <li><b>Step 3 — Input Order Details:</b> Enter the customer's registered Email ID, select their purchased duration (e.g., <code>30 Days</code>, <code>90 Days</code>, or <code>365 Days</code>), and record their bKash/Nagad TrxID in the administrative note.</li>
+                <li><b>Step 4 — Generate Cryptographic Key:</b> Click <b>Generate License Key</b>. The system generates an authentic <code>MTK-PRO-XXXX-XXXX-XXXX</code> key. Click the <b>Copy</b> button.</li>
+                <li><b>Step 5 — Instant Delivery:</b> Send the license key to the customer via WhatsApp, Email, or SMS. When the user enters the key in <b>Activate Pro License</b>, it automatically binds to their machine HWID and unlocks full pro capabilities.</li>
               </ol>
             </div>
           </div>
@@ -1476,28 +1667,66 @@ pyinstaller --noconfirm --onedir --windowed --add-data "templates;templates" --a
         <div class="modal-header-info">
           <div class="modal-icon-badge">👤</div>
           <div>
-            <h3 class="modal-title">Contributor Login</h3>
-            <p class="modal-subtitle">Sign in with your registered email</p>
+            <h3 class="modal-title" id="auth-modal-title">Contributor Access</h3>
+            <p class="modal-subtitle" id="auth-modal-subtitle">Sign in or create account for 7-Day Free Trial</p>
           </div>
         </div>
         <button class="modal-close-btn" id="close-login-btn">✕</button>
       </div>
 
       <div class="modal-body-simple">
-        <div class="admin-field">
-          <label>Email Address</label>
-          <input type="email" id="login-email" placeholder="user@gmail.com" value="ahmeddesignhouse@gmail.com">
+        <!-- Auth Tabs Switcher -->
+        <div class="auth-tab-bar">
+          <button type="button" class="auth-tab-btn active" id="tab-btn-signin">🔑 Sign In</button>
+          <button type="button" class="auth-tab-btn" id="tab-btn-register">🎁 Register (7-Day Free Trial)</button>
         </div>
-        <div class="admin-field" style="margin-top:14px;">
-          <label>Security PIN or Password</label>
-          <input type="password" id="login-password" placeholder="••••••••">
+
+        <!-- Sign In Form -->
+        <div id="auth-pane-signin">
+          <div class="admin-field">
+            <label>Master Admin / Registered Email</label>
+            <input type="email" id="login-email" placeholder="bulbulworka1@gmail.com" value="bulbulworka1@gmail.com">
+          </div>
+          <div class="admin-field" style="margin-top:14px;">
+            <label>Password / Security PIN</label>
+            <input type="password" id="login-password" placeholder="••••••••" value="bulbul2026">
+          </div>
+          <div style="margin-top:10px; font-size:0.78rem; color:var(--text-muted); line-height:1.4;">
+            💡 Master Admin: <code>bulbulworka1@gmail.com</code> | Password: <code>bulbul2026</code><br>
+            Recovery Email: <code>bulbulworka1@gmail.com</code>
+          </div>
         </div>
+
+        <!-- Register Form (7-Day Trial) -->
+        <div id="auth-pane-register" style="display:none;">
+          <div class="trial-badge-banner">
+            <div class="t-icon">🎉</div>
+            <div class="t-text">
+              <div class="t-title">Instant 7-Day Free Trial</div>
+              Register now to enjoy 7 days of complimentary access with 15 daily exports across Video Upscaler, Image Upscaler, and PSD tools.
+            </div>
+          </div>
+          <div class="admin-field">
+            <label>Full Name / Studio Name</label>
+            <input type="text" id="register-name" placeholder="e.g. Munajat Studio Contributor">
+          </div>
+          <div class="admin-field" style="margin-top:12px;">
+            <label>Email Address *</label>
+            <input type="email" id="register-email" placeholder="yourname@example.com" required>
+          </div>
+          <div class="admin-field" style="margin-top:12px;">
+            <label>Create Password *</label>
+            <input type="password" id="register-password" placeholder="At least 6 characters" required>
+          </div>
+        </div>
+
         <div class="activate-status-msg" id="login-status-msg"></div>
       </div>
 
       <div class="modal-footer">
         <button class="btn-secondary" id="cancel-login-btn">Cancel</button>
         <button class="btn-primary-compact" id="do-login-btn">Sign In</button>
+        <button class="btn-primary-compact" id="do-register-btn" style="display:none;">Create Account & Start 7-Day Trial</button>
       </div>
     </div>
   </div>
