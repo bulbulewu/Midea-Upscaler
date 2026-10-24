@@ -1915,20 +1915,26 @@ document.addEventListener("DOMContentLoaded", () => {
   let toolkitLoaded = false;
 
   function loadToolkitPanel() {
-    if (toolkitLoaded) return;
-
     const iframe = document.getElementById("toolkit-iframe");
     const loader = document.getElementById("toolkit-iframe-loading");
     const banner = document.getElementById("toolkit-not-running-banner");
     if (!iframe) return;
 
     if (banner) banner.style.display = "none";
-    if (loader) {
-      loader.classList.remove("hidden");
-      loader.style.display = "flex";
+
+    if (!iframe.src || iframe.src.endsWith("about:blank") || iframe.src.endsWith("/")) {
+      if (!iframe.src.includes("/toolkit/")) {
+        iframe.src = "/toolkit/";
+      }
     }
 
-    iframe.src = "/toolkit/";
+    // Dismiss loader smoothly within 1.5s max
+    setTimeout(() => {
+      if (loader) {
+        loader.classList.add("hidden");
+        loader.style.display = "none";
+      }
+    }, 1500);
   }
 
   // Hide loading spinner when iframe finishes loading
