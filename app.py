@@ -30,6 +30,10 @@ from backend.stock_validator import (
     STOCK_MARKETPLACES, preflight_video_check, preflight_image_check,
 )
 from backend.license_manager import license_mgr
+from backend.ai_inspector import (
+    load_ai_config, save_ai_config, get_masked_key,
+    inspect_media_for_stock
+)
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE, "uploads")
@@ -182,6 +186,112 @@ def index():
         img_formats=OUTPUT_FORMATS,
     )
 
+
+
+# -----------------------------------------------------------------------------
+# AI Stock Rejection Inspector API Endpoints
+# -----------------------------------------------------------------------------
+@app.route("/api/ai/config", methods=["GET", "POST"])
+def ai_config_endpoint():
+    if request.method == "POST":
+        data = request.get_json(silent=True) or request.form.to_dict()
+        cfg = load_ai_config()
+        if "gemini_api_key" in data and data["gemini_api_key"].strip():
+            # If user provided a masked key, don't overwrite with asterisks
+            new_key = data["gemini_api_key"].strip()
+            if "•" not in new_key and "****" not in new_key:
+                cfg["gemini_api_key"] = new_key
+        if "grok_api_key" in data and data["grok_api_key"].strip():
+            new_grok = data["grok_api_key"].strip()
+            if "•" not in new_grok and "****" not in new_grok:
+                cfg["grok_api_key"] = new_grok
+        if "provider" in data:
+            cfg["provider"] = data["provider"]
+        if "model" in data and data["model"].strip():
+            cfg["model"] = data["model"].strip()
+        if "check_trademarks" in data:
+            cfg["check_trademarks"] = str(data["check_trademarks"]).lower() in ("true", "1", "yes")
+        if "check_model_release" in data:
+            cfg["check_model_release"] = str(data["check_model_release"]).lower() in ("true", "1", "yes")
+        if "check_property_release" in data:
+            cfg["check_property_release"] = str(data["check_property_release"]).lower() in ("true", "1", "yes")
+            
+        save_ai_config(cfg)
+        return jsonify({
+            "success": True,
+            "message": "AI Stock Inspector configuration saved successfully.",
+            "has_gemini": bool(cfg.get("gemini_api_key")),
+            "has_grok": bool(cfg.get("grok_api_key")),
+            "provider": cfg.get("provider", "gemini"),
+            "model": cfg.get("model", "gemini-1.5-flash")
+        })
+
+    # GET request
+    cfg = load_ai_config()
+    return jsonify({
+        "success": True,
+        "provider": cfg.get("provider", "gemini"),
+        "model": cfg.get("model", "gemini-1.5-flash"),
+        "gemini_masked": get_masked_key(cfg.get("gemini_api_key", "")),
+        "has_gemini": bool(cfg.get("gemini_api_key")),
+        "grok_masked": get_masked_key(cfg.get("grok_api_key", "")),
+        "has_grok": bool(cfg.get("grok_api_key")),
+        "check_trademarks": cfg.get("check_trademarks", True),
+        "check_model_release": cfg.get("check_model_release", True),
+        "check_property_release": cfg.get("check_property_release", True)
+    })
+
+
+@app.route("/api/ai/inspect", methods=["POST"])
+def ai_inspect_endpoint():
+    """
+    Run the AI Stock Rejection Inspector on an image file or active job ID.
+    """
+    job_id = request.form.get("job_id") or (request.get_json(silent=True) or {}).get("job_id")
+    target_path = None
+    temp_file = False
+
+    if job_id:
+        with jobs_lock:
+            job = jobs.get(job_id)
+            if not job:
+                return jsonify({"success": False, "error": f"Job {job_id} not found."}), 404
+            
+            # If video, extract a thumbnail to inspect
+            if job["kind"] == "video":
+                src_video = job.get("src")
+                if src_video and os.path.exists(src_video):
+                    thumb_path = os.path.join(OUTPUT_DIR, f"{job_id}_ai_thumb.jpg")
+                    try:
+                        extract_thumbnail(src_video, thumb_path, time_sec=1.0)
+                        target_path = thumb_path
+                        temp_file = True
+                    except Exception:
+                        pass
+            else:
+                target_path = job.get("src")
+
+    if not target_path or not os.path.exists(target_path):
+        f = request.files.get("file")
+        if f and f.filename:
+            try:
+                _, target_path = _save_upload(f, IMG_EXTS, "image")
+                temp_file = True
+            except Exception as exc:
+                return jsonify({"success": False, "error": f"Upload failed: {str(exc)}"}), 400
+
+    if not target_path or not os.path.exists(target_path):
+        return jsonify({"success": False, "error": "No media image or active job provided to inspect."}), 400
+
+    try:
+        report = inspect_media_for_stock(target_path)
+        return jsonify(report)
+    finally:
+        if temp_file and target_path and os.path.exists(target_path):
+            try:
+                os.remove(target_path)
+            except Exception:
+                pass
 
 @app.route("/api/preflight/video", methods=["POST"])
 def preflight_video():

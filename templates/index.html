@@ -250,6 +250,7 @@
                       <span class="media-format-badge" id="preview-format-video">MP4</span>
                     </div>
                     <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-ai-inspect" id="btn-ai-inspect-video" title="Run AI Stock Rejection Inspector">🤖 AI Pre-Submission Check</button>
                       <button type="button" class="btn-media-action btn-preview-inspect" id="btn-inspect-video">🔍 Inspect</button>
                       <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-video" title="Remove video">✕ Remove</button>
                     </div>
@@ -415,6 +416,7 @@
                       <span class="media-format-badge" id="preview-format-image">PNG</span>
                     </div>
                     <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-ai-inspect" id="btn-ai-inspect-image" title="Run AI Stock Rejection Inspector">🤖 AI Pre-Submission Check</button>
                       <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-image">✕ Remove</button>
                     </div>
                   </div>
@@ -571,6 +573,7 @@
                       <span class="media-format-badge" id="preview-format-psd">PNG</span>
                     </div>
                     <div class="media-actions">
+                      <button type="button" class="btn-media-action btn-ai-inspect" id="btn-ai-inspect-psd" title="Run AI Stock Rejection Inspector">🤖 AI Pre-Submission Check</button>
                       <button type="button" class="btn-media-action btn-remove-media" id="btn-remove-psd">✕ Remove</button>
                     </div>
                   </div>
@@ -943,6 +946,7 @@
           <button class="s-pill-btn" data-panel="image_settings">🖼️ Image</button>
           <button class="s-pill-btn" data-panel="psd_settings">📄 PSD</button>
           <button class="s-pill-btn" data-panel="engine_settings">⚡ Engine</button>
+          <button class="s-pill-btn" data-panel="ai_settings">🤖 AI Inspector</button>
           <button class="s-pill-btn" data-panel="theme_settings">🎨 Themes</button>
           <button class="s-pill-btn" data-panel="readme">📖 Readme (EN/বাংলা)</button>
           <button class="modal-close-btn" id="close-settings-btn" title="Close Settings">✕</button>
@@ -964,7 +968,8 @@
           <div class="settings-group-title">SYSTEM & DOCUMENTATION</div>
           <div class="settings-menu-list">
             <button class="s-nav-btn" data-target="engine_settings">⚡ Hardware & Performance</button>
-            <button class="s-nav-btn" data-target="theme_settings">🎨 Visual Studio Themes</button>
+                        <button class="s-nav-btn" data-target="ai_settings">🤖 AI Stock Inspector API</button>
+<button class="s-nav-btn" data-target="theme_settings">🎨 Visual Studio Themes</button>
             <button class="s-nav-btn" data-target="readme">📖 Readme & User Guide (EN/বাংলা)</button>
           </div>
         </div>
@@ -1205,7 +1210,76 @@
           </div>
 
           <!-- Panel 5: Visual Themes Settings -->
-          <div class="settings-panel-view" id="panel-theme_settings" style="display:none;">
+                    <!-- Panel: AI Stock Rejection Inspector API Settings -->
+          <div class="settings-panel-view" id="panel-ai_settings" style="display:none;">
+            <div class="agency-header-row">
+              <h3 class="agency-view-title">🤖 AI Stock Rejection Inspector API Integration</h3>
+              <span class="badge-pro-pill" id="ai-key-status-pill">Ready to Configure</span>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Google Gemini Vision API (100% Free / Recommended)</div>
+              <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:12px; line-height:1.45;">
+                Powers automated pre-submission stock inspection for trademarks (Apple, Nike, car emblems), recognizable human faces needing Model Releases, and copyrighted architecture.<br>
+                Get your free API key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="color:var(--primary); font-weight:600;">Google AI Studio ↗</a> (Instant setup, no credit card required).
+              </p>
+              
+              <div class="setting-grid-2">
+                <div class="setting-field">
+                  <label>Google Gemini API Key</label>
+                  <input type="password" id="setting-gemini-key" placeholder="Paste AIzaSy... key here" autocomplete="off">
+                </div>
+                <div class="setting-field">
+                  <label>Vision Model Preset</label>
+                  <select id="setting-ai-model">
+                    <option value="gemini-1.5-flash" selected>Gemini 1.5 Flash (Fast, Free, High Accuracy)</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash (Next-Gen Experimental)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setting-grid-2" style="margin-top:14px;">
+                <div class="setting-field">
+                  <label>xAI Grok Vision API Key (Optional)</label>
+                  <input type="password" id="setting-grok-key" placeholder="xai-..." autocomplete="off">
+                </div>
+                <div class="setting-field">
+                  <label>Primary AI Vision Provider</label>
+                  <select id="setting-ai-provider">
+                    <option value="gemini" selected>Google Gemini (Recommended — Free Tier)</option>
+                    <option value="grok">xAI Grok Vision</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <div class="setting-card-title">Active AI Inspection Rules & Scanners</div>
+              <div class="setting-checkboxes-stack">
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-check-trademarks" checked>
+                  <span>🏷️ <b>Detect Trademark & Brand Logos:</b> Flags Apple, Nike, Adidas, automotive emblems, designer brands, and copyrighted patterns that cause Adobe Stock / Shutterstock intellectual property rejections.</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-check-model-release" checked>
+                  <span>👤 <b>Recognizable Faces & Model Release Check:</b> Detects identifiable people, recognizable faces, or distinctive body features requiring a signed Model Release.</span>
+                </label>
+                <label class="setting-checkbox">
+                  <input type="checkbox" id="setting-check-property-release" checked>
+                  <span>🏛️ <b>Copyrighted Architecture & Property Release Check:</b> Flags private modern buildings, illuminated landmarks, sculptures, and copyrighted artworks needing a Property Release.</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-card" style="display:flex; justify-content:space-between; align-items:center;">
+              <span id="ai-settings-msg" style="font-size:0.85rem; font-weight:600; color:var(--text-dim);">Enter your key and click Save.</span>
+              <button type="button" class="btn-primary" id="btn-save-ai-settings" style="width:auto; padding:10px 24px;">
+                <span>💾 Save & Verify AI Settings</span>
+              </button>
+            </div>
+          </div>
+
+<div class="settings-panel-view" id="panel-theme_settings" style="display:none;">
             <div class="agency-header-row">
               <h3 class="agency-view-title">🎨 Visual Studio Themes</h3>
             </div>
@@ -2086,5 +2160,112 @@ pyinstaller --noconfirm --onedir --windowed --add-data "templates;templates" --a
 
   <!-- Main Application Script -->
   <script src="/static/js/main.js"></script>
+  <!-- ========================================================
+       MODAL: AI STOCK REJECTION INSPECTOR RESULTS
+  ======================================================== -->
+  <div class="modal-backdrop" id="modal-ai-inspector">
+    <div class="modal-dialog modal-ai-dialog">
+      <div class="modal-header">
+        <div class="modal-header-info">
+          <div class="modal-icon-badge" style="background:linear-gradient(135deg, #6366f1, #a855f7);">🤖</div>
+          <div>
+            <div class="modal-title-row">
+              <h3 class="modal-title">AI Stock Rejection Inspector</h3>
+              <span class="modal-badge-file" id="ai-modal-status-badge">Pre-Submission Check</span>
+            </div>
+            <p class="modal-subtitle">AI-powered check for trademarks, recognizable faces, and copyrighted property releases.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-ai-inspector-btn" title="Close">✕</button>
+      </div>
+
+      <div class="modal-body-content" style="padding: 24px; max-height: 70vh; overflow-y: auto;">
+        
+        <!-- Loading State -->
+        <div class="ai-inspector-loading" id="ai-inspector-loading" style="display:none; text-align:center; padding: 40px 20px;">
+          <div class="spinner-pulse" style="width:50px; height:50px; margin:0 auto 16px auto; border:4px solid rgba(99,102,241,0.2); border-top-color:#6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
+          <h4 style="font-size:1.1rem; color:var(--text-main); margin-bottom:8px;">Analyzing with Vision AI…</h4>
+          <p style="color:var(--text-dim); font-size:0.88rem;">Scanning for trademarks, visible brand logos, identifiable human faces, and copyrighted architectural landmarks.</p>
+        </div>
+
+        <!-- No Key Config Prompt -->
+        <div class="ai-config-prompt-card" id="ai-config-prompt" style="display:none;">
+          <div style="font-size:2.2rem; margin-bottom:8px;">🔑</div>
+          <h4 style="font-size:1.15rem; margin-bottom:6px;">Google Gemini API Key Required</h4>
+          <p style="font-size:0.88rem; color:var(--text-dim); max-width:480px; margin:0 auto 16px auto; line-height:1.45;">
+            To run live AI vision pre-submission inspections on your images and video thumbnails, please add your free Google Gemini API key in Settings.
+          </p>
+          <div style="display:flex; justify-content:center; gap:12px;">
+            <button type="button" class="btn-primary" id="btn-open-ai-settings-from-modal" style="width:auto; padding:10px 20px;">⚙️ Open AI Key Settings</button>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="btn-download" style="width:auto; padding:10px 20px; font-size:0.85rem;">Get Free Key ↗</a>
+          </div>
+        </div>
+
+        <!-- Report Container -->
+        <div class="ai-inspector-report" id="ai-inspector-report" style="display:none;">
+          
+          <!-- Verdict Card -->
+          <div class="ai-verdict-banner" id="ai-verdict-banner">
+            <div class="ai-verdict-icon" id="ai-verdict-icon">✓</div>
+            <div class="ai-verdict-content">
+              <div class="ai-verdict-status" id="ai-verdict-status">COMMERCIAL PASS</div>
+              <div class="ai-verdict-summary" id="ai-verdict-summary">No trademark logos or release requirements detected.</div>
+            </div>
+          </div>
+
+          <!-- 3-Pillar Check Grid -->
+          <div class="ai-pillars-grid">
+            
+            <!-- Pillar 1: Trademarks -->
+            <div class="ai-pillar-card" id="pillar-trademarks">
+              <div class="pillar-header">
+                <span class="pillar-icon">🏷️</span>
+                <span class="pillar-name">Trademarks & Logos</span>
+                <span class="pillar-badge" id="badge-pillar-trademarks">PASS</span>
+              </div>
+              <div class="pillar-body" id="body-pillar-trademarks">
+                <span class="pillar-empty">No logos or brand marks detected.</span>
+              </div>
+            </div>
+
+            <!-- Pillar 2: Model Release -->
+            <div class="ai-pillar-card" id="pillar-model">
+              <div class="pillar-header">
+                <span class="pillar-icon">👤</span>
+                <span class="pillar-name">Model Release</span>
+                <span class="pillar-badge" id="badge-pillar-model">NONE</span>
+              </div>
+              <div class="pillar-body" id="body-pillar-model">
+                <span class="pillar-empty">No recognizable human faces detected.</span>
+              </div>
+            </div>
+
+            <!-- Pillar 3: Property Release -->
+            <div class="ai-pillar-card" id="pillar-property">
+              <div class="pillar-header">
+                <span class="pillar-icon">🏛️</span>
+                <span class="pillar-name">Property Release</span>
+                <span class="pillar-badge" id="badge-pillar-property">NONE</span>
+              </div>
+              <div class="pillar-body" id="body-pillar-property">
+                <span class="pillar-empty">No copyrighted modern architecture detected.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Recommendations Box -->
+          <div class="ai-recommendations-card" id="ai-recommendations-card">
+            <div class="rec-header">💡 Stock Contributor Action Plan (Adobe Stock & Freepik)</div>
+            <ul class="rec-list" id="ai-recommendations-list">
+              <li>Asset is clean and ready for commercial submission.</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
 </body>
 </html>

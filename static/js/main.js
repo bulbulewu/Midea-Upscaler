@@ -1633,5 +1633,280 @@ document.addEventListener("DOMContentLoaded", () => {
   if (psdCanvasSelect && psdCustomDimRow) {
     psdCanvasSelect.addEventListener("change", () => {
       psdCustomDimRow.style.display = (psdCanvasSelect.value === "custom") ? "flex" : "none";
+    
+  // -----------------------------------------------------------------------------
+  // AI Stock Rejection Inspector Logic
+  // -----------------------------------------------------------------------------
+  async function loadAiConfig() {
+    try {
+      const res = await fetch("/api/ai/config");
+      if (res.ok) {
+        const data = await res.json();
+        const geminiInput = document.getElementById("setting-gemini-key");
+        const grokInput = document.getElementById("setting-grok-key");
+        const modelSelect = document.getElementById("setting-ai-model");
+        const providerSelect = document.getElementById("setting-ai-provider");
+        const statusPill = document.getElementById("ai-key-status-pill");
+
+        if (geminiInput && data.gemini_masked) {
+          geminiInput.placeholder = `Saved: ${data.gemini_masked}`;
+        }
+        if (grokInput && data.grok_masked) {
+          grokInput.placeholder = `Saved: ${data.grok_masked}`;
+        }
+        if (modelSelect && data.model) modelSelect.value = data.model;
+        if (providerSelect && data.provider) providerSelect.value = data.provider;
+
+        const chkTrademarks = document.getElementById("setting-check-trademarks");
+        const chkModel = document.getElementById("setting-check-model-release");
+        const chkProperty = document.getElementById("setting-check-property-release");
+
+        if (chkTrademarks && data.check_trademarks !== undefined) chkTrademarks.checked = data.check_trademarks;
+        if (chkModel && data.check_model_release !== undefined) chkModel.checked = data.check_model_release;
+        if (chkProperty && data.check_property_release !== undefined) chkProperty.checked = data.check_property_release;
+
+        if (statusPill) {
+          if (data.has_gemini) {
+            statusPill.textContent = "✓ Gemini Connected";
+            statusPill.style.background = "rgba(16, 185, 129, 0.2)";
+            statusPill.style.color = "#10b981";
+          } else {
+            statusPill.textContent = "Key Needed";
+            statusPill.style.background = "rgba(245, 158, 11, 0.2)";
+            statusPill.style.color = "#f59e0b";
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Could not load AI configuration", e);
+    }
+  }
+
+  const btnSaveAiSettings = document.getElementById("btn-save-ai-settings");
+  if (btnSaveAiSettings) {
+    btnSaveAiSettings.addEventListener("click", async () => {
+      const msgEl = document.getElementById("ai-settings-msg");
+      if (msgEl) msgEl.textContent = "Saving AI settings...";
+
+      const payload = {
+        gemini_api_key: (document.getElementById("setting-gemini-key")?.value || "").trim(),
+        grok_api_key: (document.getElementById("setting-grok-key")?.value || "").trim(),
+        model: document.getElementById("setting-ai-model")?.value || "gemini-1.5-flash",
+        provider: document.getElementById("setting-ai-provider")?.value || "gemini",
+        check_trademarks: document.getElementById("setting-check-trademarks")?.checked ?? true,
+        check_model_release: document.getElementById("setting-check-model-release")?.checked ?? true,
+        check_property_release: document.getElementById("setting-check-property-release")?.checked ?? true
+      };
+
+      try {
+        const res = await fetch("/api/ai/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (msgEl) {
+            msgEl.textContent = "✓ Settings saved successfully!";
+            msgEl.style.color = "#10b981";
+          }
+          await loadAiConfig();
+        } else {
+          if (msgEl) {
+            msgEl.textContent = data.error || "Failed to save AI settings.";
+            msgEl.style.color = "#ef4444";
+          }
+        }
+      } catch (err) {
+        if (msgEl) {
+          msgEl.textContent = "Network error saving AI settings.";
+          msgEl.style.color = "#ef4444";
+        }
+      }
     });
+  }
+
+  // AI Inspector Runner
+  async function runAiInspection(tool) {
+    const fileInput = document.getElementById(`file-${tool}`);
+    const file = fileInput && fileInput.files && fileInput.files[0];
+    if (!file) {
+      alert("Please choose or upload a media file first before running the AI Inspector.");
+      return;
+    }
+
+    openModal("modal-ai-inspector");
+    const loadingEl = document.getElementById("ai-inspector-loading");
+    const promptEl = document.getElementById("ai-config-prompt");
+    const reportEl = document.getElementById("ai-inspector-report");
+    const modalBadge = document.getElementById("ai-modal-status-badge");
+
+    if (loadingEl) loadingEl.style.display = "block";
+    if (promptEl) promptEl.style.display = "none";
+    if (reportEl) reportEl.style.display = "none";
+    if (modalBadge) modalBadge.textContent = "Analyzing Asset…";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/ai/inspect", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+
+      if (loadingEl) loadingEl.style.display = "none";
+
+      if (data.is_config_needed) {
+        if (promptEl) promptEl.style.display = "block";
+        if (modalBadge) modalBadge.textContent = "API Key Required";
+        return;
+      }
+
+      if (!data.success) {
+        alert("AI Inspection Notice: " + (data.error || "Unable to analyze media."));
+        closeModal("modal-ai-inspector");
+        return;
+      }
+
+      // Render Inspection Report
+      if (reportEl) reportEl.style.display = "block";
+      if (modalBadge) modalBadge.textContent = `${data.provider || "Gemini"} Verified`;
+
+      // Verdict Banner
+      const verdictBanner = document.getElementById("ai-verdict-banner");
+      const verdictIcon = document.getElementById("ai-verdict-icon");
+      const verdictStatus = document.getElementById("ai-verdict-status");
+      const verdictSummary = document.getElementById("ai-verdict-summary");
+
+      const verdict = (data.verdict || "PASS").toUpperCase();
+      if (verdictBanner) {
+        verdictBanner.className = "ai-verdict-banner " + 
+          (verdict === "PASS" ? "verdict-pass" : (verdict === "CAUTION" ? "verdict-caution" : "verdict-reject"));
+      }
+      if (verdictIcon) {
+        verdictIcon.textContent = verdict === "PASS" ? "✓" : (verdict === "CAUTION" ? "⚠️" : "✕");
+      }
+      if (verdictStatus) {
+        verdictStatus.textContent = verdict === "PASS" ? "COMMERCIAL PASS" : (verdict === "CAUTION" ? "CAUTION: REVIEW NEEDED" : "REJECT HAZARD DETECTED");
+      }
+      if (verdictSummary) {
+        verdictSummary.textContent = data.summary || "No critical stock rejection hazards found.";
+      }
+
+      // Pillar 1: Trademarks
+      const badgeTrademarks = document.getElementById("badge-pillar-trademarks");
+      const bodyTrademarks = document.getElementById("body-pillar-trademarks");
+      const trademarks = data.trademarks || [];
+      if (badgeTrademarks) {
+        badgeTrademarks.textContent = trademarks.length > 0 ? `${trademarks.length} LOGOS` : "PASS";
+        badgeTrademarks.className = "pillar-badge " + (trademarks.length > 0 ? "badge-hazard" : "");
+      }
+      if (bodyTrademarks) {
+        if (trademarks.length > 0) {
+          bodyTrademarks.innerHTML = trademarks.map(t => `
+            <div style="margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <b style="color:#ef4444;">${t.name}</b> (${t.location || "visible"})<br>
+              <span style="font-size:0.75rem; color:var(--text-dim);">${t.fix || "Clone stamp or remove"}</span>
+            </div>
+          `).join("");
+        } else {
+          bodyTrademarks.innerHTML = '<span class="pillar-empty">✓ No commercial brand logos or trademarks detected.</span>';
+        }
+      }
+
+      // Pillar 2: Model Release
+      const badgeModel = document.getElementById("badge-pillar-model");
+      const bodyModel = document.getElementById("body-pillar-model");
+      const faces = data.faces_detected || [];
+      const modelNeeded = data.model_release_needed;
+      if (badgeModel) {
+        badgeModel.textContent = modelNeeded ? "RELEASE REQ" : "NONE";
+        badgeModel.className = "pillar-badge " + (modelNeeded ? "badge-warn" : "");
+      }
+      if (bodyModel) {
+        if (faces.length > 0) {
+          bodyModel.innerHTML = faces.map(f => `
+            <div style="margin-bottom:6px;">
+              <b>${f.description || "Identifiable person"}</b><br>
+              <span style="font-size:0.75rem; color:var(--text-dim);">${f.requires_release ? "Requires signed Model Release" : "Feature obscured / no release needed"}</span>
+            </div>
+          `).join("");
+        } else {
+          bodyModel.innerHTML = '<span class="pillar-empty">✓ No recognizable human faces or people detected.</span>';
+        }
+      }
+
+      // Pillar 3: Property Release
+      const badgeProperty = document.getElementById("badge-pillar-property");
+      const bodyProperty = document.getElementById("body-pillar-property");
+      const properties = data.properties_detected || [];
+      const propNeeded = data.property_release_needed;
+      if (badgeProperty) {
+        badgeProperty.textContent = propNeeded ? "RELEASE REQ" : "NONE";
+        badgeProperty.className = "pillar-badge " + (propNeeded ? "badge-warn" : "");
+      }
+      if (bodyProperty) {
+        if (properties.length > 0) {
+          bodyProperty.innerHTML = properties.map(p => `
+            <div style="margin-bottom:6px;">
+              <b>${p.description || "Architectural property"}</b><br>
+              <span style="font-size:0.75rem; color:var(--text-dim);">${p.reason || "Requires Property Release"}</span>
+            </div>
+          `).join("");
+        } else {
+          bodyProperty.innerHTML = '<span class="pillar-empty">✓ No copyrighted modern architecture or sculptures detected.</span>';
+        }
+      }
+
+      // Recommendations List
+      const recList = document.getElementById("ai-recommendations-list");
+      if (recList) {
+        const recs = data.recommendations || [];
+        if (recs.length > 0) {
+          recList.innerHTML = recs.map(r => `<li>${r}</li>`).join("");
+        } else {
+          recList.innerHTML = '<li>Asset is clean and complies with Adobe Stock & Freepik guidelines.</li>';
+        }
+      }
+
+    } catch (err) {
+      if (loadingEl) loadingEl.style.display = "none";
+      alert("Error executing AI inspection: " + err.message);
+    }
+  }
+
+  // Wire AI Inspect Trigger Buttons
+  const btnAiInspectVideo = document.getElementById("btn-ai-inspect-video");
+  if (btnAiInspectVideo) btnAiInspectVideo.addEventListener("click", () => runAiInspection("video"));
+
+  const btnAiInspectImg = document.getElementById("btn-ai-inspect-image");
+  if (btnAiInspectImg) btnAiInspectImg.addEventListener("click", () => runAiInspection("image"));
+
+  const btnAiInspectPsd = document.getElementById("btn-ai-inspect-psd");
+  if (btnAiInspectPsd) btnAiInspectPsd.addEventListener("click", () => runAiInspection("psd"));
+
+  // Wire modal close & modal settings jump
+  const closeAiInspectorBtn = document.getElementById("close-ai-inspector-btn");
+  if (closeAiInspectorBtn) closeAiInspectorBtn.addEventListener("click", () => closeModal("modal-ai-inspector"));
+
+  const btnOpenAiFromModal = document.getElementById("btn-open-ai-settings-from-modal");
+  if (btnOpenAiFromModal) {
+    btnOpenAiFromModal.addEventListener("click", () => {
+      closeModal("modal-ai-inspector");
+      openModal("modal-settings");
+      switchSettingsPanel("ai_settings");
+      loadAiConfig();
+    });
+  }
+
+  // When settings modal opens, also load AI config
+  if (openSettingsBtn) {
+    openSettingsBtn.addEventListener("click", () => {
+      loadAiConfig();
+    });
+  }
+
+});
   }

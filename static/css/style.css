@@ -3164,3 +3164,198 @@ select:focus, input:focus, textarea:focus {
   background: linear-gradient(135deg, #047857, #059669) !important;
   transform: translateY(-1px);
 }
+
+/* ========================================================
+   AI STOCK REJECTION INSPECTOR STYLING
+======================================================== */
+.btn-ai-inspect {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)) !important;
+  color: #a855f7 !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-ai-inspect:hover {
+  background: linear-gradient(135deg, #6366f1, #a855f7) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+  transform: translateY(-1px);
+}
+
+.modal-ai-dialog {
+  max-width: 740px;
+  width: 95%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.ai-verdict-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.ai-verdict-banner.verdict-pass {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.ai-verdict-banner.verdict-pass .ai-verdict-icon {
+  background: #10b981;
+  color: #fff;
+}
+.ai-verdict-banner.verdict-pass .ai-verdict-status {
+  color: #10b981;
+}
+
+.ai-verdict-banner.verdict-caution {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+.ai-verdict-banner.verdict-caution .ai-verdict-icon {
+  background: #f59e0b;
+  color: #fff;
+}
+.ai-verdict-banner.verdict-caution .ai-verdict-status {
+  color: #f59e0b;
+}
+
+.ai-verdict-banner.verdict-reject {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.ai-verdict-banner.verdict-reject .ai-verdict-icon {
+  background: #ef4444;
+  color: #fff;
+}
+.ai-verdict-banner.verdict-reject .ai-verdict-status {
+  color: #ef4444;
+}
+
+.ai-verdict-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ai-verdict-status {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.ai-verdict-summary {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.ai-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+@media (max-width: 640px) {
+  .ai-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-pillar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+.pillar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.pillar-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-left: 6px;
+  flex: 1;
+}
+.pillar-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+.pillar-badge.badge-hazard {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+.pillar-badge.badge-warn {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.pillar-body {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.pillar-empty {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.ai-recommendations-card {
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.rec-header {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #a855f7;
+  margin-bottom: 10px;
+}
+.rec-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+.rec-list li {
+  margin-bottom: 6px;
+}
+
+.ai-config-prompt-card {
+  text-align: center;
+  padding: 36px 20px;
+  background: var(--bg-card);
+  border: 1px dashed rgba(168, 85, 247, 0.4);
+  border-radius: var(--radius-md);
+}
