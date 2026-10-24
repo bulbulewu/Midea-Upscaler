@@ -17,8 +17,64 @@ document.addEventListener("DOMContentLoaded", () => {
     agenciesConfig: {},
   };
 
+  // Check URL parameters for Unified SSO and Theme Synchronization with StockMeta Pro
+  const urlParams = new URLSearchParams(window.location.search);
+  const ssoUser = urlParams.get("sso_user");
+  const ssoToken = urlParams.get("sso_token");
+  const urlTheme = urlParams.get("theme");
+
+  if (urlTheme && ["dark_studio", "obsidian_oled", "cyber_neon", "titanium_light"].includes(urlTheme)) {
+    state.activeTheme = urlTheme;
+    localStorage.setItem("mtk_theme", urlTheme);
+    localStorage.setItem("stockmeta_theme", urlTheme);
+  }
+
   // Apply initial theme
   document.documentElement.setAttribute("data-theme", state.activeTheme);
+
+  // Dynamic StockMeta Pro link generator with current active theme & SSO session
+  function updateStockMetaLink() {
+    const navStockMeta = document.getElementById("nav-stockmeta-pro");
+    if (!navStockMeta) return;
+    const currentTheme = state.activeTheme || localStorage.getItem("mtk_theme") || "dark_studio";
+    const params = new URLSearchParams();
+    params.set("theme", currentTheme);
+    if (state.session && state.session.logged_in && state.session.user_email) {
+      params.set("sso_user", state.session.user_email);
+      params.set("sso_token", btoa(state.session.user_email + ":" + Date.now()));
+    }
+    navStockMeta.href = `https://stockmeta-pro.onrender.com/?${params.toString()}`;
+  }
+
+  // If SSO credentials provided from StockMeta Pro, auto-login immediately
+  if (ssoUser) {
+    fetch("/api/auth/sso-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sso_user: ssoUser, sso_token: ssoToken || "" })
+    }).then(res => res.json()).then(data => {
+      if (data.success) {
+        refreshSession();
+        showToast(`Unified Login Active: ${ssoUser}`, "success");
+        // Clean URL query parameters cleanly
+        const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({ path: cleanUrl }, "", cleanUrl);
+      }
+    }).catch(() => {});
+  }
+
+  // Cross-Tab Theme Synchronization via Storage Event
+  window.addEventListener("storage", (e) => {
+    if (e.key === "mtk_theme" || e.key === "stockmeta_theme") {
+      const syncedTheme = e.newValue;
+      if (syncedTheme && ["dark_studio", "obsidian_oled", "cyber_neon", "titanium_light"].includes(syncedTheme)) {
+        state.activeTheme = syncedTheme;
+        document.documentElement.setAttribute("data-theme", syncedTheme);
+        document.querySelectorAll(".theme-card").forEach(c => c.classList.toggle("active", c.dataset.theme === syncedTheme));
+        updateStockMetaLink();
+      }
+    }
+  });
 
   // ---------------- UI Toast System ----------------
   function showToast(message, type = "info") {
@@ -764,6 +820,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userTierEl) userTierEl.textContent = "Unregistered Â· 7-Day Free Trial Available";
         if (logoutBtn) logoutBtn.textContent = "Sign In / Register";
       }
+      updateStockMetaLink();
     } catch (err) {
       console.warn("Session check error:", err);
     }
@@ -855,7 +912,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password: pass }),
+          body: JSON.stringify({ email, identifier: email, username: email, password: pass }),
         });
         const data = await res.json();
         if (data.success) {
@@ -1020,7 +1077,14 @@ document.addEventListener("DOMContentLoaded", () => {
       state.activeTheme = theme;
       document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("mtk_theme", theme);
-      showToast(`Visual Theme: ${card.querySelector("span").textContent}`, "info");
+      localStorage.setItem("stockmeta_theme", theme);
+      updateStockMetaLink();
+      fetch("/api/user/theme", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ theme })
+      }).catch(() => {});
+      showToast(`Visual Theme: ${card.querySelector("span").textContent} (Synced with StockMeta Pro)`, "info");
     });
   });
 
