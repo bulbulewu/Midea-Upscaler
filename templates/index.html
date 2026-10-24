@@ -54,6 +54,11 @@
             <span class="nav-text">PNG to Layered PSD</span>
             <span class="nav-badge">Photoshop</span>
           </button>
+          <button class="nav-item tab-btn" data-tool="toolkit">
+            <span class="nav-icon">🛠️</span>
+            <span class="nav-text">Stock Contributor Toolkit</span>
+            <span class="nav-badge">14 Tools</span>
+          </button>
         </nav>
       </div>
 
@@ -768,6 +773,57 @@
           </div>
         </section>
 
+
+
+
+        <!-- ========================================================
+             4. STOCK CONTRIBUTOR TOOLKIT PANEL (iFrame Embedded)
+        ======================================================== -->
+        <section class="tool-panel" id="panel-toolkit">
+          <div class="studio-card">
+
+            <div class="toolkit-panel-header">
+              <div class="toolkit-panel-info">
+                <h2>🛠️ Stock Contributor Toolkit Pro</h2>
+                <p>A full suite of microstock contributor tools — AI Metadata Studio, Keyword Research, Trend Calendar, Portfolio Tracker, Motion Graphics Generator, Promo Maker, SVG-to-Video converter, and SEO Optimizer — embedded seamlessly.</p>
+              </div>
+            </div>
+
+            <div class="toolkit-pill-row">
+              <span class="toolkit-pill">📊 Adobe Tracker</span>
+              <span class="toolkit-pill">🔑 Keyword Research</span>
+              <span class="toolkit-pill">📅 Trend Calendar</span>
+              <span class="toolkit-pill">🧠 AI Creativity Hub</span>
+              <span class="toolkit-pill">🎞️ Motion Graphics</span>
+              <span class="toolkit-pill">🎬 Promo Maker</span>
+              <span class="toolkit-pill">🌀 SVG → Video</span>
+              <span class="toolkit-pill">📈 Portfolio</span>
+              <span class="toolkit-pill">🔍 SEO Studio</span>
+            </div>
+
+            <!-- Warning banner if toolkit service is not reachable -->
+            <div class="toolkit-not-running-banner" id="toolkit-not-running-banner">
+              ⚠️ <b>Toolkit service is not reachable.</b> If running locally, start the Stock Contributor Toolkit on port 5001: <code>python app.py --port 5001</code> inside the <code>stock-contributor-toolkit-pro-v14</code> folder. On Render, set the <b>TOOLKIT_URL</b> environment variable on this service to point to the deployed toolkit URL.
+            </div>
+
+            <!-- iFrame wrapper with loading spinner -->
+            <div class="toolkit-iframe-wrapper">
+              <div class="toolkit-iframe-loading" id="toolkit-iframe-loading">
+                <div class="toolkit-spinner"></div>
+                <span class="toolkit-load-text">Loading Stock Contributor Toolkit…</span>
+              </div>
+              <iframe
+                class="toolkit-iframe-embed"
+                id="toolkit-iframe"
+                src="about:blank"
+                title="Stock Contributor Toolkit Pro"
+                allow="clipboard-write"
+                loading="lazy">
+              </iframe>
+            </div>
+
+          </div>
+        </section>
 
         <!-- Commercial Standards Overview (International Commercial Showcase) -->
         <section class="microstock-showcase-section">

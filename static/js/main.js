@@ -1,5 +1,5 @@
 /**
- * Media Toolkit Pro V3 — Multi-Marketplace Studio Engine
+ * Media Toolkit Pro V3 â€” Multi-Marketplace Studio Engine
  * Munajat International Commercial Edition
  */
 
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!container) return;
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
-    const icon = type === "success" ? "✓" : type === "error" ? "⚠️" : "ℹ️";
+    const icon = type === "success" ? "âœ“" : type === "error" ? "âš ï¸" : "â„¹ï¸";
     toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
     container.appendChild(toast);
     setTimeout(() => {
@@ -76,9 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------- Tool Pipeline Switching ----------------
   const toolTitles = {
-    video: "🎬 4K Stock Video Master Upscaler",
-    image: "🖼️ Image Upscaler (4K & 8K)",
-    psd:   "📄 PNG to Layered PSD Generator",
+    video: "ðŸŽ¬ 4K Stock Video Master Upscaler",
+    image: "ðŸ–¼ï¸ Image Upscaler (4K & 8K)",
+    psd:   "ðŸ“„ PNG to Layered PSD Generator",
   };
 
   const tabBtns = document.querySelectorAll(".tab-btn");
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!marketplaceMenu) return;
     const isCollapsed = marketplaceMenu.classList.toggle("collapsed");
     if (marketArrow) marketArrow.classList.toggle("collapsed", isCollapsed);
-    if (marketSymbol) marketSymbol.textContent = isCollapsed ? "+" : "−";
+    if (marketSymbol) marketSymbol.textContent = isCollapsed ? "+" : "âˆ’";
   }
 
   if (btnToggleMarketplaces) {
@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const mp = ((w * h) / 1000000).toFixed(2);
             
             const resEl = document.getElementById(`tech-res-${tool}`);
-            if (resEl) resEl.textContent = `${w} × ${h} px`;
+            if (resEl) resEl.textContent = `${w} Ã— ${h} px`;
 
             const mpEl = document.getElementById(`tech-mp-${tool}`);
             if (mpEl) mpEl.textContent = `${mp} MP`;
@@ -336,11 +336,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const resEl = document.getElementById("video-resolution-pill");
       if (resEl) {
-        resEl.textContent = h >= 2160 ? "4K UHD" : h >= 1440 ? "2K QHD" : h >= 1080 ? "1080p FHD" : `${w}×${h}`;
+        resEl.textContent = h >= 2160 ? "4K UHD" : h >= 1440 ? "2K QHD" : h >= 1080 ? "1080p FHD" : `${w}Ã—${h}`;
       }
 
       const techRes = document.getElementById("tech-res-video");
-      if (techRes) techRes.textContent = `${w} × ${h}`;
+      if (techRes) techRes.textContent = `${w} Ã— ${h}`;
 
       // Seek to capture frame
       tempVideo.currentTime = Math.min(1.0, dur * 0.1);
@@ -502,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (progressCard) progressCard.style.display = "block";
     if (progressFill) progressFill.style.width = "0%";
     if (progressPct) progressPct.textContent = "0%";
-    if (progressStatus) progressStatus.textContent = "Uploading asset to studio engine…";
+    if (progressStatus) progressStatus.textContent = "Uploading asset to studio engineâ€¦";
 
     const fd = new FormData();
     fd.append("file", file);
@@ -578,8 +578,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (job.state === "running") {
           if (progressStatus) {
             progressStatus.textContent = tool === "video" 
-              ? `Encoding 4K Master (${pct.toFixed(0)}% complete)…`
-              : `Upscaling high-density pixels (${pct.toFixed(0)}%)…`;
+              ? `Encoding 4K Master (${pct.toFixed(0)}% complete)â€¦`
+              : `Upscaling high-density pixels (${pct.toFixed(0)}%)â€¦`;
           }
         } else if (job.state === "done") {
           clearInterval(state[tool].pollTimer);
@@ -619,7 +619,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (tool === "video") {
       rows += `
-        <tr><td>Resolution</td><td>${src.width}×${src.height}</td><td><b>${meta.width}×${meta.height} (4K)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
+        <tr><td>Resolution</td><td>${src.width}Ã—${src.height}</td><td><b>${meta.width}Ã—${meta.height} (4K)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
         <tr><td>Frame Rate</td><td>${src.fps} fps</td><td><b>${meta.fps} fps (CFR Lock)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
         <tr><td>Codec Container</td><td>${(src.codec||'').toUpperCase()}</td><td><b>${meta.codec.toUpperCase()} (${meta.container})</b></td><td><span class="badge-status-pass">STOCK READY</span></td></tr>
         <tr><td>Bitrate Quality</td><td>${src.bitrate_kbps || 'Dynamic'} kbps</td><td><b>${meta.bitrate}</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
@@ -628,16 +628,16 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     } else if (tool === "image") {
       rows += `
-        <tr><td>Resolution</td><td>${src.width}×${src.height}</td><td><b>${meta.width}×${meta.height} px</b></td><td><span class="badge-status-pass">UHD ENLARGED</span></td></tr>
-        <tr><td>Megapixels</td><td>${src.megapixels} MP</td><td><b>${meta.megapixels} MP (Stock Rule ≥ 4.0 MP)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
+        <tr><td>Resolution</td><td>${src.width}Ã—${src.height}</td><td><b>${meta.width}Ã—${meta.height} px</b></td><td><span class="badge-status-pass">UHD ENLARGED</span></td></tr>
+        <tr><td>Megapixels</td><td>${src.megapixels} MP</td><td><b>${meta.megapixels} MP (Stock Rule â‰¥ 4.0 MP)</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
         <tr><td>Print Resolution</td><td>Standard</td><td><b>${meta.dpi} DPI Commercial Print</b></td><td><span class="badge-status-pass">EMBEDDED</span></td></tr>
         <tr><td>Format / Denoise</td><td>${src.format}</td><td><b>${meta.format} (Denoised: ${meta.auto_denoise ? 'Yes' : 'No'})</b></td><td><span class="badge-status-pass">CLEAN</span></td></tr>
       `;
     } else if (tool === "psd") {
       rows += `
-        <tr><td>Dimensions & Canvas</td><td>${src.width}×${src.height} (${src.size_mb} MB)</td><td><b>${meta.width}×${meta.height} px (${meta.megapixels} MP)</b></td><td><span class="badge-status-pass">CALIBRATED</span></td></tr>
+        <tr><td>Dimensions & Canvas</td><td>${src.width}Ã—${src.height} (${src.size_mb} MB)</td><td><b>${meta.width}Ã—${meta.height} px (${meta.megapixels} MP)</b></td><td><span class="badge-status-pass">CALIBRATED</span></td></tr>
         <tr><td>Photoshop Layers</td><td>Single Layer</td><td><b>${meta.layers} Layers (${meta.layer_name})</b></td><td><span class="badge-status-pass">PASS</span></td></tr>
-        <tr><td>Layer Structure & Alpha</td><td>Raw Bitmap</td><td><b>${meta.background} · 100% Alpha Intact</b></td><td><span class="badge-status-pass">FREEPIK READY</span></td></tr>
+        <tr><td>Layer Structure & Alpha</td><td>Raw Bitmap</td><td><b>${meta.background} Â· 100% Alpha Intact</b></td><td><span class="badge-status-pass">FREEPIK READY</span></td></tr>
         <tr><td>Print Resolution</td><td>Standard</td><td><b>${meta.dpi} Commercial Print Headers</b></td><td><span class="badge-status-pass">EMBEDDED</span></td></tr>
       `;
 
@@ -745,11 +745,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (sess.logged_in) {
         if (userEmailEl) userEmailEl.textContent = sess.user_email;
-        if (userTierEl) userTierEl.textContent = `⭐ ${sess.role} (${sess.license_tier || 'Pro'})`;
+        if (userTierEl) userTierEl.textContent = `â­ ${sess.role} (${sess.license_tier || 'Pro'})`;
         if (logoutBtn) logoutBtn.textContent = "Logout";
       } else {
         if (userEmailEl) userEmailEl.textContent = "Guest Contributor";
-        if (userTierEl) userTierEl.textContent = "Unregistered · 7-Day Free Trial Available";
+        if (userTierEl) userTierEl.textContent = "Unregistered Â· 7-Day Free Trial Available";
         if (logoutBtn) logoutBtn.textContent = "Sign In / Register";
       }
     } catch (err) {
@@ -897,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
         if (res.ok && data.success) {
           statusMsg.className = "activate-status-msg success";
-          statusMsg.textContent = "🎉 Registration successful! 7-Day Free Trial activated.";
+          statusMsg.textContent = "ðŸŽ‰ Registration successful! 7-Day Free Trial activated.";
           statusMsg.style.display = "block";
           setTimeout(() => {
             closeModal("modal-login");
@@ -1199,9 +1199,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <td>${k.created_date}</td>
             <td>${k.activated_at ? `${k.activated_at} (${k.activated_hwid || 'Locked'})` : 'Unclaimed'}</td>
             <td>
-              <button class="btn-table-action" onclick="copyKeyText('${k.key}')">📋 Copy</button>
+              <button class="btn-table-action" onclick="copyKeyText('${k.key}')">ðŸ“‹ Copy</button>
               <button class="btn-table-action" onclick="toggleRevokeKey('${k.key}')">${k.status === 'Revoked' ? 'Restore' : 'Revoke'}</button>
-              <button class="btn-table-action" onclick="deleteKey('${k.key}')" style="color:var(--danger)">🗑️</button>
+              <button class="btn-table-action" onclick="deleteKey('${k.key}')" style="color:var(--danger)">ðŸ—‘ï¸</button>
             </td>
           </tr>
         `;
@@ -1304,15 +1304,15 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr>
           <td><b>${u.email}</b></td>
           <td>${u.name} <span class="badge-status-info" style="margin-left:6px;">${u.role}</span></td>
-          <td>${u.license_period_days} Days (${u.license_key ? u.license_key.substring(0, 12) + '…' : 'Pending'})</td>
+          <td>${u.license_period_days} Days (${u.license_key ? u.license_key.substring(0, 12) + 'â€¦' : 'Pending'})</td>
           <td>${u.used_today || 0} / ${u.daily_limit}</td>
           <td><code>${u.hwid || 'Unlocked'}</code></td>
           <td><span class="${isSuspended ? 'badge-status-fail' : 'badge-status-pass'}">${u.status}</span></td>
           <td>
-            <button class="btn-table-action" onclick="openEditUserModal('${u.id}')">✏️ Edit</button>
+            <button class="btn-table-action" onclick="openEditUserModal('${u.id}')">âœï¸ Edit</button>
             <button class="btn-table-action" onclick="resetUserHwid('${u.id}')">Reset HWID</button>
             <button class="btn-table-action" onclick="toggleUserSuspend('${u.id}', '${isSuspended ? 'Active' : 'Suspended'}')">${isSuspended ? 'Activate' : 'Suspend'}</button>
-            <button class="btn-table-action" onclick="deleteUserAccount('${u.id}')" style="color:var(--danger)">🗑️</button>
+            <button class="btn-table-action" onclick="deleteUserAccount('${u.id}')" style="color:var(--danger)">ðŸ—‘ï¸</button>
           </td>
         </tr>
       `;
@@ -1527,7 +1527,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const res = await fetch(`/api/open-folder/${jobId}`, { method: "POST" });
           if (res.ok) {
-            showToast("Opening folder in Windows Explorer…", "success");
+            showToast("Opening folder in Windows Explorerâ€¦", "success");
           } else {
             showToast("Could not open folder directly.", "info");
           }
@@ -1667,7 +1667,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (statusPill) {
           if (data.has_gemini) {
-            statusPill.textContent = "✓ Gemini Connected";
+            statusPill.textContent = "âœ“ Gemini Connected";
             statusPill.style.background = "rgba(16, 185, 129, 0.2)";
             statusPill.style.color = "#10b981";
           } else {
@@ -1707,7 +1707,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
         if (data.success) {
           if (msgEl) {
-            msgEl.textContent = "✓ Settings saved successfully!";
+            msgEl.textContent = "âœ“ Settings saved successfully!";
             msgEl.style.color = "#10b981";
           }
           await loadAiConfig();
@@ -1744,7 +1744,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loadingEl) loadingEl.style.display = "block";
     if (promptEl) promptEl.style.display = "none";
     if (reportEl) reportEl.style.display = "none";
-    if (modalBadge) modalBadge.textContent = "Analyzing Asset…";
+    if (modalBadge) modalBadge.textContent = "Analyzing Assetâ€¦";
 
     const formData = new FormData();
     formData.append("file", file);
@@ -1786,7 +1786,7 @@ document.addEventListener("DOMContentLoaded", () => {
           (verdict === "PASS" ? "verdict-pass" : (verdict === "CAUTION" ? "verdict-caution" : "verdict-reject"));
       }
       if (verdictIcon) {
-        verdictIcon.textContent = verdict === "PASS" ? "✓" : (verdict === "CAUTION" ? "⚠️" : "✕");
+        verdictIcon.textContent = verdict === "PASS" ? "âœ“" : (verdict === "CAUTION" ? "âš ï¸" : "âœ•");
       }
       if (verdictStatus) {
         verdictStatus.textContent = verdict === "PASS" ? "COMMERCIAL PASS" : (verdict === "CAUTION" ? "CAUTION: REVIEW NEEDED" : "REJECT HAZARD DETECTED");
@@ -1812,7 +1812,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `).join("");
         } else {
-          bodyTrademarks.innerHTML = '<span class="pillar-empty">✓ No commercial brand logos or trademarks detected.</span>';
+          bodyTrademarks.innerHTML = '<span class="pillar-empty">âœ“ No commercial brand logos or trademarks detected.</span>';
         }
       }
 
@@ -1834,7 +1834,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `).join("");
         } else {
-          bodyModel.innerHTML = '<span class="pillar-empty">✓ No recognizable human faces or people detected.</span>';
+          bodyModel.innerHTML = '<span class="pillar-empty">âœ“ No recognizable human faces or people detected.</span>';
         }
       }
 
@@ -1856,7 +1856,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `).join("");
         } else {
-          bodyProperty.innerHTML = '<span class="pillar-empty">✓ No copyrighted modern architecture or sculptures detected.</span>';
+          bodyProperty.innerHTML = '<span class="pillar-empty">âœ“ No copyrighted modern architecture or sculptures detected.</span>';
         }
       }
 
@@ -1908,5 +1908,62 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
+  // -----------------------------------------------------------------------
+  // Stock Contributor Toolkit Panel — iFrame loader
+  // -----------------------------------------------------------------------
+  let toolkitLoaded = false;
+
+  async function loadToolkitPanel() {
+    if (toolkitLoaded) return;
+
+    const iframe = document.getElementById("toolkit-iframe");
+    const loader = document.getElementById("toolkit-iframe-loading");
+    const banner = document.getElementById("toolkit-not-running-banner");
+    if (!iframe) return;
+
+    try {
+      const res = await fetch("/api/toolkit-url");
+      const data = await res.json();
+      const toolkitUrl = data.url || "http://localhost:5001";
+
+      // Check reachability via no-cors probe (will resolve even on CORS block if server is up)
+      fetch(toolkitUrl, { mode: "no-cors", cache: "no-store" })
+        .then(() => {
+          // Server responded — load iframe
+          if (banner) banner.style.display = "none";
+          iframe.src = toolkitUrl;
+        })
+        .catch(() => {
+          // Server unreachable
+          if (loader) loader.classList.add("hidden");
+          if (banner) banner.style.display = "block";
+        });
+
+    } catch (e) {
+      if (loader) loader.classList.add("hidden");
+      if (banner) banner.style.display = "block";
+    }
+  }
+
+  // Hide loading spinner when iframe finishes loading
+  const toolkitIframe = document.getElementById("toolkit-iframe");
+  if (toolkitIframe) {
+    toolkitIframe.addEventListener("load", () => {
+      const loader = document.getElementById("toolkit-iframe-loading");
+      if (loader && toolkitIframe.src !== "about:blank") {
+        loader.classList.add("hidden");
+        toolkitLoaded = true;
+      }
+    });
+  }
+
+  // Wire the toolkit tab button
+  const toolkitTabBtn = document.querySelector('.tab-btn[data-tool="toolkit"]');
+  if (toolkitTabBtn) {
+    toolkitTabBtn.addEventListener("click", () => {
+      loadToolkitPanel();
+    });
+  }
 });
   }

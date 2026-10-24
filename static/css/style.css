@@ -3359,3 +3359,105 @@ select:focus, input:focus, textarea:focus {
   border: 1px dashed rgba(168, 85, 247, 0.4);
   border-radius: var(--radius-md);
 }
+
+/* ========================================================
+   STOCK CONTRIBUTOR TOOLKIT PANEL — iFrame Embed
+======================================================== */
+.toolkit-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.toolkit-panel-info h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+.toolkit-panel-info p {
+  font-size: 0.87rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  max-width: 640px;
+}
+.toolkit-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.toolkit-pill {
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  letter-spacing: 0.3px;
+}
+.toolkit-iframe-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+.toolkit-iframe-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  z-index: 2;
+  gap: 14px;
+  transition: opacity 0.4s;
+}
+.toolkit-iframe-loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.toolkit-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+.toolkit-load-text {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.toolkit-not-running-banner {
+  display: none;
+  padding: 20px 24px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  color: #f59e0b;
+  line-height: 1.5;
+}
+.toolkit-iframe-embed {
+  display: block;
+  width: 100%;
+  height: 85vh;
+  min-height: 600px;
+  border: none;
+  background: transparent;
+}
+@media (max-width: 768px) {
+  .toolkit-iframe-embed {
+    height: 80vh;
+    min-height: 500px;
+  }
+}

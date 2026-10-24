@@ -1,0 +1,15 @@
+﻿# Stock Contributor Toolkit Pro — Render.com deployment config
+# Deploy this as a SEPARATE web service on Render.
+# Then set TOOLKIT_URL env var on the host (midea-upscaler-pro) to this service's URL.
+
+services:
+  - type: web
+    name: stock-toolkit-pro
+    runtime: python
+    rootDir: stock-contributor-toolkit-pro-v14
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    plan: free
+    envVars:
+      - key: PORT
+        generateValue: false

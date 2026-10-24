@@ -1,5 +1,5 @@
 """
-Media Toolkit Pro — Version 3.0.0
+Media Toolkit Pro â€” Version 3.0.0
 Multi-Marketplace Studio Engine (Adobe Stock, Shutterstock, Getty, Pond5, Freepik)
 Made By Munajat International
 """
@@ -199,11 +199,11 @@ def ai_config_endpoint():
         if "gemini_api_key" in data and data["gemini_api_key"].strip():
             # If user provided a masked key, don't overwrite with asterisks
             new_key = data["gemini_api_key"].strip()
-            if "•" not in new_key and "****" not in new_key:
+            if "â€¢" not in new_key and "****" not in new_key:
                 cfg["gemini_api_key"] = new_key
         if "grok_api_key" in data and data["grok_api_key"].strip():
             new_grok = data["grok_api_key"].strip()
-            if "•" not in new_grok and "****" not in new_grok:
+            if "â€¢" not in new_grok and "****" not in new_grok:
                 cfg["grok_api_key"] = new_grok
         if "provider" in data:
             cfg["provider"] = data["provider"]
@@ -830,6 +830,17 @@ def studio_settings():
     return jsonify(license_mgr.get_studio_settings())
 
 
+
+# -----------------------------------------------------------------------
+# Stock Contributor Toolkit Integration - iFrame URL endpoint
+# Set TOOLKIT_URL env var on Render to point to the toolkit's Render URL.
+# Locally defaults to http://localhost:5001
+# -----------------------------------------------------------------------
+@app.route("/api/toolkit-url")
+def toolkit_url():
+    url = os.environ.get("TOOLKIT_URL", "http://localhost:5001")
+    return jsonify({"url": url})
+
 def main():
     ap = argparse.ArgumentParser(description="Media Toolkit Pro V3 by Munajat International")
     ap.add_argument("--port", type=int, default=None)
@@ -853,7 +864,7 @@ def main():
 
     url = f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}"
     print(f"\n=======================================================")
-    print(f"  Media Toolkit Pro v3.0 — Made By Munajat International")
+    print(f"  Media Toolkit Pro v3.0 â€” Made By Munajat International")
     print(f"  Multi-Marketplace Engine (Adobe, Shutterstock, Getty)")
     print(f"  Live Server: {url}")
     print(f"=======================================================\n")
